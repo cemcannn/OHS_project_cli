@@ -1,0 +1,34 @@
+<h1 mat-dialog-title>Personel Bilgilerini Giriniz:</h1>
+<div mat-dialog-content>
+    <mat-form-field appearance="fill" class="personnel-create">
+        <mat-label>TC Kimlik Numarası</mat-label>
+        <input matInput type="number" min="11" #txtTrIdNumber> 
+      </mat-form-field>
+      <mat-form-field appearance="fill" class="personnel-create">
+        <mat-label>İsim</mat-label>
+        <input matInput #txtName>
+      </mat-form-field>
+      <mat-form-field appearance="fill" class="personnel-create">
+        <mat-label>Soyisim</mat-label>
+        <input matInput #txtSurname> 
+      </mat-form-field>
+      <mat-form-field appearance="fill" class="personnel-create">
+        <mat-label>Emekli Numarası</mat-label>
+        <input matInput type="number" #txtRetireId> 
+      </mat-form-field>
+      <mat-form-field appearance="fill" class="personnel-create">
+        <mat-label>SGK Sicil Numarası</mat-label>
+        <input matInput type="number" #txtInsuranceId>
+      </mat-form-field>
+      <mat-form-field appearance="fill" class="personnel-create">
+        <mat-label>İşe Başlangıç Tarihi</mat-label>
+        <input matInput type="datetime" #txtStartDateOfWork> 
+      </mat-form-field>
+      <mat-form-field appearance="fill" class="personnel-create">
+        <mat-label>TKİ Sicil Numarası</mat-label>
+        <input matInput type="number" #txtTkiId> 
+      </mat-form-field>
+<div mat-dialog-actions>
+  <button mat-button (click)="close()">İptal</button>
+  <button mat-raised-button class="btn" color="primary" (click)="createPersonnel(txtTrIdNumber.value, txtName.value, txtSurname.value, txtRetireId.value, txtInsuranceId.value, txtStartDateOfWork.value, txtTkiId.value)">Personel Ekle</button>
+</div>

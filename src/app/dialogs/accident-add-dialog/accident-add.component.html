@@ -1,0 +1,27 @@
+<h1 mat-dialog-title>Kaza Oluşum Tipini Giriniz:</h1>
+<div mat-dialog-content>
+  <mat-form-field appearance="fill">
+    <mat-label>Kaza Oluşum Tipi</mat-label>
+    <input matInput #txtTypeOfAccident>
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Kaza Tarihi</mat-label>
+    <input matInput placeholder="GG.AA.YYYY" #txtAccidentDate>
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Kaza Saati</mat-label>
+    <input matInput placeholder="SS:DD" #txtAccidentHour>
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>İşe Başlangıç Tarihi</mat-label>
+    <input matInput placeholder="GG.AA.YYYY" #txtOnTheJobDate>
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Açıklama</mat-label>
+    <input matInput #txtDescription>
+  </mat-form-field>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="close()">İptal</button>
+  <button mat-raised-button class="btn" color="primary" (click)="createAccident(txtTypeOfAccident.value, txtAccidentDate.value, txtAccidentHour.value, txtOnTheJobDate.value, txtDescription.value)">Kaza Ekle</button>
+</div>
