@@ -37,7 +37,7 @@ export class AccidentListComponent extends BaseDialog<AccidentListComponent> imp
   }
 
   async loadAccidents(personId: string): Promise<void> {
-    const allAccidents: { datas: List_Accident[], totalCount: number } = await this.accidentService.getAccidents(personId);
+    const allAccidents: { datas: List_Accident[], totalCount: number } = await this.accidentService.getAccidentById(personId);
   
     // Use the correct type for MatTableDataSource
     this.dataSource = new MatTableDataSource<List_Accident>(allAccidents.datas);

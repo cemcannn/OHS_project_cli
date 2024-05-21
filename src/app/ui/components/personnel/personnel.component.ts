@@ -22,8 +22,4 @@ export class PersonnelComponent extends BaseComponent implements OnInit {
   }
 
   @ViewChild(ListComponent) listComponents: ListComponent;
-
-  createdPersonnel(createdPersonnel: Create_Personnel) {
-    this.listComponents.getPersonnels();
-  }
 }

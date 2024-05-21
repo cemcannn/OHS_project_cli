@@ -16,60 +16,36 @@
         <td mat-cell *matCellDef="let element"> {{element.surname}} </td>
       </ng-container>
   
-      <ng-container matColumnDef="insuranceId">
-        <th mat-header-cell *matHeaderCellDef> SGK Sicil Numarası </th>
-        <td mat-cell *matCellDef="let element"> {{element.insuranceId}} </td>
+      <ng-container matColumnDef="typeOfAccident">
+        <th mat-header-cell *matHeaderCellDef> Kaza Oluş Şekli </th>
+        <td mat-cell *matCellDef="let element"> {{element.typeOfAccident}} </td>
       </ng-container>
   
-      <ng-container matColumnDef="startDateOfWork">
-        <th mat-header-cell *matHeaderCellDef> İşe Başlangıç Tarihi </th>
-        <td mat-cell *matCellDef="let element"> {{element.startDateOfWork}} </td>
+      <ng-container matColumnDef="accidentDate">
+        <th mat-header-cell *matHeaderCellDef> Kaza Tarihi </th>
+        <td mat-cell *matCellDef="let element"> {{element.accidentDate}} </td>
       </ng-container>
  
-      <ng-container matColumnDef="profession">
-        <th mat-header-cell *matHeaderCellDef> Meslek Dalı </th>
-        <td mat-cell *matCellDef="let element"> {{element.profession}} </td>
+      <ng-container matColumnDef="accidentHour">
+        <th mat-header-cell *matHeaderCellDef> Kaza Saati </th>
+        <td mat-cell *matCellDef="let element"> {{element.accidentHour}} </td>
       </ng-container>
   
-      <ng-container matColumnDef="typeOfPlace">
-        <th mat-header-cell *matHeaderCellDef> Çalıştığı Birim </th>
-        <td mat-cell *matCellDef="let element"> {{element.typeOfPlace}} </td>
+      <ng-container matColumnDef="onTheJobDate">
+        <th mat-header-cell *matHeaderCellDef> İşe Başlayacağı Tarih </th>
+        <td mat-cell *matCellDef="let element"> {{element.onTheJobDate}} </td>
       </ng-container>
   
-      <ng-container matColumnDef="tKIId">
-        <th mat-header-cell *matHeaderCellDef> TKİ Sicil Numarası </th>
-        <td mat-cell *matCellDef="let element"> {{element.tKIId}} </td>
+      <ng-container matColumnDef="description">
+        <th mat-header-cell *matHeaderCellDef> Tanımlama </th>
+        <td mat-cell *matCellDef="let element"> {{element.description}} </td>
       </ng-container> 
- 
-      <ng-container matColumnDef="unit">
-        <th mat-header-cell *matHeaderCellDef> Birimi </th>
-        <td mat-cell *matCellDef="let element"> {{element.unit}} </td>
-      </ng-container>
-
-      <ng-container matColumnDef="accidentAdd">
-        <th mat-header-cell *matHeaderCellDef> Kaza Ekle </th>
-        <td mat-cell *matCellDef="let element">
-          <button mat-icon-button color="primary" (click)="openAccidentAddDialog(element.id)">
-            <img src="../../../../../../assets/icons/add.png" alt="Kaza Ekle">
-          </button>
-        </td>
-      </ng-container>
-      
-      <ng-container matColumnDef="accidentList">
-        <th mat-header-cell *matHeaderCellDef> Kazaları Göster </th>
-        <td mat-cell *matCellDef="let element">
-          <button mat-icon-button color="primary" (click)="openAccidentDialog(element.id)">
-            <img src="../../../../../../assets/icons/list.svg" alt="Kaza Ekle">
-          </button>
-        </td>
-      </ng-container>
-  
-
   
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
-  
+
+
     <mat-paginator (page)="pageChanged()"
                    [pageSizeOptions]="[5, 10, 20]"
                    showFirstLastButtons
