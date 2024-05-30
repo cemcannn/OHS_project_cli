@@ -5,6 +5,7 @@ import { List_Personnel } from "src/app/contracts/personnels/list_personnel";
 import { Observable, firstValueFrom } from "rxjs";
 import { Create_Personnel } from "src/app/contracts/personnels/create_personnel";
 import { HttpErrorResponse } from "@angular/common/http";
+import { Update_Personnel } from "src/app/contracts/personnels/update_personnel";
 
 @Injectable({
   providedIn: 'root'
@@ -56,5 +57,13 @@ export class PersonnelService {
         });
         if (errorCallBack) errorCallBack(message);
       });
+  }
+
+  async updatePersonnel(personnel: Update_Personnel, successCallBack?: () => void, errorCallBack?: (errorMessage: string) => void) {
+    const observable = this.httpClientService.put({
+      controller: "personnels",
+    }, personnel);
+
+    return this.handleRequest(observable, successCallBack, errorCallBack);
   }
 }

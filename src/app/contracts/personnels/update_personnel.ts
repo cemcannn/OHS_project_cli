@@ -1,4 +1,5 @@
-export class Create_Personnel {
+export class Update_Personnel {
+    id: string;
     trIdNumber: string;
     name: string;
     surname: string;

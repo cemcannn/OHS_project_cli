@@ -22,7 +22,7 @@ export class AccidentComponent extends BaseComponent implements OnInit {
 
   @ViewChild(ListComponent) listComponents: ListComponent;
 
-  createdAccident(createdAccident: Create_Accident) {
-    this.listComponents.getPersonnels();
-  }
+  // createdAccident(createdAccident: Create_Accident) {
+  //   this.listComponents.loadAccidents();
+  // }
 }

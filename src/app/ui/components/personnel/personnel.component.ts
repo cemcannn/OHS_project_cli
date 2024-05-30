@@ -14,7 +14,7 @@ import { Create_Personnel } from 'src/app/contracts/personnels/create_personnel'
 })
 export class PersonnelComponent extends BaseComponent implements OnInit {
 
-  constructor(spinner: NgxSpinnerService, private httpClientService: HttpClientService, private dialogService: DialogService) {
+  constructor(spinner: NgxSpinnerService) {
     super(spinner)
   }
 

@@ -39,7 +39,6 @@ export class DeleteDirective {
 
   @HostListener("click")
   async onclick() {
-    debugger
     this.dialogService.openDialog({
       componentType: DeleteDialogComponent,
       data: DeleteState.Yes,
@@ -55,7 +54,20 @@ export class DeleteDirective {
             height: "toogle"
           }, 700, () => {
             this.callback.emit();
-            this.alertifyService.message(`${this.controller == 'roles' ? 'Rol' : 'Personel'} başarıyla silinmiştir.`, {
+            if(this.controller == 'roles')
+            this.alertifyService.message('Rol bilgisi başarıyla silinmiştir.', {
+              dismissOthers: true,
+              messageType: MessageType.Success,
+              position: Position.TopRight
+            })
+            else if(this.controller == 'personnel')
+            this.alertifyService.message('Personel bilgileri başarıyla silinmiştir.', {
+              dismissOthers: true,
+              messageType: MessageType.Success,
+              position: Position.TopRight
+            })
+            else(this.controller == 'accident')
+            this.alertifyService.message('Kaza bilgileri başarıyla silinmiştir.', {
               dismissOthers: true,
               messageType: MessageType.Success,
               position: Position.TopRight
@@ -63,26 +75,26 @@ export class DeleteDirective {
           });
         }, (errorResponse: HttpErrorResponse) => {
           this.spinner.hide(SpinnerType.BallAtom);
-          this.alertifyService.message("Ürün silinirken beklenmeyen bir hatayla karşılaşılmıştır.", {
+          if(this.controller == 'roles')
+          this.alertifyService.message("Rol bilgisi silinirken beklenmeyen bir hatayla karşılaşılmıştır.", {
             dismissOthers: true,
             messageType: MessageType.Error,
             position: Position.TopRight
-          });
+          })
+          else if(this.controller == 'personnel')
+            this.alertifyService.message('Personel bilgileri silinirken beklenmeyen bir hatayla karşılaşılmıştır.', {
+              dismissOthers: true,
+              messageType: MessageType.Success,
+              position: Position.TopRight
+            })
+            else(this.controller == 'accident')
+            this.alertifyService.message('Kaza bilgileri silinirken beklenmeyen bir hatayla karşılaşılmıştır.', {
+              dismissOthers: true,
+              messageType: MessageType.Success,
+              position: Position.TopRight
+            })
         });
       }
     });
   }
-
-  //openDialog(afterClosed: any): void {
-  //  const dialogRef = this.dialog.open(DeleteDialogComponent, {
-  //    width: '250px',
-  //    data: DeleteState.Yes,
-  //  });
-
-  //  dialogRef.afterClosed().subscribe(result => {
-  //    if (result == DeleteState.Yes)
-  //      afterClosed();
-  //  });
-  //}
-
 }

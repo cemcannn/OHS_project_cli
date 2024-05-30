@@ -4,6 +4,7 @@ import { HttpClientService } from '../http-client.service';
 import { Create_Accident } from 'src/app/contracts/accidents/create_accident';
 import { HttpErrorResponse } from '@angular/common/http';
 import { List_Accident } from 'src/app/contracts/accidents/list_accident';
+import { Update_Accident } from 'src/app/contracts/accidents/update_accident';
 
 @Injectable({
   providedIn: 'root'
@@ -44,7 +45,6 @@ export class AccidentService {
     const observable: Observable<{ datas: List_Accident[], totalCount: number }> = this.httpClientService.get<{ datas: List_Accident[], totalCount: number }>({
       controller: "accidents"
     }, id);
-
     return this.handleRequest(observable, successCallBack, errorCallBack);
   }
 
@@ -53,6 +53,14 @@ export class AccidentService {
       controller: "accidents",
       queryString: `get-all-accidents`
     });
+
+    return this.handleRequest(observable, successCallBack, errorCallBack);
+  }
+
+  async updateAccident(accident: Update_Accident, successCallBack?: () => void, errorCallBack?: (errorMessage: string) => void) {
+    const observable = this.httpClientService.put({
+      controller: "accidents",
+    }, accident);
 
     return this.handleRequest(observable, successCallBack, errorCallBack);
   }

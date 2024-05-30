@@ -1,0 +1,46 @@
+<h1 mat-dialog-title>Kaza Bilgilerini Güncelle:</h1>
+<div mat-dialog-content>
+  <form #accidentForm="ngForm">
+  <mat-form-field appearance="fill">
+    <mat-label>Kaza Oluşum Tipi</mat-label>
+    <input matInput #txtTypeOfAccident="ngModel" name="typeOfAccident" ngModel required>
+    <mat-error *ngIf="txtTypeOfAccident.invalid && (txtTypeOfAccident.dirty || txtTypeOfAccident.touched)">
+      <span *ngIf="txtTypeOfAccident.errors?.required">Kaza oluşum tipi gereklidir.</span>
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Kaza Tarihi</mat-label>
+    <input matInput [matDatepicker]="picker1" #txtAccidentDate="ngModel" name="accidentDate" ngModel>
+    <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+    <mat-datepicker #picker1></mat-datepicker>
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Kaza Saati</mat-label>
+    <input matInput type="time" #txtAccidentHour="ngModel" name="accidentHour" ngModel required>
+    <mat-error *ngIf="txtAccidentHour.invalid">
+      <span *ngIf="txtAccidentHour.errors?.required">Kaza saati gereklidir.</span>
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>İşe Başlangıç Tarihi</mat-label>
+    <input matInput [matDatepicker]="picker2" #txtOnTheJobDate="ngModel" name="onTheJobDate" ngModel required>
+    <mat-error *ngIf="txtOnTheJobDate.invalid">
+      <span *ngIf="txtOnTheJobDate.errors?.required">İşe başlangıç tarihi gereklidir.</span>
+    </mat-error>
+    <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+    <mat-datepicker #picker2></mat-datepicker>
+  </mat-form-field>
+  
+  <mat-form-field appearance="fill">
+    <mat-label>Açıklama</mat-label>
+    <textarea matInput [(ngModel)]="data.description"></textarea>
+  </mat-form-field>
+</form>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="close()">İptal</button>
+  <button mat-raised-button color="primary" [disabled]="accidentForm.invalid" (click)="updateAccident()">Güncelle</button>
+</div>

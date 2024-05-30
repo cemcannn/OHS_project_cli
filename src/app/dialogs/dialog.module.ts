@@ -4,9 +4,10 @@ import { DeleteDialogComponent } from './delete-dialog/delete-dialog.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
-import { FormsModule } from '@angular/forms';
 import { MatTableModule } from '@angular/material/table';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
 import { AuthorizeMenuDialogComponent } from './authorize-menu-dialog/authorize-menu-dialog.component';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatListModule } from '@angular/material/list';
@@ -14,9 +15,16 @@ import { AuthorizeUserDialogComponent } from './authorize-user-dialog/authorize-
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { AccidentAddComponent } from './accident-add-dialog/accident-add.component';
-import { PersonnelAddComponent } from './personnel-add-dialog/personnel-add-dialog.component';
 import { AccidentListComponent } from './accident-list/accident-list.component';
 import { DeleteDirectiveModule } from '../directives/admin/delete.directive.module';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AccidentUpdateDialogComponent } from './accident-update-dialog/accident-update-dialog.component';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSortModule } from '@angular/material/sort';
+import { TimespanPipe } from '../pipes/timespan.pipe';
+import { PersonnelUpdateDialogComponent } from './personnel-update-dialog/personnel-update-dialog.component';
+import { PersonnelAddDialogComponent } from './personnel-add-dialog/personnel-add-dialog.component';
+
 
 
 @NgModule({
@@ -25,11 +33,14 @@ import { DeleteDirectiveModule } from '../directives/admin/delete.directive.modu
     AuthorizeMenuDialogComponent,
     AuthorizeUserDialogComponent,
     AccidentAddComponent,
-    PersonnelAddComponent,
-    AccidentListComponent
+    PersonnelAddDialogComponent,
+    AccidentListComponent,
+    AccidentUpdateDialogComponent,
+    TimespanPipe,
+    PersonnelUpdateDialogComponent
   ],
   imports: [
-    CommonModule, MatDialogModule, MatButtonModule, MatCardModule, MatTableModule, MatToolbarModule, MatBadgeModule, MatListModule, MatFormFieldModule, MatInputModule, DeleteDirectiveModule
+    FormsModule, MatDatepickerModule, MatNativeDateModule, MatPaginatorModule, MatSortModule, ReactiveFormsModule, CommonModule, MatDialogModule, MatButtonModule, MatCardModule, MatTableModule, MatToolbarModule, MatBadgeModule, MatListModule, MatFormFieldModule, MatInputModule, DeleteDirectiveModule
   ]
 })
 export class DialogModule { }

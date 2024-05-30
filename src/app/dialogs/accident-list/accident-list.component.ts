@@ -1,24 +1,26 @@
-import { Component, Inject, OnInit, ViewChild } from '@angular/core';
+import { Component, Inject, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { BaseDialog } from '../base/base-dialog';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
-import { AccidentService } from 'src/app/services/common/models/accident.service';
 import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
 import { List_Accident } from 'src/app/contracts/accidents/list_accident';
-import { SpinnerType } from 'src/app/base/base.component';
+import { AccidentService } from 'src/app/services/common/models/accident.service';
 import { AlertifyService, MessageType, Position } from 'src/app/services/admin/alertify.service';
-import { DialogService } from 'src/app/services/common/dialog.service';
-import { AccidentAddComponent } from '../accident-add-dialog/accident-add.component';
+import { AccidentUpdateDialogComponent } from '../accident-update-dialog/accident-update-dialog.component';
+
 
 @Component({
   selector: 'app-accident-list',
   templateUrl: './accident-list.component.html',
   styleUrls: ['./accident-list.component.scss']
 })
-export class AccidentListComponent extends BaseDialog<AccidentListComponent> implements OnInit {
-  displayedColumns: string[] = ['typeOfAccident', 'accidentDate', 'accidentHour', 'onTheJobDate', 'description', 'delete'];
+export class AccidentListComponent extends BaseDialog<AccidentListComponent> implements OnInit, AfterViewInit {
+  displayedColumns: string[] = ['typeOfAccident', 'accidentDate', 'accidentHour', 'onTheJobDate', 'description', 'accidentUpdate', 'delete'];
   dataSource: MatTableDataSource<List_Accident> = new MatTableDataSource<List_Accident>();
+
   @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
 
   constructor(
     dialogRef: MatDialogRef<AccidentListComponent>,
@@ -30,17 +32,44 @@ export class AccidentListComponent extends BaseDialog<AccidentListComponent> imp
     super(dialogRef);
   }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     if (this.data && this.data.personId) {
-      this.loadAccidents(this.data.personId);
+      await this.loadAccidents(this.data.personId);
     }
   }
 
-  async loadAccidents(personId: string): Promise<void> {
-    const allAccidents: { datas: List_Accident[], totalCount: number } = await this.accidentService.getAccidentById(personId);
-  
-    // Use the correct type for MatTableDataSource
-    this.dataSource = new MatTableDataSource<List_Accident>(allAccidents.datas);
+  ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
-  }  
+    this.dataSource.sort = this.sort;
+  }
+
+  async openUpdateAccidentDialog(accidentData: any): Promise<void> {
+    const dialogRef = await this.dialog.open(AccidentUpdateDialogComponent, {
+      width: '500px',
+      data: accidentData
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result && result.success) {
+        console.log('Accident updated successfully!');
+      } else if (result && result.error) {
+        console.error('Failed to update accident:', result.error);
+      }
+    });
+  }
+
+  async loadAccidents(personId: string): Promise<void> {
+    try {
+      const allAccidents: { datas: List_Accident[], totalCount: number } = await this.accidentService.getAccidentById(personId);
+      this.dataSource = new MatTableDataSource<List_Accident>(allAccidents.datas);
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
+    } catch (error) {
+      this.alertifyService.message('Kaza bilgilerini yüklerken bir hata oluştu.', {
+        dismissOthers: true,
+        messageType: MessageType.Error,
+        position: Position.TopRight
+      });
+    }
+  }
 }

@@ -11,6 +11,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { DialogModule } from 'src/app/dialogs/dialog.module';
 import { DeleteDirectiveModule } from 'src/app/directives/admin/delete.directive.module';
+import { MatSortModule } from '@angular/material/sort';
 
 
 
@@ -22,7 +23,7 @@ import { DeleteDirectiveModule } from 'src/app/directives/admin/delete.directive
   ],
   imports: [
     CommonModule, MatSidenavModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatTableModule, MatPaginatorModule,
-    DialogModule,
+    DialogModule, MatSortModule, 
     DeleteDirectiveModule,
     RouterModule.forChild([
       { path: "", component: PersonnelComponent}

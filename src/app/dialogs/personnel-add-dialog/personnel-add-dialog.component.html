@@ -1,34 +1,50 @@
 <h1 mat-dialog-title>Personel Bilgilerini Giriniz:</h1>
 <div mat-dialog-content>
+  <form #personnelForm="ngForm">
     <mat-form-field appearance="fill" class="personnel-create">
-        <mat-label>TC Kimlik Numarası</mat-label>
-        <input matInput type="number" min="11" #txtTrIdNumber> 
-      </mat-form-field>
-      <mat-form-field appearance="fill" class="personnel-create">
-        <mat-label>İsim</mat-label>
-        <input matInput #txtName>
-      </mat-form-field>
-      <mat-form-field appearance="fill" class="personnel-create">
-        <mat-label>Soyisim</mat-label>
-        <input matInput #txtSurname> 
-      </mat-form-field>
-      <mat-form-field appearance="fill" class="personnel-create">
-        <mat-label>Emekli Numarası</mat-label>
-        <input matInput type="number" #txtRetireId> 
-      </mat-form-field>
-      <mat-form-field appearance="fill" class="personnel-create">
-        <mat-label>SGK Sicil Numarası</mat-label>
-        <input matInput type="number" #txtInsuranceId>
-      </mat-form-field>
-      <mat-form-field appearance="fill" class="personnel-create">
-        <mat-label>İşe Başlangıç Tarihi</mat-label>
-        <input matInput type="datetime" #txtStartDateOfWork> 
-      </mat-form-field>
-      <mat-form-field appearance="fill" class="personnel-create">
-        <mat-label>TKİ Sicil Numarası</mat-label>
-        <input matInput type="number" #txtTkiId> 
-      </mat-form-field>
+      <mat-label>TC Kimlik Numarası</mat-label>
+      <input matInput type="text" maxlength="11" minlength="11" pattern="^[0-9]*$" required #txtTrIdNumber="ngModel" name="trIdNumber" ngModel>
+      <mat-error *ngIf="txtTrIdNumber.invalid && (txtTrIdNumber.dirty || txtTrIdNumber.touched)">
+        <span *ngIf="txtTrIdNumber.errors?.required">TC Kimlik Numarası gereklidir.</span>
+        <span *ngIf="txtTrIdNumber.errors?.pattern">TC Kimlik Numarası sadece rakamlardan oluşmalıdır.</span>
+        <span *ngIf="txtTrIdNumber.errors?.minlength || txtTrIdNumber.errors?.maxlength">TC Kimlik Numarası 11 haneli olmalıdır.</span>
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="fill" class="personnel-create">
+      <mat-label>İsim</mat-label>
+      <input matInput #txtName="ngModel" name="name" ngModel required>
+      <mat-error *ngIf="txtName.invalid && (txtName.dirty || txtName.touched)">
+        <span *ngIf="txtName.errors?.required">İsim gereklidir.</span>
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="fill" class="personnel-create">
+      <mat-label>Soyisim</mat-label>
+      <input matInput #txtSurname="ngModel" name="surname" ngModel required>
+      <mat-error *ngIf="txtSurname.invalid && (txtSurname.dirty || txtSurname.touched)">
+        <span *ngIf="txtSurname.errors?.required">Soyisim gereklidir.</span>
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="fill" class="personnel-create">
+      <mat-label>Emekli Numarası</mat-label>
+      <input matInput type="number" #txtRetireId="ngModel" name="retireId" ngModel>
+    </mat-form-field>
+    <mat-form-field appearance="fill" class="personnel-create">
+      <mat-label>SGK Sicil Numarası</mat-label>
+      <input matInput type="number" #txtInsuranceId="ngModel" name="insuranceId" ngModel>
+    </mat-form-field>
+    <mat-form-field appearance="fill" class="personnel-create">
+      <mat-label>İşe Başlangıç Tarihi</mat-label>
+      <input matInput [matDatepicker]="picker" #txtStartDateOfWork="ngModel" name="startDateOfWork" ngModel>
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+    <mat-form-field appearance="fill" class="personnel-create">
+      <mat-label>TKİ Sicil Numarası</mat-label>
+      <input matInput type="number" #txtTkiId="ngModel" name="tkiId" ngModel>
+    </mat-form-field>
+  </form>
+</div>
 <div mat-dialog-actions>
   <button mat-button (click)="close()">İptal</button>
-  <button mat-raised-button class="btn" color="primary" (click)="createPersonnel(txtTrIdNumber.value, txtName.value, txtSurname.value, txtRetireId.value, txtInsuranceId.value, txtStartDateOfWork.value, txtTkiId.value)">Personel Ekle</button>
+  <button mat-raised-button class="btn" color="primary" [disabled]="personnelForm.invalid" (click)="createPersonnel(txtTrIdNumber.value, txtName.value, txtSurname.value, txtRetireId.value, txtInsuranceId.value, txtStartDateOfWork.value, txtTkiId.value)">Personel Ekle</button>
 </div>
