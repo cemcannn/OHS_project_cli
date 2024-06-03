@@ -4,7 +4,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { BaseComponent, SpinnerType } from '../../../../base/base.component';
 import { List_User } from '../../../../contracts/users/list_user';
-import { AuthorizeUserDialogComponent } from '../../../../dialogs/authorize-user-dialog/authorize-user-dialog.component';
+import { AuthorizeUserDialogComponent } from '../../../../dialogs/authorize/authorize-user-dialog/authorize-user-dialog.component';
 import { AlertifyService, MessageType, Position } from '../../../../services/admin/alertify.service';
 import { DialogService } from '../../../../services/common/dialog.service';
 import { UserService } from '../../../../services/common/models/user.service';

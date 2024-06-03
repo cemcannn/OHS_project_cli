@@ -1,15 +1,18 @@
-<h1 mat-dialog-title>Personel Bilgilerini Giriniz:</h1>
+<h1 mat-dialog-title>Personel Bilgilerini Güncelle:</h1>
 <div mat-dialog-content>
   <form #personnelForm="ngForm">
     <mat-form-field appearance="fill" class="personnel-create">
       <mat-label>TC Kimlik Numarası</mat-label>
-      <input matInput type="text" maxlength="11" minlength="11" pattern="^[0-9]*$" required #txtTrIdNumber="ngModel" name="trIdNumber" ngModel>
+      <input matInput type="text" maxlength="11" minlength="11" pattern="^[0-9]*$" required #txtTrIdNumber="ngModel"
+        name="trIdNumber" ngModel>
       <mat-error *ngIf="txtTrIdNumber.invalid && (txtTrIdNumber.dirty || txtTrIdNumber.touched)">
         <span *ngIf="txtTrIdNumber.errors?.required">TC Kimlik Numarası gereklidir.</span>
         <span *ngIf="txtTrIdNumber.errors?.pattern">TC Kimlik Numarası sadece rakamlardan oluşmalıdır.</span>
-        <span *ngIf="txtTrIdNumber.errors?.minlength || txtTrIdNumber.errors?.maxlength">TC Kimlik Numarası 11 haneli olmalıdır.</span>
+        <span *ngIf="txtTrIdNumber.errors?.minlength || txtTrIdNumber.errors?.maxlength">TC Kimlik Numarası 11 haneli
+          olmalıdır.</span>
       </mat-error>
     </mat-form-field>
+
     <mat-form-field appearance="fill" class="personnel-create">
       <mat-label>İsim</mat-label>
       <input matInput #txtName="ngModel" name="name" ngModel required>
@@ -17,6 +20,7 @@
         <span *ngIf="txtName.errors?.required">İsim gereklidir.</span>
       </mat-error>
     </mat-form-field>
+
     <mat-form-field appearance="fill" class="personnel-create">
       <mat-label>Soyisim</mat-label>
       <input matInput #txtSurname="ngModel" name="surname" ngModel required>
@@ -24,27 +28,31 @@
         <span *ngIf="txtSurname.errors?.required">Soyisim gereklidir.</span>
       </mat-error>
     </mat-form-field>
-    <mat-form-field appearance="fill" class="personnel-create">
-      <mat-label>Emekli Numarası</mat-label>
-      <input matInput type="number" #txtRetireId="ngModel" name="retireId" ngModel>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Emekli Sicil Numarası</mat-label>
+      <input matInput [(ngModel)]="data.retiredId">
     </mat-form-field>
-    <mat-form-field appearance="fill" class="personnel-create">
+
+    <mat-form-field appearance="fill">
       <mat-label>SGK Sicil Numarası</mat-label>
-      <input matInput type="number" #txtInsuranceId="ngModel" name="insuranceId" ngModel>
+      <input matInput [(ngModel)]="data.insuranceId">
     </mat-form-field>
-    <mat-form-field appearance="fill" class="personnel-create">
+
+    <mat-form-field appearance="fill">
       <mat-label>İşe Başlangıç Tarihi</mat-label>
-      <input matInput [matDatepicker]="picker" #txtStartDateOfWork="ngModel" name="startDateOfWork" ngModel>
+      <input matInput [matDatepicker]="picker" #txtStartDateOfWork="ngModel" name="onTheJobDate" ngModel required>
       <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
       <mat-datepicker #picker></mat-datepicker>
-    </mat-form-field>
-    <mat-form-field appearance="fill" class="personnel-create">
-      <mat-label>TKİ Sicil Numarası</mat-label>
-      <input matInput type="number" #txtTkiId="ngModel" name="tkiId" ngModel>
+      <mat-error *ngIf="txtStartDateOfWork.invalid && (txtStartDateOfWork.dirty || txtStartDateOfWork.touched)">
+        <span *ngIf="txtStartDateOfWork.errors?.required">İşe başlangıç tarihi gereklidir.</span>
+        <span *ngIf="txtStartDateOfWork.errors?.dateInFuture">İşe başlangıç tarihi geçmiş tarihli olmalı.</span>
+      </mat-error>
     </mat-form-field>
   </form>
 </div>
 <div mat-dialog-actions>
   <button mat-button (click)="close()">İptal</button>
-  <button mat-raised-button class="btn" color="primary" [disabled]="personnelForm.invalid" (click)="createPersonnel(txtTrIdNumber.value, txtName.value, txtSurname.value, txtRetireId.value, txtInsuranceId.value, txtStartDateOfWork.value, txtTkiId.value)">Personel Ekle</button>
+  <button mat-raised-button color="primary" [disabled]="personnelForm.invalid"
+    (click)="updatePersonnel()">Güncelle</button>
 </div>

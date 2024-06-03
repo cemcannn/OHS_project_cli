@@ -6,7 +6,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { BaseComponent, SpinnerType } from 'src/app/base/base.component';
 import { List_Accident } from 'src/app/contracts/accidents/list_accident';
-import { AccidentUpdateDialogComponent } from 'src/app/dialogs/accident-update-dialog/accident-update-dialog.component';
+import { AccidentUpdateDialogComponent } from 'src/app/dialogs/accident/accident-update-dialog/accident-update-dialog.component';
 import { AccidentService } from 'src/app/services/common/models/accident.service';
 
 

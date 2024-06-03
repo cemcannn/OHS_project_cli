@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit, ViewChild, AfterViewInit } from '@angular/core';
-import { BaseDialog } from '../base/base-dialog';
+import { BaseDialog } from '../../base/base-dialog';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
@@ -51,9 +51,9 @@ export class AccidentListComponent extends BaseDialog<AccidentListComponent> imp
 
     dialogRef.afterClosed().subscribe(result => {
       if (result && result.success) {
-        console.log('Accident updated successfully!');
+        console.log('Kaza bilgileri başarıyla güncellendi!');
       } else if (result && result.error) {
-        console.error('Failed to update accident:', result.error);
+        console.error('Kaza bilgileri güncellenirken bir hata oluştu:', result.error);
       }
     });
   }

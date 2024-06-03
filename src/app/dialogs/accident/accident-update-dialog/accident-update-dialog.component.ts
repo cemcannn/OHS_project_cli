@@ -3,7 +3,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { AccidentService } from 'src/app/services/common/models/accident.service';
 import { AlertifyService, MessageType, Position } from 'src/app/services/admin/alertify.service';
 import { Update_Accident } from 'src/app/contracts/accidents/update_accident';
-import { BaseDialog } from '../base/base-dialog';
+import { BaseDialog } from '../../base/base-dialog';
 
 @Component({
   selector: 'app-accident-update-dialog',

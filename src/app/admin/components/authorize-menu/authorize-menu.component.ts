@@ -4,7 +4,7 @@ import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree'
 import { NgxSpinnerService } from 'ngx-spinner';
 import { BaseComponent } from '../../../base/base.component';
 import { Menu } from '../../../contracts/application-configurations/menu';
-import { AuthorizeMenuDialogComponent } from '../../../dialogs/authorize-menu-dialog/authorize-menu-dialog.component';
+import { AuthorizeMenuDialogComponent } from '../../../dialogs/authorize/authorize-menu-dialog/authorize-menu-dialog.component';
 import { DialogService } from '../../../services/common/dialog.service';
 import { ApplicationService } from '../../../services/common/models/application.service';
 

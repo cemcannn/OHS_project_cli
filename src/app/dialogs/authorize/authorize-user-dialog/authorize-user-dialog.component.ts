@@ -2,11 +2,11 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSelectionList } from '@angular/material/list';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { SpinnerType } from '../../base/base.component';
-import { List_Role } from '../../contracts/role/List_Role';
-import { RoleService } from '../../services/common/models/role.service';
-import { UserService } from '../../services/common/models/user.service';
-import { BaseDialog } from '../base/base-dialog';
+import { SpinnerType } from '../../../base/base.component';
+import { List_Role } from '../../../contracts/role/List_Role';
+import { RoleService } from '../../../services/common/models/role.service';
+import { UserService } from '../../../services/common/models/user.service';
+import { BaseDialog } from '../../base/base-dialog';
 
 @Component({
   selector: 'app-authorize-user-dialog',
