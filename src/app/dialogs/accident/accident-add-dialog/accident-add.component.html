@@ -2,7 +2,7 @@
 <div mat-dialog-content>
   <form #personnelForm="ngForm">
 
-    <mat-form-field appearance="fill">
+    <mat-form-field appearance="fill" class="field">
       <mat-label>Kaza Oluşum Tipi</mat-label>
       <input matInput [value]="typeOfAccident?.name" readonly (click)="openTypeOfAccidentPicker()">
       <button mat-icon-button matSuffix (click)="openTypeOfAccidentPicker()">
@@ -10,26 +10,34 @@
       </button>
     </mat-form-field>
 
-    <mat-form-field appearance="fill">
+    <mat-form-field appearance="fill" class="field">
+      <mat-label>Uzuv Türü</mat-label>
+      <input matInput [value]="limb?.name" readonly (click)="openLimbPicker()">
+      <button mat-icon-button matSuffix (click)="openLimbPicker()">
+        <mat-icon>arrow_drop_down</mat-icon>
+      </button>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="field">
       <mat-label>Kaza Tarihi</mat-label>
       <input matInput [matDatepicker]="picker1" #txtAccidentDate>
       <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
       <mat-datepicker #picker1></mat-datepicker>
     </mat-form-field>
 
-    <mat-form-field appearance="fill">
+    <mat-form-field appearance="fill" class="field">
       <mat-label>Kaza Saati</mat-label>
       <input matInput type="time" #txtAccidentHour>
     </mat-form-field>
 
-    <mat-form-field appearance="fill">
+    <mat-form-field appearance="fill" class="field">
       <mat-label>İşe Başlangıç Tarihi</mat-label>
       <input matInput [matDatepicker]="picker2" #txtOnTheJobDate>
       <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
       <mat-datepicker #picker2></mat-datepicker>
     </mat-form-field>
 
-    <mat-form-field appearance="fill">
+    <mat-form-field appearance="fill" class="field">
       <mat-label>Açıklama</mat-label>
       <input matInput #txtDescription>
     </mat-form-field>
@@ -39,7 +47,7 @@
 <div mat-dialog-actions>
   <button mat-button (click)="close()">İptal</button>
   <button mat-raised-button class="btn" color="primary" [disabled]="personnelForm.invalid"
-    (click)="createAccident(typeOfAccident?.name, txtAccidentDate.value, txtAccidentHour.value, txtOnTheJobDate.value, txtDescription.value)">
+    (click)="createAccident(typeOfAccident?.name, limb?.name, txtAccidentDate.value, txtAccidentHour.value, txtOnTheJobDate.value, txtDescription.value)">
     Kaza Ekle
   </button>
 </div>

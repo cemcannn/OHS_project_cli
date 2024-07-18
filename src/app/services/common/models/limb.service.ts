@@ -1,15 +1,16 @@
 import { Injectable } from '@angular/core';
 import { firstValueFrom, Observable } from 'rxjs';
 import { HttpClientService } from '../http-client.service';
-import { Create_Accident } from 'src/app/contracts/accidents/create_accident';
 import { HttpErrorResponse } from '@angular/common/http';
-import { List_Accident } from 'src/app/contracts/accidents/list_accident';
-import { Update_Accident } from 'src/app/contracts/accidents/update_accident';
+import { Create_Limb } from 'src/app/contracts/definitions/limb/create_limb';
+import { List_Limb } from 'src/app/contracts/definitions/limb/list_limb';
+import { Update_Limb } from 'src/app/contracts/definitions/limb/update_limb';
+
 
 @Injectable({
   providedIn: 'root'
 })
-export class AccidentService {
+export class LimbService {
 
   constructor(private httpClientService: HttpClientService) { }
 
@@ -23,10 +24,10 @@ export class AccidentService {
     return await promiseData;
   }
 
-  async createAccident(accident: Create_Accident, successCallBack?: () => void, errorCallBack?: (errorMessage: string) => void) {
+  async createLimb(limb: Create_Limb, successCallBack?: () => void, errorCallBack?: (errorMessage: string) => void) {
     this.httpClientService.post({
-      controller: "accidents"
-    }, accident)
+      controller: "limbs"
+    }, limb)
       .subscribe(result => {
         if (successCallBack) successCallBack();
       }, (errorResponse: HttpErrorResponse) => {
@@ -41,26 +42,33 @@ export class AccidentService {
       });
   }
 
-  async getAccidentById(id: string, successCallBack?: () => void, errorCallBack?: (errorMessage: string) => void): Promise<{ datas: List_Accident[], totalCount: number }> {
-    const observable: Observable<{ datas: List_Accident[], totalCount: number }> = this.httpClientService.get<{ datas: List_Accident[], totalCount: number }>({
-      controller: "accidents"
+  async getLimbById(id: string, successCallBack?: () => void, errorCallBack?: (errorMessage: string) => void): Promise<List_Limb> {
+    const observable: Observable<List_Limb> = this.httpClientService.get<List_Limb>({
+      controller: "limbs"
     }, id);
     return this.handleRequest(observable, successCallBack, errorCallBack);
   }
 
-  async getAccidents(successCallBack?: () => void, errorCallBack?: (errorMessage: string) => void): Promise<{ totalCount: number; datas: List_Accident[] }> {
-    const observable: Observable<{ totalCount: number; datas: List_Accident[] }> = this.httpClientService.get({
-      controller: "accidents",
-      queryString: `get-all-accidents`
+  async getLimbs(successCallBack?: () => void, errorCallBack?: (errorMessage: string) => void): Promise<{ totalCount: number; datas: List_Limb[] }> {
+    const observable: Observable<{ totalCount: number; datas: List_Limb[] }> = this.httpClientService.get({
+      controller: "limbs"
     });
 
     return this.handleRequest(observable, successCallBack, errorCallBack);
   }
 
-  async updateAccident(accident: Update_Accident, successCallBack?: () => void, errorCallBack?: (errorMessage: string) => void) {
+  async updateLimb(limb: Update_Limb, successCallBack?: () => void, errorCallBack?: (errorMessage: string) => void) {
     const observable = this.httpClientService.put({
-      controller: "accidents",
-    }, accident);
+      controller: "limbs",
+    }, limb);
+
+    return this.handleRequest(observable, successCallBack, errorCallBack);
+  }
+
+  async deleteLimb(id: string, successCallBack?: () => void, errorCallBack?: (errorMessage: string) => void) {
+    const observable = this.httpClientService.delete({
+      controller: "limbs"
+    }, id);
 
     return this.handleRequest(observable, successCallBack, errorCallBack);
   }

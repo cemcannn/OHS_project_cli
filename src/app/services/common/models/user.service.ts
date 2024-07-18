@@ -40,7 +40,7 @@ export class UserService {
     await promiseData;
   }
 
-  async getAllUsers(page: number = 0, size: number = 5, successCallBack?: () => void, errorCallBack?: (errorMessage: string) => void): Promise<{ totalUsersCount: number; users: List_User[] }> {
+  async getAllUsers(successCallBack?: () => void, errorCallBack?: (errorMessage: string) => void): Promise<{ totalUsersCount: number; users: List_User[] }> {
     const observable: Observable<{ totalUsersCount: number; users: List_User[] }> = this.httpClientService.get({
       controller: "Users",
       queryString: `get-all-users`

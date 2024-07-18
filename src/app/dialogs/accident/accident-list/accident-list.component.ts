@@ -16,7 +16,7 @@ import { AccidentUpdateDialogComponent } from '../accident-update-dialog/acciden
   styleUrls: ['./accident-list.component.scss']
 })
 export class AccidentListComponent extends BaseDialog<AccidentListComponent> implements OnInit, AfterViewInit {
-  displayedColumns: string[] = ['typeOfAccident', 'accidentDate', 'accidentHour', 'onTheJobDate', 'description', 'accidentUpdate', 'delete'];
+  displayedColumns: string[] = ['typeOfAccident', 'limb', 'accidentDate', 'accidentHour', 'onTheJobDate', 'description', 'accidentUpdate', 'delete'];
   dataSource: MatTableDataSource<List_Accident> = new MatTableDataSource<List_Accident>();
 
   @ViewChild(MatPaginator) paginator: MatPaginator;

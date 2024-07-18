@@ -5,6 +5,7 @@ export class List_Accident {
     surname: string;
     personnelId: string;
     typeOfAccident: string;
+    limb: string;
     accidentDate : Date;
     accidentHour : string;
     onTheJobDate : Date;

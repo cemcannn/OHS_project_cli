@@ -1,21 +1,21 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { BaseDialog } from '../../base/base-dialog';
 import { MatTableDataSource } from '@angular/material/table';
-import { List_Type_Of_Accident } from 'src/app/contracts/definitions/list_type_of_accident';
+import { List_Type_Of_Accident } from 'src/app/contracts/definitions/type_of_accident/list_type_of_accident';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { AlertifyService, MessageType, Position } from 'src/app/services/admin/alertify.service';
 import { TypeOfAccidentService } from 'src/app/services/common/models/type-of-accident.service';
-import { Create_Type_Of_Accident } from 'src/app/contracts/definitions/create_type_of_accident';
-import { Update_Type_Of_Accident } from 'src/app/contracts/definitions/update_type_of_accident';
+import { Create_Type_Of_Accident } from 'src/app/contracts/definitions/type_of_accident/create_type_of_accident';
+import { Update_Type_Of_Accident } from 'src/app/contracts/definitions/type_of_accident/update_type_of_accident';
 
 @Component({
-  selector: 'app-show-definition-dialog',
-  templateUrl: './show-definition-dialog.component.html',
-  styleUrls: ['./show-definition-dialog.component.scss']
+  selector: 'app-show-type-of-accident-dialog',
+  templateUrl: './show-type-of-accident-dialog.component.html',
+  styleUrls: ['./show-type-of-accident-dialog.component.scss']
 })
-export class ShowDefinitionDialogComponent extends BaseDialog<ShowDefinitionDialogComponent> implements OnInit {
+export class ShowTypeOfAccidentDialogComponent extends BaseDialog<ShowTypeOfAccidentDialogComponent> implements OnInit {
   displayedColumns: string[] = ['typeOfAccident', 'actions'];
   dataSource: MatTableDataSource<List_Type_Of_Accident> = new MatTableDataSource<List_Type_Of_Accident>();
 
@@ -26,7 +26,7 @@ export class ShowDefinitionDialogComponent extends BaseDialog<ShowDefinitionDial
   newTypeOfAccident: string = ''; // Yeni kaza türü eklemek için
 
   constructor(
-    dialogRef: MatDialogRef<ShowDefinitionDialogComponent>,
+    dialogRef: MatDialogRef<ShowTypeOfAccidentDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private typeOfAccidentService: TypeOfAccidentService,
     private alertifyService: AlertifyService
@@ -45,12 +45,12 @@ export class ShowDefinitionDialogComponent extends BaseDialog<ShowDefinitionDial
 
   async showTypeOfAccidents(): Promise<void> {
     try {
-      const allAccidents = await this.typeOfAccidentService.getTypeOfAccidents();
-      this.dataSource.data = allAccidents.datas;
+      const allTypeOfAccidents = await this.typeOfAccidentService.getTypeOfAccidents();
+      this.dataSource.data = allTypeOfAccidents.datas;
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
     } catch (error) {
-      this.alertifyService.message('Kaza bilgilerini yüklerken bir hata oluştu.', {
+      this.alertifyService.message('Kaza türü bilgilerini yüklerken bir hata oluştu.', {
         dismissOthers: true,
         messageType: MessageType.Error,
         position: Position.TopRight
@@ -69,13 +69,13 @@ export class ShowDefinitionDialogComponent extends BaseDialog<ShowDefinitionDial
   }
 
   async saveEdit(element: List_Type_Of_Accident): Promise<void> {
-    const updatedAccident: Update_Type_Of_Accident = {
+    const updatedTypeOfAccident: Update_Type_Of_Accident = {
       id: element.id,
       name: element.name // Güncellenen kaza türü adı
     };
 
     try {
-      await this.typeOfAccidentService.updateTypeOfAccident(updatedAccident);
+      await this.typeOfAccidentService.updateTypeOfAccident(updatedTypeOfAccident);
       this.alertifyService.message('Kaza türü başarıyla güncellendi.', {
         dismissOthers: true,
         messageType: MessageType.Success,
@@ -97,12 +97,12 @@ export class ShowDefinitionDialogComponent extends BaseDialog<ShowDefinitionDial
   }
 
   async createTypeOfAccident(): Promise<void> {
-    const newAccident: Create_Type_Of_Accident = {
+    const newTypeOfAccident: Create_Type_Of_Accident = {
       name: this.newTypeOfAccident // Yeni kaza türü adı
     };
 
     try {
-      await this.typeOfAccidentService.createTypeOfAccident(newAccident);
+      await this.typeOfAccidentService.createTypeOfAccident(newTypeOfAccident);
       this.alertifyService.message('Kaza türü başarıyla oluşturuldu.', {
         dismissOthers: true,
         messageType: MessageType.Success,

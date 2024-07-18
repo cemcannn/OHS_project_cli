@@ -25,9 +25,10 @@ import { TimespanPipe } from '../pipes/timespan.pipe';
 import { PersonnelUpdateDialogComponent } from './personnel/personnel-update-dialog/personnel-update-dialog.component';
 import { PersonnelAddDialogComponent } from './personnel/personnel-add-dialog/personnel-add-dialog.component';
 import { DateNotInFutureValidatorDirective, TimeNotInFutureValidatorDirective } from '../directives/validator.directive';
-import { ShowDefinitionDialogComponent } from './definition/show-definition-dialog/show-definition-dialog.component';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
+import { ShowTypeOfAccidentDialogComponent } from './definition/show-type-of-accident-dialog/show-type-of-accident-dialog.component';
+import { ShowLimbDialogComponent } from './definition/show-limb-dialog/show-limb-dialog.component';
 
 
 
@@ -44,7 +45,8 @@ import { MatSelectModule } from '@angular/material/select';
     PersonnelUpdateDialogComponent,
     DateNotInFutureValidatorDirective,
     TimeNotInFutureValidatorDirective,
-    ShowDefinitionDialogComponent,
+    ShowTypeOfAccidentDialogComponent,
+    ShowLimbDialogComponent
 
   ],
   imports: [

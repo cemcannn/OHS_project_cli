@@ -5,9 +5,11 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { AccidentService } from 'src/app/services/common/models/accident.service';
 import { AlertifyService, MessageType, Position } from 'src/app/services/admin/alertify.service';
 import { Create_Accident } from 'src/app/contracts/accidents/create_accident';
-import { ShowDefinitionDialogComponent } from 'src/app/dialogs/definition/show-definition-dialog/show-definition-dialog.component';
-import { List_Type_Of_Accident } from 'src/app/contracts/definitions/list_type_of_accident';
+import { List_Type_Of_Accident } from 'src/app/contracts/definitions/type_of_accident/list_type_of_accident';
 import { BaseDialog } from '../../base/base-dialog';
+import { ShowTypeOfAccidentDialogComponent } from '../../definition/show-type-of-accident-dialog/show-type-of-accident-dialog.component';
+import { ShowLimbDialogComponent } from '../../definition/show-limb-dialog/show-limb-dialog.component';
+import { List_Limb } from 'src/app/contracts/definitions/limb/list_limb';
 
 @Component({
   selector: 'app-accident-add',
@@ -18,6 +20,7 @@ export class AccidentAddComponent extends BaseDialog<AccidentAddComponent> imple
   accidentDateInput: string = "";
   onTheJobDateInput: string = "";
   typeOfAccident: List_Type_Of_Accident; // Kaza türünü tutmak için
+  limb: List_Limb;
 
   constructor(
     dialogRef: MatDialogRef<AccidentAddComponent>,
@@ -32,7 +35,7 @@ export class AccidentAddComponent extends BaseDialog<AccidentAddComponent> imple
   ngOnInit(): void {}
 
   openTypeOfAccidentPicker(): void {
-    const dialogRef = this.dialog.open(ShowDefinitionDialogComponent, {
+    const dialogRef = this.dialog.open(ShowTypeOfAccidentDialogComponent, {
       width: '600px',
       data: { isPicker: true } // Picker modunda açmak için
     });
@@ -44,8 +47,22 @@ export class AccidentAddComponent extends BaseDialog<AccidentAddComponent> imple
     });
   }
 
+  openLimbPicker(): void {
+    const dialogRef = this.dialog.open(ShowLimbDialogComponent, {
+      width: '600px',
+      data: { isPicker: true } // Picker modunda açmak için
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.limb = result; // Seçilen kaza türünü al
+      }
+    });
+  }
+
   createAccident(
     typeOfAccident: string,
+    limb: string,
     accidentDateInput: string,
     accidentHour: string,
     onTheJobDateInput: string,
@@ -62,6 +79,7 @@ export class AccidentAddComponent extends BaseDialog<AccidentAddComponent> imple
     const createAccident: Create_Accident = {
       personnelId: this.data.personnelId,
       typeOfAccident: this.typeOfAccident ? this.typeOfAccident.name : typeOfAccident,
+      limb: this.limb ? this.limb.name : limb,
       accidentDate: accidentDateValue,
       accidentHour: accidentHour,
       onTheJobDate: onTheJobDateValue,

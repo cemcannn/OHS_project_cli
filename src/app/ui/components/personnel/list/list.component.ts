@@ -49,14 +49,14 @@ export class ListComponent extends BaseComponent implements OnInit, AfterViewIni
   }
 
   async getPersonnels() {
-    const allPersonnels: {datas: List_Personnel[], totalCount: number} = await this.personnelService.getPersonnels(this.paginator ? this.paginator.pageIndex : 0, this.paginator ? this.paginator.pageSize : 5, () => this.hideSpinner(SpinnerType.BallAtom), errorMessage => this.alertifyService.message(errorMessage, {
+    const allPersonnels: {datas: List_Personnel[], totalCount: number} = await this.personnelService.getPersonnels(() => this.hideSpinner(SpinnerType.BallAtom), errorMessage => this.alertifyService.message(errorMessage, {
       dismissOthers: true,
       messageType: MessageType.Error,
       position: Position.TopRight
     }))
 
     this.dataSource = new MatTableDataSource<List_Personnel>(allPersonnels.datas);
-    this.paginator.length = allPersonnels.totalCount;
+    this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }
 
@@ -111,5 +111,14 @@ export class ListComponent extends BaseComponent implements OnInit, AfterViewIni
         this.getPersonnels();
       }
     });
+  }
+
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
   }
 }

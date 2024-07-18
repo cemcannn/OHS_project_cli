@@ -2,9 +2,9 @@ import { Injectable } from '@angular/core';
 import { firstValueFrom, Observable } from 'rxjs';
 import { HttpClientService } from '../http-client.service';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Create_Type_Of_Accident } from 'src/app/contracts/definitions/create_type_of_accident';
-import { List_Type_Of_Accident } from 'src/app/contracts/definitions/list_type_of_accident';
-import { Update_Type_Of_Accident } from 'src/app/contracts/definitions/update_type_of_accident';
+import { Create_Type_Of_Accident } from 'src/app/contracts/definitions/type_of_accident/create_type_of_accident';
+import { List_Type_Of_Accident } from 'src/app/contracts/definitions/type_of_accident/list_type_of_accident';
+import { Update_Type_Of_Accident } from 'src/app/contracts/definitions/type_of_accident/update_type_of_accident';
 
 @Injectable({
   providedIn: 'root'

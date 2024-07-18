@@ -1,64 +1,71 @@
 <div class="mat-elevation-z8">
+  <div class="filter-container">
+    <mat-form-field appearance="fill">
+      <mat-label>Filtrele</mat-label>
+      <input matInput (keyup)="applyFilter($event)" placeholder="Personel Ara">
+    </mat-form-field>
+  </div>
+
   <table mat-table [dataSource]="dataSource" matSort>
 
     <ng-container matColumnDef="trIdNumber">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> TC Kimlik Numarası </th>
-      <td mat-cell *matCellDef="let element"> {{element.trIdNumber}} </td>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align: center;">TC Kimlik Numarası</th>
+      <td mat-cell *matCellDef="let element" style="text-align: center;">{{element.trIdNumber}}</td>
     </ng-container>
 
     <ng-container matColumnDef="name">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> İsim </th>
-      <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align: center;"> İsim </th>
+      <td mat-cell *matCellDef="let element" style="text-align: center;"> {{element.name}} </td>
     </ng-container>
 
     <ng-container matColumnDef="surname">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Soyisim </th>
-      <td mat-cell *matCellDef="let element"> {{element.surname}} </td>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align: center;"> Soyisim </th>
+      <td mat-cell *matCellDef="let element" style="text-align: center;"> {{element.surname}} </td>
     </ng-container>
 
     <ng-container matColumnDef="retiredId">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Emekli Sicil Numarası </th>
-      <td mat-cell *matCellDef="let element"> {{element.retiredId}} </td>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align: center;"> Emekli Sicil Numarası </th>
+      <td mat-cell *matCellDef="let element" style="text-align: center;"> {{element.retiredId}} </td>
     </ng-container>
 
     <ng-container matColumnDef="insuranceId">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> SGK Sicil Numarası </th>
-      <td mat-cell *matCellDef="let element"> {{element.insuranceId}} </td>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align: center;"> SGK Sicil Numarası </th>
+      <td mat-cell *matCellDef="let element" style="text-align: center;"> {{element.insuranceId}} </td>
     </ng-container>
 
     <ng-container matColumnDef="startDateOfWork">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> İşe Başlangıç Tarihi </th>
-      <td mat-cell *matCellDef="let element"> {{element.startDateOfWork | date:'dd/MM/yyyy'}} </td>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align: center;"> İşe Başlangıç Tarihi </th>
+      <td mat-cell *matCellDef="let element" style="text-align: center;"> {{element.startDateOfWork | date:'dd/MM/yyyy'}} </td>
     </ng-container>
 
     <ng-container matColumnDef="profession">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Meslek Dalı </th>
-      <td mat-cell *matCellDef="let element"> {{element.profession}} </td>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align: center;"> Meslek Dalı </th>
+      <td mat-cell *matCellDef="let element" style="text-align: center;"> {{element.profession}} </td>
     </ng-container>
 
     <ng-container matColumnDef="typeOfPlace">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Çalıştığı Birim </th>
-      <td mat-cell *matCellDef="let element"> {{element.typeOfPlace}} </td>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align: center;"> Çalıştığı Birim </th>
+      <td mat-cell *matCellDef="let element" style="text-align: center;"> {{element.typeOfPlace}} </td>
     </ng-container>
 
     <ng-container matColumnDef="tKIId">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> TKİ Sicil Numarası </th>
-      <td mat-cell *matCellDef="let element"> {{element.tKIId}} </td>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align: center;"> TKİ Sicil Numarası </th>
+      <td mat-cell *matCellDef="let element" style="text-align: center;"> {{element.tKIId}} </td>
     </ng-container> 
 
     <ng-container matColumnDef="unit">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Birimi </th>
-      <td mat-cell *matCellDef="let element"> {{element.unit}} </td>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align: center;"> Birimi </th>
+      <td mat-cell *matCellDef="let element" style="text-align: center;"> {{element.unit}} </td>
     </ng-container>
 
     <ng-container matColumnDef="taskInstruction">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Görev Talimatları </th>
-      <td mat-cell *matCellDef="let element"> {{element.taskInstruction}} </td>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align: center;"> Görev Talimatları </th>
+      <td mat-cell *matCellDef="let element" style="text-align: center;"> {{element.taskInstruction}} </td>
     </ng-container> 
 
     <ng-container matColumnDef="accidentAdd">
-      <th mat-header-cell *matHeaderCellDef> Kaza Ekle </th>
-      <td mat-cell *matCellDef="let element">
+      <th mat-header-cell *matHeaderCellDef style="text-align: center;"> Kaza Ekle </th>
+      <td mat-cell *matCellDef="let element" style="text-align: center;">
         <button mat-icon-button color="primary" (click)="openAccidentAddDialog(element.id)">
           <img src="../../../../../../assets/icons/add.png" alt="Kaza Ekle">
         </button>
@@ -66,17 +73,17 @@
     </ng-container>
     
     <ng-container matColumnDef="accidentList">
-      <th mat-header-cell *matHeaderCellDef> Kazaları Göster </th>
-      <td mat-cell *matCellDef="let element">
+      <th mat-header-cell *matHeaderCellDef style="text-align: center;"> Kazaları Göster </th>
+      <td mat-cell *matCellDef="let element" style="text-align: center;">
         <button mat-icon-button color="primary" (click)="openAccidentDialog(element.id)">
           <img src="../../../../../../assets/icons/list.svg" alt="Kaza Ekle">
         </button>
       </td>
     </ng-container>
 
-    <ng-container matColumnDef="personnelUpdate">
-      <th mat-header-cell *matHeaderCellDef> Personel Bilgilerini Güncelle </th>
-      <td mat-cell *matCellDef="let element">
+    <ng-container matColumnDef="personnelUpdate" >
+      <th mat-header-cell *matHeaderCellDef style="text-align: center;"> Personel Bilgilerini Güncelle </th>
+      <td mat-cell *matCellDef="let element" style="text-align: center;">
         <button mat-icon-button color="primary" (click)="openUpdatePersonnelDialog(element)">
           <img src="../../../../../../assets/icons/edit.png" alt="Personel Güncelle">
         </button>
@@ -84,8 +91,9 @@
     </ng-container>
 
     <ng-container matColumnDef="delete"> 
-      <th mat-header-cell *matHeaderCellDef width="30"> Personel Bilgilerini Sil </th>
+      <th mat-header-cell *matHeaderCellDef width="30" style="text-align: center;"> Personel Bilgilerini Sil </th>
       <td mat-cell *matCellDef="let element"
+      style="text-align: center;"
           appDelete
           [id]="element.id"
           (callback)="getPersonnels()"
@@ -106,7 +114,8 @@
 
     <div class="col-9">
       <mat-paginator 
-      [pageSizeOptions]="[5, 10, 20]"
+      (page)="pageChanged()"
+      [pageSizeOptions]="[10, 20, 100]"
       showFirstLastButtons
       aria-label="Select page of periodic elements">
       </mat-paginator>

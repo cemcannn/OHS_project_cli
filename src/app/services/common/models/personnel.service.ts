@@ -26,7 +26,7 @@ export class PersonnelService {
     return await promiseData;
   }
 
-  async getPersonnels(page: number = 0, size: number = 5, successCallBack?: () => void, errorCallBack?: (errorMessage: string) => void): Promise<{ totalCount: number; datas: List_Personnel[] }> {
+  async getPersonnels(successCallBack?: () => void, errorCallBack?: (errorMessage: string) => void): Promise<{ totalCount: number; datas: List_Personnel[] }> {
     const observable: Observable<{ totalCount: number; datas: List_Personnel[] }> = this.httpClientService.get({
       controller: "personnels",
       queryString: `get-all-personnels`
