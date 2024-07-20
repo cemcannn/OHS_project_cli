@@ -10,4 +10,5 @@ export class List_Accident {
     accidentHour : string;
     onTheJobDate : Date;
     description : string;
+    reportDays?: number
   }

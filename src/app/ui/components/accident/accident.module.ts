@@ -23,7 +23,7 @@ import { MatSortModule } from '@angular/material/sort';
   imports: [
     CommonModule, MatSidenavModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatTableModule, MatPaginatorModule,
     DialogModule, MatSortModule,
-    DeleteDirectiveModule,
+    DeleteDirectiveModule, 
     RouterModule.forChild([
       { path: "", component: AccidentComponent}
     ])
