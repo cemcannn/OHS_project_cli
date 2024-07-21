@@ -132,66 +132,64 @@
             </div>
             <!-- Column -->
           </div>
-          <!-- ============================================================== -->
-          <!-- Sales chart -->
-          <!-- ============================================================== -->
-          <div class="row">
-            <div class="col-md-12">
-              <div class="card">
-                <div class="card-body">
-                  <div class="d-md-flex align-items-center">
-                    <div>
-                      <h3 class="card-title">İş Kazası Geçiren Çalışan Sayıları</h3>
-                      <h4 class="card-subtitle">Geçen Ayın Genel Görünümü</h4>
-                    </div>
-                  </div>
-                  <table mat-table matSort>
-
-                    <ng-container matColumnDef="month">
-                      <th mat-header-cell *matHeaderCellDef mat-sort-header> Aylar </th>
-                      <td mat-cell *matCellDef="let element"> {{element.month}} </td>
-                    </ng-container>
-
-                    <ng-container matColumnDef="zeroDay">
-                      <th mat-header-cell *matHeaderCellDef mat-sort-header> Kaza Sonrası Çalışır Durumdaki Çalışan Sayısı </th>
-                      <td mat-cell *matCellDef="let element"> {{element.trIdNumber}} </td>
-                    </ng-container>
-                
-                    <ng-container matColumnDef="oneToFourDay">
-                      <th mat-header-cell *matHeaderCellDef mat-sort-header> Kaza Sonrası İş Göremez Raporlu Çalışan Sayısı (1-4 Gün) </th>
-                      <td mat-cell *matCellDef="let element"> {{element.name}} </td>
-                    </ng-container>
-                
-                    <ng-container matColumnDef="fiveAboveDay">
-                      <th mat-header-cell *matHeaderCellDef mat-sort-header> Kaza Sonrası İş Göremez Sayısı (5 Gün ve Üzeri) </th>
-                      <td mat-cell *matCellDef="let element"> {{element.surname}} </td>
-                    </ng-container>
-                
-                    <ng-container matColumnDef="deathNumber">
-                      <th mat-header-cell *matHeaderCellDef mat-sort-header> İş Kazası Sonucu Ölen Çalışan Sayısı (**) </th>
-                      <td mat-cell *matCellDef="let element"> {{element.typeOfAccident }} </td>
-                    </ng-container>
-                
-                    <ng-container matColumnDef="totalAccidentNumber">
-                      <th mat-header-cell *matHeaderCellDef mat-sort-header> Toplam İş Kazası Sayısı </th>
-                      <td mat-cell *matCellDef="let element"> {{element.accidentDate | date:'dd/MM/yyyy'}} </td>
-                    </ng-container>
-                
-                    <ng-container matColumnDef="totalWorkDay">
-                      <th mat-header-cell *matHeaderCellDef mat-sort-header> Toplam İşgünü Kaybı (**) </th>
-                      <td mat-cell *matCellDef="let element"> {{element.accidentHour}} </td>
-                    </ng-container>                
-                
-                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-                  </table>
-                </div>
-              </div>
+  <!-- ============================================================== -->
+  <!-- Sales chart -->
+  <!-- ============================================================== -->
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-body">
+          <div class="d-md-flex align-items-center">
+            <div>
+              <h3 class="card-title">İş Kazası Geçiren Çalışan Sayıları</h3>
             </div>
           </div>
-          <!-- ============================================================== -->
-          <!-- Sales chart -->
-          <!-- ============================================================== -->
+          <!-- Excel Export Button -->
+          <button mat-raised-button color="primary" (click)="exportToExcel()">Excel Olarak Dışa Aktar</button>
+          <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8 demo-table">
+            <ng-container matColumnDef="month">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Aylar </th>
+              <td mat-cell *matCellDef="let element"> {{element.month}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="zeroDay">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Kaza Sonrası Çalışır Durumdaki Çalışan Sayısı </th>
+              <td mat-cell *matCellDef="let element"> {{element.zeroDay}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="oneToFourDay">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Kaza Sonrası İş Göremez Raporlu Çalışan Sayısı (1-4 Gün) </th>
+              <td mat-cell *matCellDef="let element"> {{element.oneToFourDay}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="fiveAboveDay">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Kaza Sonrası İş Göremez Sayısı (5 Gün ve Üzeri) </th>
+              <td mat-cell *matCellDef="let element"> {{element.fiveAboveDay}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="totalAccidentNumber">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Toplam İş Kazası Sayısı </th>
+              <td mat-cell *matCellDef="let element"> {{element.totalAccidentNumber}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="totalWorkDay">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Toplam İşgünü Kaybı </th>
+              <td mat-cell *matCellDef="let element"> {{element.totalWorkDay}} </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row 
+                (click)="clickedRows.add(row)"
+                [class.demo-row-is-clicked]="clickedRows.has(row)"
+                *matRowDef="let row; columns: displayedColumns;"></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- ============================================================== -->
+  <!-- Sales chart -->
+  <!-- ============================================================== -->
         </div>
         <!-- ============================================================== -->
         <!-- End Container fluid  -->
