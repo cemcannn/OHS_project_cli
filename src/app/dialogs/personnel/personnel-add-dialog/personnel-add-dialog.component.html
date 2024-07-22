@@ -15,7 +15,11 @@
 
     <mat-form-field appearance="fill" class="field">
       <mat-label>TKİ Sicil Numarası</mat-label>
-      <input matInput type="text" #txtTkiId="ngModel" name="tkiId" ngModel>
+      <input matInput type="text" pattern="^[0-9]*$" required #txtTkiId="ngModel" name="tkiId" ngModel>
+      <mat-error *ngIf="txtTkiId.invalid && (txtTkiId.dirty || txtTkiId.touched)">
+        <span *ngIf="txtTkiId.errors?.required">TKİ sicil numarası gereklidir.</span>
+        <span *ngIf="txtTrIdNumber.errors?.pattern">TKİ sicil numarası sadece rakamlardan oluşmalıdır.</span>
+      </mat-error>
     </mat-form-field>
 
 
@@ -37,7 +41,7 @@
 
     <mat-form-field appearance="fill" class="field">
       <mat-label>Mesleği</mat-label>
-      <input matInput [value]="unit?.name" readonly (click)="openUnitPicker()">
+      <input matInput [value]="unit?.name" required readonly (click)="openUnitPicker()">
       <button mat-icon-button matSuffix (click)="openUnitPicker()">
         <mat-icon>arrow_drop_down</mat-icon>
       </button>
