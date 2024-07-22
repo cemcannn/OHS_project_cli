@@ -68,14 +68,14 @@ export class AccidentAddComponent extends BaseDialog<AccidentAddComponent> imple
     onTheJobDateInput: string,
     description: string
   ): void {
-    // gg.aa.yyyy formatındaki tarihi Date nesnesine çevirme
+    // gg.aa.yyyy formatındaki tarihi Date nesnesine çevirme ve UTC olarak ayarlama
     const [day, month, year] = accidentDateInput.split(".");
-    const accidentDateValue: Date = new Date(`${year}-${month}-${day}`);
-
-    // gg.aa.yyyy formatındaki tarihi Date nesnesine çevirme
+    const accidentDateValue: Date = new Date(Date.UTC(+year, +month - 1, +day));
+  
+    // gg.aa.yyyy formatındaki tarihi Date nesnesine çevirme ve UTC olarak ayarlama
     const [jobDay, jobMonth, jobYear] = onTheJobDateInput.split(".");
-    const onTheJobDateValue: Date = new Date(`${jobYear}-${jobMonth}-${jobDay}`);
-
+    const onTheJobDateValue: Date = new Date(Date.UTC(+jobYear, +jobMonth - 1, +jobDay));
+  
     const createAccident: Create_Accident = {
       personnelId: this.data.personnelId,
       typeOfAccident: this.typeOfAccident ? this.typeOfAccident.name : typeOfAccident,
@@ -85,7 +85,7 @@ export class AccidentAddComponent extends BaseDialog<AccidentAddComponent> imple
       onTheJobDate: onTheJobDateValue,
       description: description
     };
-
+  
     this.accidentService.createAccident(
       createAccident,
       () => {
@@ -101,5 +101,5 @@ export class AccidentAddComponent extends BaseDialog<AccidentAddComponent> imple
         this.dialogRef.close({ success: false, error: errorMessage });
       }
     );
-  }
+  }  
 }

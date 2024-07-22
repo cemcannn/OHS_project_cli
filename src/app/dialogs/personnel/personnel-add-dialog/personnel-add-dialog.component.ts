@@ -33,9 +33,11 @@ export class PersonnelAddDialogComponent extends BaseDialog<PersonnelAddDialogCo
     insuranceId: string,
     startDateOfWork: string
   ): void {
-    // Convert necessary values to the expected types
-    const startDateOfWorkValue: Date = new Date(startDateOfWork); // You may want to handle date formatting here
-
+  // Convert necessary values to the expected types
+  const startDateOfWorkValue: Date = new Date(startDateOfWork);
+  
+  // Tarihi UTC olarak ayarlayın
+  startDateOfWorkValue.setMinutes(startDateOfWorkValue.getMinutes() - startDateOfWorkValue.getTimezoneOffset());
 
     const createPersonnel: Create_Personnel = {
       trIdNumber: trIdNumber,

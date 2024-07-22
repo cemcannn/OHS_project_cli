@@ -21,7 +21,7 @@ import { PersonnelService } from 'src/app/services/common/models/personnel.servi
   styleUrls: ['./list.component.scss']
 })
 export class ListComponent extends BaseComponent implements OnInit, AfterViewInit {
-  displayedColumns: string[] = ['trIdNumber', 'tKIId','name', 'surname', 'unit', 'retiredId', 'insuranceId', 'startDateOfWork', 'accidentAdd', 'accidentList', 'personnelUpdate', 'delete'];
+  displayedColumns: string[] = ['trIdNumber', 'tkiId','name', 'surname', 'unit', 'retiredId', 'insuranceId', 'startDateOfWork', 'accidentAdd', 'accidentList', 'personnelUpdate', 'delete'];
   dataSource: MatTableDataSource<List_Personnel> = new MatTableDataSource<List_Personnel>();
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
