@@ -60,13 +60,13 @@ export class DeleteDirective {
               messageType: MessageType.Success,
               position: Position.TopRight
             })
-            else if(this.controller == 'personnel')
+            else if(this.controller == 'personnels')
             this.alertifyService.message('Personel bilgileri başarıyla silinmiştir.', {
               dismissOthers: true,
               messageType: MessageType.Success,
               position: Position.TopRight
             })
-            else(this.controller == 'accident')
+            else(this.controller == 'accidents')
             this.alertifyService.message('Kaza bilgileri başarıyla silinmiştir.', {
               dismissOthers: true,
               messageType: MessageType.Success,
@@ -81,13 +81,13 @@ export class DeleteDirective {
             messageType: MessageType.Error,
             position: Position.TopRight
           })
-          else if(this.controller == 'personnel')
+          else if(this.controller == 'personnels')
             this.alertifyService.message('Personel bilgileri silinirken beklenmeyen bir hatayla karşılaşılmıştır.', {
               dismissOthers: true,
               messageType: MessageType.Success,
               position: Position.TopRight
             })
-            else(this.controller == 'accident')
+            else(this.controller == 'accidents')
             this.alertifyService.message('Kaza bilgileri silinirken beklenmeyen bir hatayla karşılaşılmıştır.', {
               dismissOthers: true,
               messageType: MessageType.Success,

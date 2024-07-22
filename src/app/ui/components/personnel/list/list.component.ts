@@ -21,7 +21,7 @@ import { PersonnelService } from 'src/app/services/common/models/personnel.servi
   styleUrls: ['./list.component.scss']
 })
 export class ListComponent extends BaseComponent implements OnInit, AfterViewInit {
-  displayedColumns: string[] = ['trIdNumber', 'name', 'surname', 'retiredId', 'insuranceId', 'startDateOfWork', 'profession', 'typeOfPlace', 'tKIId', 'unit', 'taskInstruction', 'accidentAdd', 'accidentList', 'personnelUpdate', 'delete'];
+  displayedColumns: string[] = ['trIdNumber', 'tKIId','name', 'surname', 'unit', 'retiredId', 'insuranceId', 'startDateOfWork', 'accidentAdd', 'accidentList', 'personnelUpdate', 'delete'];
   dataSource: MatTableDataSource<List_Personnel> = new MatTableDataSource<List_Personnel>();
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -60,7 +60,7 @@ export class ListComponent extends BaseComponent implements OnInit, AfterViewIni
     this.dataSource.sort = this.sort;
   }
 
-  openPersonnelAddDialog(): void {
+  async openPersonnelAddDialog(): Promise<void> {
     const dialogRef = this.dialog.open(PersonnelAddDialogComponent, {
       width: '400px',
     });
@@ -72,7 +72,7 @@ export class ListComponent extends BaseComponent implements OnInit, AfterViewIni
     });
   }
 
-  openAccidentAddDialog(id: number): void {
+  async openAccidentAddDialog(id: number): Promise<void> {
     const dialogRef = this.dialog.open(AccidentAddComponent, {
       width: '400px',
       data: { personnelId: id }
@@ -85,7 +85,7 @@ export class ListComponent extends BaseComponent implements OnInit, AfterViewIni
     });
   }
 
-  async openUpdatePersonnelDialog(personnelData: any): Promise<void> {
+  async openPersonnelUpdateDialog(personnelData: any): Promise<void> {
     const dialogRef = await this.dialog.open(PersonnelUpdateDialogComponent, {
       width: '500px',
       data: personnelData
@@ -100,7 +100,7 @@ export class ListComponent extends BaseComponent implements OnInit, AfterViewIni
     });
   }
 
-  openAccidentDialog(id: string): void {
+  async openAccidentsDialog(id: string): Promise<void> {
     const dialogRef = this.dialog.open(AccidentListComponent, {
       width: '800px',
       data: { personId: id }

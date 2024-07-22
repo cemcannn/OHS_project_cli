@@ -2,14 +2,14 @@
     <div class="filter-container">
       <mat-form-field appearance="fill">
         <mat-label>Filtrele</mat-label>
-        <input matInput (keyup)="applyFilter($event)" placeholder="Uzuv Türünü Ara">
+        <input matInput (keyup)="applyFilter($event)" placeholder="Birim Türünü Ara">
       </mat-form-field>
     </div>
   
     <table mat-table [dataSource]="dataSource" matSort>
   
-      <ng-container matColumnDef="limb">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> Uzuv Türü </th>
+      <ng-container matColumnDef="unit">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Birim Türü </th>
         <td mat-cell *matCellDef="let element; let i = index">
           <div *ngIf="editIndex === i; else readMode">
             <input matInput [(ngModel)]="element.name">
@@ -35,10 +35,10 @@
             <button mat-icon-button color="primary" (click)="startEdit(i)" *ngIf="!data.isPicker">
               <mat-icon>edit</mat-icon>
             </button>
-            <button mat-icon-button color="warn" appDelete [id]="element.id" (callback)="showLimbs()" controller="limbs" *ngIf="!data.isPicker">
+            <button mat-icon-button color="warn" appDelete [id]="element.id" (callback)="showUnits()" controller="units" *ngIf="!data.isPicker">
               <mat-icon>delete</mat-icon>
             </button>
-            <button mat-icon-button color="primary" (click)="selectLimb(element)" *ngIf="data.isPicker">
+            <button mat-icon-button color="primary" (click)="selectUnit(element)" *ngIf="data.isPicker">
               <mat-icon>check</mat-icon>
             </button>
           </ng-template>
@@ -54,9 +54,9 @@
   
   <div class="new-accident-container" *ngIf="!data.isPicker">
     <mat-form-field appearance="fill">
-      <mat-label>Yeni Uzuv Türü</mat-label>
-      <input matInput [(ngModel)]="newLimb">
+      <mat-label>Yeni Birim Türü</mat-label>
+      <input matInput [(ngModel)]="newUnit">
     </mat-form-field>
-    <button mat-raised-button color="primary" (click)="createLimb()">Ekle</button>
+    <button mat-raised-button color="primary" (click)="createUnit()">Ekle</button>
   </div>
   

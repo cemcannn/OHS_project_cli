@@ -29,6 +29,14 @@
       </mat-error>
     </mat-form-field>
 
+    <mat-form-field appearance="fill" class="field">
+      <mat-label>Mesleği</mat-label>
+      <input matInput [value]="unit?.name" readonly (click)="openUnitPicker()">
+      <button mat-icon-button matSuffix (click)="openUnitPicker()">
+        <mat-icon>arrow_drop_down</mat-icon>
+      </button>
+    </mat-form-field>
+
     <mat-form-field appearance="fill">
       <mat-label>Emekli Sicil Numarası</mat-label>
       <input matInput [(ngModel)]="data.retiredId">

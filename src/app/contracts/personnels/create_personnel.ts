@@ -1,9 +1,10 @@
 export class Create_Personnel {
     trIdNumber: string;
+    tkiId: string;
     name: string;
     surname: string;
-    retiredId: number;
-    insuranceId: number;
+    unit: string;
+    retiredId: string;
+    insuranceId: string;
     startDateOfWork: Date;
-    tkiId: number;
   }

@@ -29,6 +29,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
 import { ShowTypeOfAccidentDialogComponent } from './definition/show-type-of-accident-dialog/show-type-of-accident-dialog.component';
 import { ShowLimbDialogComponent } from './definition/show-limb-dialog/show-limb-dialog.component';
+import { ShowUnitDialogComponent } from './definition/show-unit-dialog/show-unit-dialog.component';
+
 
 
 
@@ -46,7 +48,8 @@ import { ShowLimbDialogComponent } from './definition/show-limb-dialog/show-limb
     DateNotInFutureValidatorDirective,
     TimeNotInFutureValidatorDirective,
     ShowTypeOfAccidentDialogComponent,
-    ShowLimbDialogComponent
+    ShowLimbDialogComponent,
+    ShowUnitDialogComponent
 
   ],
   imports: [

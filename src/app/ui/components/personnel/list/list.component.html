@@ -12,6 +12,11 @@
       <th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align: center;">TC Kimlik Numarası</th>
       <td mat-cell *matCellDef="let element" style="text-align: center;">{{element.trIdNumber}}</td>
     </ng-container>
+    
+    <ng-container matColumnDef="tKIId">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align: center;"> TKİ Sicil Numarası </th>
+      <td mat-cell *matCellDef="let element" style="text-align: center;"> {{element.tKIId}} </td>
+    </ng-container> 
 
     <ng-container matColumnDef="name">
       <th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align: center;"> İsim </th>
@@ -21,6 +26,11 @@
     <ng-container matColumnDef="surname">
       <th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align: center;"> Soyisim </th>
       <td mat-cell *matCellDef="let element" style="text-align: center;"> {{element.surname}} </td>
+    </ng-container>
+    
+    <ng-container matColumnDef="unit">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align: center;"> Meslek Dalı </th>
+      <td mat-cell *matCellDef="let element" style="text-align: center;"> {{element.unit}} </td>
     </ng-container>
 
     <ng-container matColumnDef="retiredId">
@@ -38,31 +48,6 @@
       <td mat-cell *matCellDef="let element" style="text-align: center;"> {{element.startDateOfWork | date:'dd/MM/yyyy'}} </td>
     </ng-container>
 
-    <ng-container matColumnDef="profession">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align: center;"> Meslek Dalı </th>
-      <td mat-cell *matCellDef="let element" style="text-align: center;"> {{element.profession}} </td>
-    </ng-container>
-
-    <ng-container matColumnDef="typeOfPlace">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align: center;"> Çalıştığı Birim </th>
-      <td mat-cell *matCellDef="let element" style="text-align: center;"> {{element.typeOfPlace}} </td>
-    </ng-container>
-
-    <ng-container matColumnDef="tKIId">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align: center;"> TKİ Sicil Numarası </th>
-      <td mat-cell *matCellDef="let element" style="text-align: center;"> {{element.tKIId}} </td>
-    </ng-container> 
-
-    <ng-container matColumnDef="unit">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align: center;"> Birimi </th>
-      <td mat-cell *matCellDef="let element" style="text-align: center;"> {{element.unit}} </td>
-    </ng-container>
-
-    <ng-container matColumnDef="taskInstruction">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align: center;"> Görev Talimatları </th>
-      <td mat-cell *matCellDef="let element" style="text-align: center;"> {{element.taskInstruction}} </td>
-    </ng-container> 
-
     <ng-container matColumnDef="accidentAdd">
       <th mat-header-cell *matHeaderCellDef style="text-align: center;"> Kaza Ekle </th>
       <td mat-cell *matCellDef="let element" style="text-align: center;">
@@ -75,7 +60,7 @@
     <ng-container matColumnDef="accidentList">
       <th mat-header-cell *matHeaderCellDef style="text-align: center;"> Kazaları Göster </th>
       <td mat-cell *matCellDef="let element" style="text-align: center;">
-        <button mat-icon-button color="primary" (click)="openAccidentDialog(element.id)">
+        <button mat-icon-button color="primary" (click)="openAccidentsDialog(element.id)">
           <img src="../../../../../../assets/icons/list.svg" alt="Kaza Ekle">
         </button>
       </td>
@@ -84,7 +69,7 @@
     <ng-container matColumnDef="personnelUpdate" >
       <th mat-header-cell *matHeaderCellDef style="text-align: center;"> Personel Bilgilerini Güncelle </th>
       <td mat-cell *matCellDef="let element" style="text-align: center;">
-        <button mat-icon-button color="primary" (click)="openUpdatePersonnelDialog(element)">
+        <button mat-icon-button color="primary" (click)="openPersonnelUpdateDialog(element)">
           <img src="../../../../../../assets/icons/edit.png" alt="Personel Güncelle">
         </button>
       </td>
