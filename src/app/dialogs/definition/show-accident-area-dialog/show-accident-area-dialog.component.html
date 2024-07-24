@@ -2,14 +2,14 @@
     <div class="filter-container">
       <mat-form-field appearance="fill">
         <mat-label>Filtrele</mat-label>
-        <input matInput (keyup)="applyFilter($event)" placeholder="Birim Türünü Ara">
+        <input matInput (keyup)="applyFilter($event)" placeholder="Kaza Yeri Türünü Ara">
       </mat-form-field>
     </div>
   
     <table mat-table [dataSource]="dataSource" matSort>
   
-      <ng-container matColumnDef="unit">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> Birim Türü </th>
+      <ng-container matColumnDef="accidentArea">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Kaza Yeri Türü </th>
         <td mat-cell *matCellDef="let element; let i = index">
           <div *ngIf="editIndex === i; else readMode">
             <input matInput [(ngModel)]="element.name">
@@ -33,12 +33,11 @@
           </div>
           <ng-template #editMode>
             <button mat-icon-button color="primary" (click)="startEdit(i)" *ngIf="!data.isPicker">
-              <mat-icon>edit</mat-icon>
+              <img src="../../../assets/icons/edit.png" alt="Edit" width="24" height="24">
             </button>
-            <button mat-icon-button color="warn" appDelete [id]="element.id" (callback)="showUnits()" controller="units" *ngIf="!data.isPicker">
-              <mat-icon>delete</mat-icon>
+            <button mat-icon-button color="warn" appDelete [id]="element.id" (callback)="showAccidentAreas()" controller="accidentAreas" *ngIf="!data.isPicker">
             </button>
-            <button mat-icon-button color="primary" (click)="selectUnit(element)" *ngIf="data.isPicker">
+            <button mat-icon-button color="primary" (click)="selectAccidentArea(element)" *ngIf="data.isPicker">
               <mat-icon>check</mat-icon>
             </button>
           </ng-template>
@@ -54,9 +53,9 @@
   
   <div class="new-accident-container" *ngIf="!data.isPicker">
     <mat-form-field appearance="fill">
-      <mat-label>Yeni Birim Türü</mat-label>
-      <input matInput [(ngModel)]="newUnit">
+      <mat-label>Yeni Kaza Yeri Türü</mat-label>
+      <input matInput [(ngModel)]="newAccidentArea">
     </mat-form-field>
-    <button mat-raised-button color="primary" (click)="createUnit()">Ekle</button>
+    <button mat-raised-button color="primary" (click)="createAccidentArea()">Ekle</button>
   </div>
   

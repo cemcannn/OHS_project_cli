@@ -3,10 +3,9 @@
   <form #personnelForm="ngForm">
     <mat-form-field appearance="fill" class="field">
       <mat-label>TC Kimlik Numarası</mat-label>
-      <input matInput type="text" maxlength="11" minlength="11" pattern="^[0-9]*$" required #txtTrIdNumber="ngModel"
+      <input matInput type="text" maxlength="11" minlength="11" pattern="^[0-9]*$" #txtTrIdNumber="ngModel"
         name="trIdNumber" ngModel>
       <mat-error *ngIf="txtTrIdNumber.invalid && (txtTrIdNumber.dirty || txtTrIdNumber.touched)">
-        <span *ngIf="txtTrIdNumber.errors?.required">TC Kimlik Numarası gereklidir.</span>
         <span *ngIf="txtTrIdNumber.errors?.pattern">TC Kimlik Numarası sadece rakamlardan oluşmalıdır.</span>
         <span *ngIf="txtTrIdNumber.errors?.minlength || txtTrIdNumber.errors?.maxlength">TC Kimlik Numarası 11 haneli
           olmalıdır.</span>
@@ -48,16 +47,6 @@
     </mat-form-field>
 
     <mat-form-field appearance="fill" class="field">
-      <mat-label>Emekli Numarası</mat-label>
-      <input matInput type="number" #txtRetireId="ngModel" name="retireId" ngModel>
-    </mat-form-field>
-
-    <mat-form-field appearance="fill" class="field">
-      <mat-label>SGK Sicil Numarası</mat-label>
-      <input matInput type="number" #txtInsuranceId="ngModel" name="insuranceId" ngModel>
-    </mat-form-field>
-
-    <mat-form-field appearance="fill" class="field">
       <mat-label>İşe Başlangıç Tarihi</mat-label>
       <input matInput [matDatepicker]="picker" #txtStartDateOfWork="ngModel" name="onTheJobDate" ngModel required>
       <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
@@ -72,6 +61,6 @@
 <div mat-dialog-actions>
   <button mat-button (click)="close()">İptal</button>
   <button mat-raised-button class="btn" color="primary" [disabled]="personnelForm.invalid"
-    (click)="createPersonnel(txtTrIdNumber.value, txtTkiId.value, txtName.value, txtSurname.value, unit.name, txtRetireId.value, txtInsuranceId.value, txtStartDateOfWork.value)">Personel
+    (click)="createPersonnel(txtTrIdNumber.value, txtTkiId.value, txtName.value, txtSurname.value, unit.name, txtStartDateOfWork.value)">Personel
     Ekle</button>
 </div>

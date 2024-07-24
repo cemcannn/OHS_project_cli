@@ -10,6 +10,8 @@ import { BaseDialog } from '../../base/base-dialog';
 import { ShowTypeOfAccidentDialogComponent } from '../../definition/show-type-of-accident-dialog/show-type-of-accident-dialog.component';
 import { ShowLimbDialogComponent } from '../../definition/show-limb-dialog/show-limb-dialog.component';
 import { List_Limb } from 'src/app/contracts/definitions/limb/list_limb';
+import { ShowAccidentAreaDialogComponent } from '../../definition/show-accident-area-dialog/show-accident-area-dialog.component';
+import { List_Accident_Area } from 'src/app/contracts/definitions/accident_area/list_accident_area';
 
 @Component({
   selector: 'app-accident-add',
@@ -21,6 +23,7 @@ export class AccidentAddComponent extends BaseDialog<AccidentAddComponent> imple
   onTheJobDateInput: string = "";
   typeOfAccident: List_Type_Of_Accident; // Kaza türünü tutmak için
   limb: List_Limb;
+  accidentArea: List_Accident_Area;
 
   constructor(
     dialogRef: MatDialogRef<AccidentAddComponent>,
@@ -55,7 +58,20 @@ export class AccidentAddComponent extends BaseDialog<AccidentAddComponent> imple
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.limb = result; // Seçilen kaza türünü al
+        this.limb = result; // Seçilen uzuv türünü al
+      }
+    });
+  }
+
+  openAccidentAreaPicker(): void {
+    const dialogRef = this.dialog.open(ShowAccidentAreaDialogComponent, {
+      width: '600px',
+      data: { isPicker: true } // Picker modunda açmak için
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.accidentArea = result; // Seçilen kaza alanı türünü al
       }
     });
   }
@@ -63,6 +79,7 @@ export class AccidentAddComponent extends BaseDialog<AccidentAddComponent> imple
   createAccident(
     typeOfAccident: string,
     limb: string,
+    accidentArea: string,
     accidentDateInput: string,
     accidentHour: string,
     onTheJobDateInput: string,
@@ -80,6 +97,7 @@ export class AccidentAddComponent extends BaseDialog<AccidentAddComponent> imple
       personnelId: this.data.personnelId,
       typeOfAccident: this.typeOfAccident ? this.typeOfAccident.name : typeOfAccident,
       limb: this.limb ? this.limb.name : limb,
+      accidentArea: this.accidentArea ? this.accidentArea.name : accidentArea,
       accidentDate: accidentDateValue,
       accidentHour: accidentHour,
       onTheJobDate: onTheJobDateValue,

@@ -1,41 +1,41 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { BaseDialog } from '../../base/base-dialog';
 import { MatTableDataSource } from '@angular/material/table';
-import { List_Unit } from 'src/app/contracts/definitions/unit/list_unit';
+import { List_Profession } from 'src/app/contracts/definitions/profession/list_profession';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { UnitService } from 'src/app/services/common/models/unit.service';
 import { AlertifyService, MessageType, Position } from 'src/app/services/admin/alertify.service';
-import { Update_Unit } from 'src/app/contracts/definitions/unit/update_unit';
-import { Create_Unit } from 'src/app/contracts/definitions/unit/create_unit';
+import { Update_Profession } from 'src/app/contracts/definitions/profession/update_profession';
+import { Create_Profession } from 'src/app/contracts/definitions/profession/create_profession';
+import { ProfessionService } from 'src/app/services/common/models/profession.service';
 
 @Component({
-  selector: 'app-show-unit-dialog',
-  templateUrl: './show-unit-dialog.component.html',
-  styleUrls: ['./show-unit-dialog.component.scss']
+  selector: 'app-show-profession-dialog',
+  templateUrl: './show-profession-dialog.component.html',
+  styleUrls: ['./show-profession-dialog.component.scss']
 })
-export class ShowUnitDialogComponent extends BaseDialog<ShowUnitDialogComponent> implements OnInit {
-  displayedColumns: string[] = ['unit', 'actions'];
-  dataSource: MatTableDataSource<List_Unit> = new MatTableDataSource<List_Unit>();
+export class ShowProfessionDialogComponent extends BaseDialog<ShowProfessionDialogComponent> implements OnInit {
+  displayedColumns: string[] = ['profession', 'actions'];
+  dataSource: MatTableDataSource<List_Profession> = new MatTableDataSource<List_Profession>();
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
   editIndex: number | null = null; // Düzenleme modunda olan satırın indeksi
-  newUnit: string = ''; // Yeni kaza türü eklemek için
+  newProfession: string = ''; // Yeni kaza türü eklemek için
 
   constructor(
-    dialogRef: MatDialogRef<ShowUnitDialogComponent>,
+    dialogRef: MatDialogRef<ShowProfessionDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private unitService: UnitService,
+    private professionService: ProfessionService,
     private alertifyService: AlertifyService,
   ) {
     super(dialogRef);
   }
 
   async ngOnInit(){
-    await this.showUnits();
+    await this.showProfessions();
   }
 
   ngAfterViewInit(): void {
@@ -43,10 +43,10 @@ export class ShowUnitDialogComponent extends BaseDialog<ShowUnitDialogComponent>
     this.dataSource.sort = this.sort;
   }
 
-  async showUnits(): Promise<void> {
+  async showProfessions(): Promise<void> {
     try {
-      const allUnits = await this.unitService.getUnits();
-      this.dataSource.data = allUnits.datas;
+      const allProfessions = await this.professionService.getProfessions();
+      this.dataSource.data = allProfessions.datas;
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
     } catch (error) {
@@ -58,7 +58,7 @@ export class ShowUnitDialogComponent extends BaseDialog<ShowUnitDialogComponent>
     }
   }
 
-  selectUnit(accident: List_Unit): void {
+  selectProfession(accident: List_Profession): void {
     if (this.data.isPicker) {
       this.dialogRef.close(accident);
     }
@@ -68,21 +68,21 @@ export class ShowUnitDialogComponent extends BaseDialog<ShowUnitDialogComponent>
     this.editIndex = index;
   }
 
-  async saveEdit(element: List_Unit): Promise<void> {
-    const updatedUnit: Update_Unit = {
+  async saveEdit(element: List_Profession): Promise<void> {
+    const updatedProfession: Update_Profession = {
       id: element.id,
       name: element.name // Güncellenen kaza türü adı
     };
 
     try {
-      await this.unitService.updateUnit(updatedUnit);
+      await this.professionService.updateProfession(updatedProfession);
       this.alertifyService.message('Uzuv türü başarıyla güncellendi.', {
         dismissOthers: true,
         messageType: MessageType.Success,
         position: Position.TopRight
       });
       this.editIndex = null; // Düzenleme modunu kapat
-      await this.showUnits(); // Güncellenen kaza türünü yükleme
+      await this.showProfessions(); // Güncellenen kaza türünü yükleme
     } catch (error) {
       this.alertifyService.message('Uzuv türü güncellenirken bir hata oluştu.', {
         dismissOthers: true,
@@ -96,20 +96,20 @@ export class ShowUnitDialogComponent extends BaseDialog<ShowUnitDialogComponent>
     this.editIndex = null;
   }
 
-  async createUnit(): Promise<void> {
-    const newUnit: Create_Unit = {
-      name: this.newUnit // Yeni kaza türü adı
+  async createProfession(): Promise<void> {
+    const newProfession: Create_Profession = {
+      name: this.newProfession // Yeni kaza türü adı
     };
 
     try {
-      await this.unitService.createUnit(newUnit);
+      await this.professionService.createProfession(newProfession);
       this.alertifyService.message('Kaza türü başarıyla oluşturuldu.', {
         dismissOthers: true,
         messageType: MessageType.Success,
         position: Position.TopRight
       });
-      this.newUnit = ''; // Giriş alanını temizleme
-      await this.showUnits(); // Yeni kaza türünü yükleme
+      this.newProfession = ''; // Giriş alanını temizleme
+      await this.showProfessions(); // Yeni kaza türünü yükleme
     } catch (error) {
       this.alertifyService.message('Kaza türü oluşturulurken bir hata oluştu.', {
         dismissOthers: true,

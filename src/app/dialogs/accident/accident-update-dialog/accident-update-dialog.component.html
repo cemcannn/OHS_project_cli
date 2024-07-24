@@ -3,7 +3,7 @@
   <form #accidentForm="ngForm">
     
     <mat-form-field appearance="fill" class="field">
-      <mat-label>Kaza Oluşum Tipi</mat-label>
+      <mat-label> Kaza Oluşum Tipi </mat-label>
       <input matInput [value]="typeOfAccident?.name" readonly (click)="openTypeOfAccidentPicker()">
       <button mat-icon-button matSuffix (click)="openTypeOfAccidentPicker()">
         <mat-icon>arrow_drop_down</mat-icon>
@@ -11,9 +11,17 @@
     </mat-form-field>
 
     <mat-form-field appearance="fill" class="field">
-      <mat-label>Uzuv Türü</mat-label>
+      <mat-label> Uzuv </mat-label>
       <input matInput [value]="limb?.name" readonly (click)="openLimbPicker()">
       <button mat-icon-button matSuffix (click)="openLimbPicker()">
+        <mat-icon>arrow_drop_down</mat-icon>
+      </button>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="field">
+      <mat-label> Kaza Yeri </mat-label>
+      <input matInput [value]="accidentArea?.name" readonly (click)="openAccidentAreaPicker()">
+      <button mat-icon-button matSuffix (click)="openAccidentAreaPicker()">
         <mat-icon>arrow_drop_down</mat-icon>
       </button>
     </mat-form-field>

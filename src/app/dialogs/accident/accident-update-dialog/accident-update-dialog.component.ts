@@ -8,6 +8,8 @@ import { List_Type_Of_Accident } from 'src/app/contracts/definitions/type_of_acc
 import { List_Limb } from 'src/app/contracts/definitions/limb/list_limb';
 import { ShowTypeOfAccidentDialogComponent } from '../../definition/show-type-of-accident-dialog/show-type-of-accident-dialog.component';
 import { ShowLimbDialogComponent } from '../../definition/show-limb-dialog/show-limb-dialog.component';
+import { List_Accident_Area } from 'src/app/contracts/definitions/accident_area/list_accident_area';
+import { ShowAccidentAreaDialogComponent } from '../../definition/show-accident-area-dialog/show-accident-area-dialog.component';
 
 @Component({
   selector: 'app-accident-update-dialog',
@@ -17,6 +19,7 @@ import { ShowLimbDialogComponent } from '../../definition/show-limb-dialog/show-
 export class AccidentUpdateDialogComponent extends BaseDialog<AccidentUpdateDialogComponent>  {
   typeOfAccident: List_Type_Of_Accident; // Kaza türünü tutmak için
   limb: List_Limb;
+  accidentArea: List_Accident_Area;
 
   constructor(
     dialogRef: MatDialogRef<AccidentUpdateDialogComponent>,
@@ -50,11 +53,25 @@ export class AccidentUpdateDialogComponent extends BaseDialog<AccidentUpdateDial
     });
   }
 
+  openAccidentAreaPicker(): void {
+    const dialogRef = this.dialog.open(ShowAccidentAreaDialogComponent, {
+      width: '600px',
+      data: { isPicker: true } // Picker modunda açmak için
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.accidentArea = result; // Seçilen kaza alanı türünü al
+      }
+    });
+  }
+
   updateAccident(): void {
     const updateAccident: Update_Accident = {
       id: this.data. id,
       typeOfAccident: this.data.typeOfAccident,
       limb: this.data.limb,
+      accidentArea : this.data.accidentArea,
       accidentDate: new Date(this.data.accidentDate),
       accidentHour: this.data.accidentHour,
       onTheJobDate: new Date(this.data.onTheJobDate),

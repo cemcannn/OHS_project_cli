@@ -2,14 +2,14 @@
     <div class="filter-container">
       <mat-form-field appearance="fill">
         <mat-label>Filtrele</mat-label>
-        <input matInput (keyup)="applyFilter($event)" placeholder="Kaza Türünü Ara">
+        <input matInput (keyup)="applyFilter($event)" placeholder="Meslek Türünü Ara">
       </mat-form-field>
     </div>
   
     <table mat-table [dataSource]="dataSource" matSort>
   
-      <ng-container matColumnDef="typeOfAccident">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> Kaza Türü </th>
+      <ng-container matColumnDef="profession">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Meslek Türü </th>
         <td mat-cell *matCellDef="let element; let i = index">
           <div *ngIf="editIndex === i; else readMode">
             <input matInput [(ngModel)]="element.name">
@@ -35,9 +35,9 @@
             <button mat-icon-button color="primary" (click)="startEdit(i)" *ngIf="!data.isPicker">
               <img src="../../../assets/icons/edit.png" alt="Edit" width="24" height="24">
             </button>
-            <button mat-icon-button color="warn" appDelete [id]="element.id" (callback)="showTypeOfAccidents()" controller="typeOfAccidents" *ngIf="!data.isPicker">
+            <button mat-icon-button color="warn" appDelete [id]="element.id" (callback)="showProfessions()" controller="professions" *ngIf="!data.isPicker">
             </button>
-            <button mat-icon-button color="primary" (click)="selectTypeOfAccident(element)" *ngIf="data.isPicker">
+            <button mat-icon-button color="primary" (click)="selectProfession(element)" *ngIf="data.isPicker">
               <mat-icon>check</mat-icon>
             </button>
           </ng-template>
@@ -53,9 +53,9 @@
   
   <div class="new-accident-container" *ngIf="!data.isPicker">
     <mat-form-field appearance="fill">
-      <mat-label>Yeni Kaza Türü</mat-label>
-      <input matInput [(ngModel)]="newTypeOfAccident">
+      <mat-label>Yeni Meslek Türü</mat-label>
+      <input matInput [(ngModel)]="newProfession">
     </mat-form-field>
-    <button mat-raised-button color="primary" (click)="createTypeOfAccident()">Ekle</button>
+    <button mat-raised-button color="primary" (click)="createProfession()">Ekle</button>
   </div>
   

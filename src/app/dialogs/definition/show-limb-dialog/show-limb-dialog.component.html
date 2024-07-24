@@ -33,10 +33,9 @@
           </div>
           <ng-template #editMode>
             <button mat-icon-button color="primary" (click)="startEdit(i)" *ngIf="!data.isPicker">
-              <mat-icon>edit</mat-icon>
+              <img src="../../../assets/icons/edit.png" alt="Edit" width="24" height="24">
             </button>
             <button mat-icon-button color="warn" appDelete [id]="element.id" (callback)="showLimbs()" controller="limbs" *ngIf="!data.isPicker">
-              <mat-icon>delete</mat-icon>
             </button>
             <button mat-icon-button color="primary" (click)="selectLimb(element)" *ngIf="data.isPicker">
               <mat-icon>check</mat-icon>
@@ -57,6 +56,8 @@
       <mat-label>Yeni Uzuv Türü</mat-label>
       <input matInput [(ngModel)]="newLimb">
     </mat-form-field>
-    <button mat-raised-button color="primary" (click)="createLimb()">Ekle</button>
+    <button mat-raised-button color="primary" (click)="createLimb()">Ekle
+      <mat-icon>save</mat-icon>
+    </button>
   </div>
   

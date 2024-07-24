@@ -3,8 +3,9 @@ import { BaseDialog } from '../../base/base-dialog';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { PersonnelService } from 'src/app/services/common/models/personnel.service';
 import { Create_Personnel } from 'src/app/contracts/personnels/create_personnel';
-import { ShowUnitDialogComponent } from '../../definition/show-unit-dialog/show-unit-dialog.component';
-import { List_Unit } from 'src/app/contracts/definitions/unit/list_unit';
+import { ShowProfessionDialogComponent } from '../../definition/show-profession-dialog/show-profession-dialog.component';
+import { List_Profession } from 'src/app/contracts/definitions/profession/list_profession';
+
 
 @Component({
   selector: 'app-personnel-add-dialog',
@@ -12,7 +13,7 @@ import { List_Unit } from 'src/app/contracts/definitions/unit/list_unit';
   styleUrls: ['./personnel-add-dialog.component.scss']
 })
 export class PersonnelAddDialogComponent extends BaseDialog<PersonnelAddDialogComponent> implements OnInit {
-  unit: List_Unit; // Kaza türünü tutmak için
+  unit: List_Profession; // Kaza türünü tutmak için
 
   constructor(
     dialogRef: MatDialogRef<PersonnelAddDialogComponent>,
@@ -29,8 +30,6 @@ export class PersonnelAddDialogComponent extends BaseDialog<PersonnelAddDialogCo
     name: string,
     surname: string,
     unit: string,
-    retireId: string,
-    insuranceId: string,
     startDateOfWork: string
   ): void {
   // Convert necessary values to the expected types
@@ -45,8 +44,6 @@ export class PersonnelAddDialogComponent extends BaseDialog<PersonnelAddDialogCo
       name: name,
       unit: unit,
       surname: surname,
-      retiredId: retireId,
-      insuranceId: insuranceId,
       startDateOfWork: startDateOfWorkValue
     };
 
@@ -64,7 +61,7 @@ export class PersonnelAddDialogComponent extends BaseDialog<PersonnelAddDialogCo
   }
 
   openUnitPicker(): void {
-    const dialogRef = this.dialog.open(ShowUnitDialogComponent, {
+    const dialogRef = this.dialog.open(ShowProfessionDialogComponent, {
       width: '600px',
       data: { isPicker: true } // Picker modunda açmak için
     });

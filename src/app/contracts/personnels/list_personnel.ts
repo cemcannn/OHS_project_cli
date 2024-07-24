@@ -7,12 +7,7 @@ export class List_Personnel {
     name: string;
     surname: string;
     unit: string;
-    retiredId: string;
-    insuranceId: string;
     startDateOfWork: Date;
-    typeOfPlace: string;
-    certificate: string[]; 
-    taskInstruction: string[]; 
     accident: List_Accident[]; 
   }
 

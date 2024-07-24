@@ -1,16 +1,15 @@
 import { Injectable } from '@angular/core';
-import { firstValueFrom, Observable } from 'rxjs';
 import { HttpClientService } from '../http-client.service';
+import { firstValueFrom, Observable } from 'rxjs';
+import { Create_Accident_Area } from 'src/app/contracts/definitions/accident_area/create_accident_area';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Create_Unit } from 'src/app/contracts/definitions/unit/create_unit';
-import { List_Unit } from 'src/app/contracts/definitions/unit/list_unit';
-import { Update_Unit } from 'src/app/contracts/definitions/unit/update_unit';
-
+import { List_Accident_Area } from 'src/app/contracts/definitions/accident_area/list_accident_area';
+import { Update_Accident_Area } from 'src/app/contracts/definitions/accident_area/update_accident_area';
 
 @Injectable({
   providedIn: 'root'
 })
-export class UnitService {
+export class AccidentAreaService {
 
   constructor(private httpClientService: HttpClientService) { }
 
@@ -24,10 +23,10 @@ export class UnitService {
     return await promiseData;
   }
 
-  async createUnit(unit: Create_Unit, successCallBack?: () => void, errorCallBack?: (errorMessage: string) => void) {
+  async createAccidentArea(accidentArea: Create_Accident_Area, successCallBack?: () => void, errorCallBack?: (errorMessage: string) => void) {
     this.httpClientService.post({
-      controller: "units"
-    }, unit)
+      controller: "accidentAreas"
+    }, accidentArea)
       .subscribe(result => {
         if (successCallBack) successCallBack();
       }, (errorResponse: HttpErrorResponse) => {
@@ -42,32 +41,32 @@ export class UnitService {
       });
   }
 
-  async getUnitById(id: string, successCallBack?: () => void, errorCallBack?: (errorMessage: string) => void): Promise<List_Unit> {
-    const observable: Observable<List_Unit> = this.httpClientService.get<List_Unit>({
-      controller: "units"
+  async getAccidentAreaById(id: string, successCallBack?: () => void, errorCallBack?: (errorMessage: string) => void): Promise<List_Accident_Area> {
+    const observable: Observable<List_Accident_Area> = this.httpClientService.get<List_Accident_Area>({
+      controller: "accidentAreas"
     }, id);
     return this.handleRequest(observable, successCallBack, errorCallBack);
   }
 
-  async getUnits(successCallBack?: () => void, errorCallBack?: (errorMessage: string) => void): Promise<{ totalCount: number; datas: List_Unit[] }> {
-    const observable: Observable<{ totalCount: number; datas: List_Unit[] }> = this.httpClientService.get({
-      controller: "units"
+  async getAccidentAreas(successCallBack?: () => void, errorCallBack?: (errorMessage: string) => void): Promise<{ totalCount: number; datas: List_Accident_Area[] }> {
+    const observable: Observable<{ totalCount: number; datas: List_Accident_Area[] }> = this.httpClientService.get({
+      controller: "accidentAreas"
     });
 
     return this.handleRequest(observable, successCallBack, errorCallBack);
   }
 
-  async updateUnit(unit: Update_Unit, successCallBack?: () => void, errorCallBack?: (errorMessage: string) => void) {
+  async updateAccidentArea(accidentArea: Update_Accident_Area, successCallBack?: () => void, errorCallBack?: (errorMessage: string) => void) {
     const observable = this.httpClientService.put({
-      controller: "units",
-    }, unit);
+      controller: "accidentAreas",
+    }, accidentArea);
 
     return this.handleRequest(observable, successCallBack, errorCallBack);
   }
 
-  async deleteUnit(id: string, successCallBack?: () => void, errorCallBack?: (errorMessage: string) => void) {
+  async deleteAccidentArea(id: string, successCallBack?: () => void, errorCallBack?: (errorMessage: string) => void) {
     const observable = this.httpClientService.delete({
-      controller: "units"
+      controller: "accidentAreas"
     }, id);
 
     return this.handleRequest(observable, successCallBack, errorCallBack);

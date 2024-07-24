@@ -17,7 +17,7 @@ import { ReportDaysCalculatorService } from 'src/app/services/common/report-days
   styleUrls: ['./accident-list.component.scss']
 })
 export class AccidentListComponent extends BaseDialog<AccidentListComponent> implements OnInit, AfterViewInit {
-  displayedColumns: string[] = ['typeOfAccident', 'limb', 'accidentDate', 'accidentHour', 'onTheJobDate', 'reportDays', 'description', 'accidentUpdate', 'delete'];
+  displayedColumns: string[] = ['typeOfAccident', 'limb', 'accidentArea', 'accidentDate', 'accidentHour', 'onTheJobDate', 'reportDays', 'description', 'accidentUpdate', 'delete'];
   dataSource: MatTableDataSource<List_Accident> = new MatTableDataSource<List_Accident>();
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -34,13 +34,14 @@ export class AccidentListComponent extends BaseDialog<AccidentListComponent> imp
     super(dialogRef);
   }
 
-  async ngOnInit(): Promise<void> {
+  async ngOnInit() {
     if (this.data && this.data.personId) {
       await this.loadAccidents(this.data.personId);
     }
   }
 
-  ngAfterViewInit(): void {
+
+  async ngAfterViewInit(): Promise<void> {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }
@@ -64,19 +65,21 @@ export class AccidentListComponent extends BaseDialog<AccidentListComponent> imp
     try {
       const allAccidents: { datas: List_Accident[], totalCount: number } = await this.accidentService.getAccidentById(personId);
 
-          // Calculate report days and update each accident object
-    const accidentsWithReportDays = allAccidents.datas.map(accident => {
-      const reportDays = this.reportDaysCalculatorService.calculateReportDays(
-        accident.onTheJobDate,
-        accident.accidentDate
-      );
-      return { ...accident, reportDays }; // Add reportDays property
-    });
+      // Calculate report days and update each accident object
+      const accidentsWithReportDays = allAccidents.datas.map(accident => {
+        const reportDays = this.reportDaysCalculatorService.calculateReportDays(
+          accident.onTheJobDate,
+          accident.accidentDate
+        );
+        return { ...accident, reportDays }; // Add reportDays property
+      });
 
+      // Use the correct type for MatTableDataSource
       this.dataSource = new MatTableDataSource<List_Accident>(accidentsWithReportDays);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
-    } catch (error) {
+    }
+    catch (error) {
       this.alertifyService.message('Kaza bilgilerini yüklerken bir hata oluştu.', {
         dismissOthers: true,
         messageType: MessageType.Error,

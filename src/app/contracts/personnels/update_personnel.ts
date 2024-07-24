@@ -5,7 +5,5 @@ export class Update_Personnel {
     name: string;
     surname: string;
     unit: string;
-    retiredId: string;
-    insuranceId: string;
     startDateOfWork: Date;
   }

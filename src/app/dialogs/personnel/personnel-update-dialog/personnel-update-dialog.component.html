@@ -38,16 +38,6 @@
     </mat-form-field>
 
     <mat-form-field appearance="fill">
-      <mat-label>Emekli Sicil Numarası</mat-label>
-      <input matInput [(ngModel)]="data.retiredId">
-    </mat-form-field>
-
-    <mat-form-field appearance="fill">
-      <mat-label>SGK Sicil Numarası</mat-label>
-      <input matInput [(ngModel)]="data.insuranceId">
-    </mat-form-field>
-
-    <mat-form-field appearance="fill">
       <mat-label>İşe Başlangıç Tarihi</mat-label>
       <input matInput [matDatepicker]="picker" #txtStartDateOfWork="ngModel" name="onTheJobDate" ngModel required>
       <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>

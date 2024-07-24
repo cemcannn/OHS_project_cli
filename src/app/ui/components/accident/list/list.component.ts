@@ -17,7 +17,7 @@ import { ReportDaysCalculatorService } from 'src/app/services/common/report-days
   styleUrls: ['./list.component.scss']
 })
 export class ListComponent extends BaseComponent implements OnInit {
-  displayedColumns: string[] = ['trIdNumber', 'name', 'surname', 'typeOfAccident', 'accidentDate', 'accidentHour', 'onTheJobDate', 'reportDays', 'description', 'accidentUpdate', 'delete']; // Added 'reportDays' column
+  displayedColumns: string[] = ['tkiId', 'name', 'surname', 'typeOfAccident', 'limb', 'accidentArea', 'accidentDate', 'accidentHour', 'onTheJobDate', 'reportDays', 'description', 'accidentUpdate', 'delete']; // Added 'reportDays' column
   dataSource: MatTableDataSource<List_Accident> = null;
 
 

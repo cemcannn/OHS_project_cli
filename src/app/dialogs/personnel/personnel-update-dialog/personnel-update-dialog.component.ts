@@ -4,8 +4,9 @@ import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dial
 import { Update_Personnel } from 'src/app/contracts/personnels/update_personnel';
 import { PersonnelService } from 'src/app/services/common/models/personnel.service';
 import { AlertifyService, MessageType, Position } from 'src/app/services/admin/alertify.service';
-import { List_Unit } from 'src/app/contracts/definitions/unit/list_unit';
-import { ShowUnitDialogComponent } from '../../definition/show-unit-dialog/show-unit-dialog.component';
+import { List_Profession } from 'src/app/contracts/definitions/profession/list_profession';
+import { ShowProfessionDialogComponent } from '../../definition/show-profession-dialog/show-profession-dialog.component';
+
 
 @Component({
   selector: 'app-personnel-update-dialog',
@@ -13,7 +14,7 @@ import { ShowUnitDialogComponent } from '../../definition/show-unit-dialog/show-
   styleUrls: ['./personnel-update-dialog.component.scss']
 })
 export class PersonnelUpdateDialogComponent extends BaseDialog<PersonnelUpdateDialogComponent> implements OnInit {
-  unit: List_Unit; // Kaza türünü tutmak için
+  unit: List_Profession; // Kaza türünü tutmak için
 
   constructor(dialogRef: MatDialogRef<PersonnelUpdateDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: Update_Personnel,
@@ -29,8 +30,6 @@ export class PersonnelUpdateDialogComponent extends BaseDialog<PersonnelUpdateDi
       id: this.data.id,
       name: this.data.name,
       surname: this.data.surname,
-      insuranceId: this.data.insuranceId,
-      retiredId: this.data.retiredId,
       startDateOfWork: new Date(this.data.startDateOfWork),
       tkiId: this.data.tkiId,
       trIdNumber: this.data.trIdNumber,
@@ -58,7 +57,7 @@ export class PersonnelUpdateDialogComponent extends BaseDialog<PersonnelUpdateDi
   }
 
   openUnitPicker(): void {
-    const dialogRef = this.dialog.open(ShowUnitDialogComponent, {
+    const dialogRef = this.dialog.open(ShowProfessionDialogComponent, {
       width: '600px',
       data: { isPicker: true } // Picker modunda açmak için
     });
