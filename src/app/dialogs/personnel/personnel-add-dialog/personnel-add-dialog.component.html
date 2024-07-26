@@ -40,27 +40,24 @@
 
     <mat-form-field appearance="fill" class="field">
       <mat-label>Mesleği</mat-label>
-      <input matInput [value]="unit?.name" required readonly (click)="openUnitPicker()">
-      <button mat-icon-button matSuffix (click)="openUnitPicker()">
+      <input matInput [value]="profession?.name" required readonly (click)="openProfessionPicker()">
+      <button mat-icon-button matSuffix (click)="openProfessionPicker()">
         <mat-icon>arrow_drop_down</mat-icon>
       </button>
     </mat-form-field>
 
     <mat-form-field appearance="fill" class="field">
-      <mat-label>İşe Başlangıç Tarihi</mat-label>
-      <input matInput [matDatepicker]="picker" #txtStartDateOfWork="ngModel" name="onTheJobDate" ngModel required>
+      <mat-label>Doğum Tarihi</mat-label>
+      <input matInput [matDatepicker]="picker" #txtBornDate="ngModel" name="bornDate" ngModel >
       <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
       <mat-datepicker #picker></mat-datepicker>
-      <mat-error *ngIf="txtStartDateOfWork.invalid && (txtStartDateOfWork.dirty || txtStartDateOfWork.touched)">
-        <span *ngIf="txtStartDateOfWork.errors?.required">İşe başlangıç tarihi gereklidir.</span>
-        <span *ngIf="txtStartDateOfWork.errors?.dateInFuture">İşe başlangıç tarihi geçmiş tarihli olmalı.</span>
-      </mat-error>
+
     </mat-form-field>
   </form>
 </div>
 <div mat-dialog-actions>
   <button mat-button (click)="close()">İptal</button>
   <button mat-raised-button class="btn" color="primary" [disabled]="personnelForm.invalid"
-    (click)="createPersonnel(txtTrIdNumber.value, txtTkiId.value, txtName.value, txtSurname.value, unit.name, txtStartDateOfWork.value)">Personel
+    (click)="createPersonnel(txtTrIdNumber.value, txtTkiId.value, txtName.value, txtSurname.value, profession.name, txtBornDate.value)">Personel
     Ekle</button>
 </div>

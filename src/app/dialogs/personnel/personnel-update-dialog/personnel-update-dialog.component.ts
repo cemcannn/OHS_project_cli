@@ -14,7 +14,7 @@ import { ShowProfessionDialogComponent } from '../../definition/show-profession-
   styleUrls: ['./personnel-update-dialog.component.scss']
 })
 export class PersonnelUpdateDialogComponent extends BaseDialog<PersonnelUpdateDialogComponent> implements OnInit {
-  unit: List_Profession; // Kaza türünü tutmak için
+  profession: List_Profession; // Kaza türünü tutmak için
 
   constructor(dialogRef: MatDialogRef<PersonnelUpdateDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: Update_Personnel,
@@ -30,10 +30,10 @@ export class PersonnelUpdateDialogComponent extends BaseDialog<PersonnelUpdateDi
       id: this.data.id,
       name: this.data.name,
       surname: this.data.surname,
-      startDateOfWork: new Date(this.data.startDateOfWork),
+      bornDate: new Date(this.data.bornDate),
       tkiId: this.data.tkiId,
       trIdNumber: this.data.trIdNumber,
-      unit: this.data.unit
+      profession: this.data.profession
     };
 
     this.personnelService.updatePersonnel(updatePersonnel).then(
@@ -56,7 +56,7 @@ export class PersonnelUpdateDialogComponent extends BaseDialog<PersonnelUpdateDi
     );
   }
 
-  openUnitPicker(): void {
+  openProfessionPicker(): void {
     const dialogRef = this.dialog.open(ShowProfessionDialogComponent, {
       width: '600px',
       data: { isPicker: true } // Picker modunda açmak için
@@ -64,7 +64,7 @@ export class PersonnelUpdateDialogComponent extends BaseDialog<PersonnelUpdateDi
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.unit = result; // Seçilen kaza türünü al
+        this.profession = result; // Seçilen kaza türünü al
       }
     });
   }

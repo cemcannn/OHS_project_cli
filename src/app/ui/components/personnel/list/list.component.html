@@ -7,15 +7,10 @@
   </div>
 
   <table mat-table [dataSource]="dataSource" matSort>
-
-    <ng-container matColumnDef="trIdNumber">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header >TC Kimlik Numarası</th>
-      <td mat-cell *matCellDef="let element">{{element.trIdNumber}}</td>
-    </ng-container>
     
     <ng-container matColumnDef="tkiId">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> TKİ Sicil Numarası </th>
-      <td mat-cell *matCellDef="let element"> {{element.tkiId}} </td>
+      <td mat-cell *matCellDef="let element"> {{element.tkiId | integer}} </td>
     </ng-container> 
 
     <ng-container matColumnDef="name">
@@ -28,24 +23,14 @@
       <td mat-cell *matCellDef="let element"> {{element.surname}} </td>
     </ng-container>
     
-    <ng-container matColumnDef="unit">
+    <ng-container matColumnDef="profession">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Meslek Dalı </th>
-      <td mat-cell *matCellDef="let element"> {{element.unit}} </td>
+      <td mat-cell *matCellDef="let element"> {{element.profession}} </td>
     </ng-container>
 
-    <ng-container matColumnDef="retiredId">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Emekli Sicil Numarası </th>
-      <td mat-cell *matCellDef="let element"> {{element.retiredId}} </td>
-    </ng-container>
-
-    <ng-container matColumnDef="insuranceId">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> SGK Sicil Numarası </th>
-      <td mat-cell *matCellDef="let element"> {{element.insuranceId}} </td>
-    </ng-container>
-
-    <ng-container matColumnDef="startDateOfWork">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> İşe Başlangıç Tarihi </th>
-      <td mat-cell *matCellDef="let element"> {{element.startDateOfWork | date:'dd/MM/yyyy'}} </td>
+    <ng-container matColumnDef="bornDate">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Doğum Tarihi </th>
+      <td mat-cell *matCellDef="let element"> {{element.bornDate | date:'dd/MM/yyyy'}} </td>
     </ng-container>
 
     <ng-container matColumnDef="accidentAdd">

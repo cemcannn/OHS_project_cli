@@ -1,9 +1,8 @@
 <h1 mat-dialog-title>Kaza Bilgilerini Güncelle:</h1>
 <div mat-dialog-content>
   <form #accidentForm="ngForm">
-    
     <mat-form-field appearance="fill" class="field">
-      <mat-label> Kaza Oluşum Tipi </mat-label>
+      <mat-label>Kaza Oluşum Tipi</mat-label>
       <input matInput [value]="typeOfAccident?.name" readonly (click)="openTypeOfAccidentPicker()">
       <button mat-icon-button matSuffix (click)="openTypeOfAccidentPicker()">
         <mat-icon>arrow_drop_down</mat-icon>
@@ -11,7 +10,7 @@
     </mat-form-field>
 
     <mat-form-field appearance="fill" class="field">
-      <mat-label> Uzuv </mat-label>
+      <mat-label>Uzuv</mat-label>
       <input matInput [value]="limb?.name" readonly (click)="openLimbPicker()">
       <button mat-icon-button matSuffix (click)="openLimbPicker()">
         <mat-icon>arrow_drop_down</mat-icon>
@@ -19,7 +18,7 @@
     </mat-form-field>
 
     <mat-form-field appearance="fill" class="field">
-      <mat-label> Kaza Yeri </mat-label>
+      <mat-label>Kaza Yeri</mat-label>
       <input matInput [value]="accidentArea?.name" readonly (click)="openAccidentAreaPicker()">
       <button mat-icon-button matSuffix (click)="openAccidentAreaPicker()">
         <mat-icon>arrow_drop_down</mat-icon>
@@ -28,34 +27,25 @@
 
     <mat-form-field appearance="fill" class="field">
       <mat-label>Kaza Tarihi</mat-label>
-      <input matInput [matDatepicker]="picker1" #txtAccidentDate="ngModel" name="accidentDate" ngModel required
-        dateNotInFuture>
+      <input matInput [matDatepicker]="picker1" name="accidentDate" [(ngModel)]="data.accidentDate" required>
       <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
       <mat-datepicker #picker1></mat-datepicker>
-      <mat-error *ngIf="txtAccidentDate.invalid && (txtAccidentDate.dirty || txtAccidentDate.touched)">
-        <span *ngIf="txtAccidentDate.errors?.required">Kaza tarihi gereklidir.</span>
-        <span *ngIf="txtAccidentDate.errors?.dateInFuture">Kaza tarihi bugünden sonra olamaz.</span>
+      <mat-error *ngIf="accidentForm.controls['accidentDate'].invalid && (accidentForm.controls['accidentDate'].dirty || accidentForm.controls['accidentDate'].touched)">
+        <span *ngIf="accidentForm.controls['accidentDate'].errors?.required">Kaza tarihi gereklidir.</span>
       </mat-error>
     </mat-form-field>
 
     <mat-form-field appearance="fill" class="field">
       <mat-label>Kaza Saati</mat-label>
-      <input matInput type="time" #txtAccidentHour="ngModel" name="accidentHour" ngModel required
-        [timeNotInFuture]="txtAccidentDate.value">
-      <mat-error *ngIf="txtAccidentHour.invalid && (txtAccidentHour.dirty || txtAccidentHour.touched)">
-        <span *ngIf="txtAccidentHour.errors?.required">Kaza saati gereklidir.</span>
-        <span *ngIf="txtAccidentHour.errors?.timeInFuture">Kaza saati bugünden sonra olamaz.</span>
+      <input matInput type="time" name="accidentHour" [(ngModel)]="data.accidentHour" required>
+      <mat-error *ngIf="accidentForm.controls['accidentHour'].invalid && (accidentForm.controls['accidentHour'].dirty || accidentForm.controls['accidentHour'].touched)">
+        <span *ngIf="accidentForm.controls['accidentHour'].errors?.required">Kaza saati gereklidir.</span>
       </mat-error>
     </mat-form-field>
 
     <mat-form-field appearance="fill" class="field">
-      <mat-label>İşe Başlangıç Tarihi</mat-label>
-      <input matInput [matDatepicker]="picker2" #txtOnTheJobDate="ngModel" name="onTheJobDate" ngModel required>
-      <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
-      <mat-datepicker #picker2></mat-datepicker>
-      <mat-error *ngIf="txtOnTheJobDate.invalid && (txtOnTheJobDate.dirty || txtOnTheJobDate.touched)">
-        <span *ngIf="txtOnTheJobDate.errors?.required">İşe başlangıç tarihi gereklidir.</span>
-      </mat-error>
+      <mat-label>Raporlu Olduğu Gün Sayısı</mat-label>
+      <input matInput type="text" [(ngModel)]="data.reportDay">
     </mat-form-field>
 
     <mat-form-field appearance="fill" class="field">
@@ -66,6 +56,5 @@
 </div>
 <div mat-dialog-actions>
   <button mat-button (click)="close()">İptal</button>
-  <button mat-raised-button color="primary" [disabled]="accidentForm.invalid"
-    (click)="updateAccident()">Güncelle</button>
+  <button mat-raised-button color="primary" [disabled]="accidentForm.invalid" (click)="updateAccident()">Güncelle</button>
 </div>

@@ -10,7 +10,6 @@ export class List_Accident {
     limb: string;
     accidentDate : Date;
     accidentHour : string;
-    onTheJobDate : Date;
+    reportDay : string;
     description : string;
-    reportDays?: number
   }

@@ -25,14 +25,9 @@
       <td mat-cell *matCellDef="let element"> {{ element.accidentHour | timespan }} </td>
     </ng-container> 
 
-    <ng-container matColumnDef="onTheJobDate">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> İşe Başlangıç Tarihi </th>
-      <td mat-cell *matCellDef="let element"> {{ element.onTheJobDate | date:'dd.MM.yyyy' }} </td>
-    </ng-container> 
-    
-    <ng-container matColumnDef="reportDays">
+    <ng-container matColumnDef="reportDay">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Rapor Günleri </th>
-      <td mat-cell *matCellDef="let element"> {{element.reportDays}} </td>
+      <td mat-cell *matCellDef="let element"> {{element.reportDay| integer}} </td>
     </ng-container>
 
     <ng-container matColumnDef="description">

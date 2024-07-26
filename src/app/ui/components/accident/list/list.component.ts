@@ -8,7 +8,6 @@ import { BaseComponent } from 'src/app/base/base.component';
 import { List_Accident } from 'src/app/contracts/accidents/list_accident';
 import { AccidentUpdateDialogComponent } from 'src/app/dialogs/accident/accident-update-dialog/accident-update-dialog.component';
 import { AccidentService } from 'src/app/services/common/models/accident.service';
-import { ReportDaysCalculatorService } from 'src/app/services/common/report-days-calculator.service';
 
 
 @Component({
@@ -17,7 +16,7 @@ import { ReportDaysCalculatorService } from 'src/app/services/common/report-days
   styleUrls: ['./list.component.scss']
 })
 export class ListComponent extends BaseComponent implements OnInit {
-  displayedColumns: string[] = ['tkiId', 'name', 'surname', 'typeOfAccident', 'limb', 'accidentArea', 'accidentDate', 'accidentHour', 'onTheJobDate', 'reportDays', 'description', 'accidentUpdate', 'delete']; // Added 'reportDays' column
+  displayedColumns: string[] = ['tkiId', 'name', 'surname', 'typeOfAccident', 'limb', 'accidentArea', 'accidentDate', 'accidentHour', 'reportDay', 'description', 'accidentUpdate', 'delete']; // Added 'reportDay' column
   dataSource: MatTableDataSource<List_Accident> = null;
 
 
@@ -28,7 +27,6 @@ export class ListComponent extends BaseComponent implements OnInit {
     spinner: NgxSpinnerService,
     private accidentService: AccidentService,
     private dialog: MatDialog,
-    private reportDaysCalculatorService: ReportDaysCalculatorService // Inject ReportDaysCalculatorService
   ) {
     super(spinner);
   }
@@ -60,17 +58,8 @@ export class ListComponent extends BaseComponent implements OnInit {
   async loadAccidents(): Promise<void> {
     const allAccidents: { datas: List_Accident[], totalCount: number } = await this.accidentService.getAccidents();
   
-    // Calculate report days and update each accident object
-    const accidentsWithReportDays = allAccidents.datas.map(accident => {
-      const reportDays = this.reportDaysCalculatorService.calculateReportDays(
-        accident.onTheJobDate,
-        accident.accidentDate
-      );
-      return { ...accident, reportDays }; // Add reportDays property
-    });
-
     // Use the correct type for MatTableDataSource
-    this.dataSource = new MatTableDataSource<List_Accident>(accidentsWithReportDays);
+    this.dataSource = new MatTableDataSource<List_Accident>(allAccidents.datas);
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }  

@@ -12,18 +12,19 @@ import { DeleteDirectiveModule } from 'src/app/directives/admin/delete.directive
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { DialogModule } from 'src/app/dialogs/dialog.module';
 import { MatSortModule } from '@angular/material/sort';
+import { CommonPipesModule } from 'src/app/pipes/common-pipes.module';
 
 
 
 @NgModule({
   declarations: [
     AccidentComponent,
-    ListComponent,
+    ListComponent
   ],
   imports: [
     CommonModule, MatSidenavModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatTableModule, MatPaginatorModule,
-    DialogModule, MatSortModule,
-    DeleteDirectiveModule, 
+    DialogModule, MatSortModule, 
+    DeleteDirectiveModule, CommonPipesModule,
     RouterModule.forChild([
       { path: "", component: AccidentComponent}
     ])

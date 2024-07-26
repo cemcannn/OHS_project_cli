@@ -6,8 +6,8 @@ export class List_Personnel {
     tkiId: string;
     name: string;
     surname: string;
-    unit: string;
-    startDateOfWork: Date;
+    profession: string;
+    bornDate: Date;
     accident: List_Accident[]; 
   }
 

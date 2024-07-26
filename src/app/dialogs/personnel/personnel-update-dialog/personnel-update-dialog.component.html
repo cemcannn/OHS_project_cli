@@ -3,13 +3,22 @@
   <form #personnelForm="ngForm">
     <mat-form-field appearance="fill" class="personnel-create">
       <mat-label>TC Kimlik Numarası</mat-label>
-      <input matInput type="text" maxlength="11" minlength="11" pattern="^[0-9]*$" required #txtTrIdNumber="ngModel"
+      <input matInput type="text" maxlength="11" minlength="11" pattern="^[0-9]*$" #txtTrIdNumber="ngModel"
         name="trIdNumber" ngModel>
       <mat-error *ngIf="txtTrIdNumber.invalid && (txtTrIdNumber.dirty || txtTrIdNumber.touched)">
-        <span *ngIf="txtTrIdNumber.errors?.required">TC Kimlik Numarası gereklidir.</span>
         <span *ngIf="txtTrIdNumber.errors?.pattern">TC Kimlik Numarası sadece rakamlardan oluşmalıdır.</span>
         <span *ngIf="txtTrIdNumber.errors?.minlength || txtTrIdNumber.errors?.maxlength">TC Kimlik Numarası 11 haneli
           olmalıdır.</span>
+      </mat-error>
+    </mat-form-field>
+    
+    <mat-form-field appearance="fill" class="personnel-create">
+      <mat-label>TKİ Sicil No</mat-label>
+      <input matInput type="text" pattern="^[0-9]*$" required #txtTkiId="ngModel"
+        name="tkiId" ngModel>
+      <mat-error *ngIf="txtTkiId.invalid && (txtTkiId.dirty || txtTkiId.touched)">
+        <span *ngIf="txtTkiId.errors?.required">TKİ Sicil Numarası gereklidir.</span>
+        <span *ngIf="txtTkiId.errors?.pattern">TKİ Sicil Numarası sadece rakamlardan oluşmalıdır.</span>
       </mat-error>
     </mat-form-field>
 
@@ -31,21 +40,21 @@
 
     <mat-form-field appearance="fill" class="field">
       <mat-label>Mesleği</mat-label>
-      <input matInput [value]="unit?.name" readonly (click)="openUnitPicker()">
-      <button mat-icon-button matSuffix (click)="openUnitPicker()">
+      <input matInput [value]="profession?.name" readonly (click)="openProfessionPicker()">
+      <button mat-icon-button matSuffix (click)="openProfessionPicker()">
         <mat-icon>arrow_drop_down</mat-icon>
       </button>
     </mat-form-field>
 
-    <mat-form-field appearance="fill">
-      <mat-label>İşe Başlangıç Tarihi</mat-label>
-      <input matInput [matDatepicker]="picker" #txtStartDateOfWork="ngModel" name="onTheJobDate" ngModel required>
+    <mat-form-field appearance="fill" class="field">
+      <mat-label>Doğum Tarihi</mat-label>
+      <input matInput [matDatepicker]="picker" #txtBornDate="ngModel" name="bornDate" ngModel>
       <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
       <mat-datepicker #picker></mat-datepicker>
-      <mat-error *ngIf="txtStartDateOfWork.invalid && (txtStartDateOfWork.dirty || txtStartDateOfWork.touched)">
-        <span *ngIf="txtStartDateOfWork.errors?.required">İşe başlangıç tarihi gereklidir.</span>
-        <span *ngIf="txtStartDateOfWork.errors?.dateInFuture">İşe başlangıç tarihi geçmiş tarihli olmalı.</span>
-      </mat-error>
+      <!-- <mat-error *ngIf="txtBornDate.invalid && (txtBornDate.dirty || txtBornDate.touched)">
+        <span *ngIf="txtBornDate.errors?.required">Doğum tarihi gereklidir.</span>
+        <span *ngIf="txtBornDate.errors?.dateInFuture">Doğum tarihi geçmiş tarihli olmalı.</span>
+      </mat-error> -->
     </mat-form-field>
   </form>
 </div>

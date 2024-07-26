@@ -32,26 +32,26 @@ export class AccidentRateService {
     accidents.forEach(accident => {
       const monthIndex = new Date(accident.accidentDate).getMonth();
       const month = this.monthNames[monthIndex];
-      const reportDays = this.calculateReportDays(new Date(accident.onTheJobDate), new Date(accident.accidentDate));
+      const reportDay = Number(accident.reportDay); 
 
       const accidentRate = accidentRates[month];
 
-      if (reportDays === 0) {
+      if (reportDay === 0) {
         accidentRate.zeroDay += 1;
-      } else if (reportDays >= 1 && reportDays <= 4) {
+      } else if (reportDay >= 1 && reportDay <= 4) {
         accidentRate.oneToFourDay += 1;
-      } else if (reportDays >= 5) {
+      } else if (reportDay >= 5) {
         accidentRate.fiveAboveDay += 1;
       }
 
       accidentRate.totalAccidentNumber += 1;
-      accidentRate.totalWorkDay += reportDays;
+      accidentRate.totalWorkDay += reportDay;
     });
 
     return Object.values(accidentRates);
   }
 
-  private calculateReportDays(onTheJobDate: Date, accidentDate: Date): number {
+  private calculateReportDay(onTheJobDate: Date, accidentDate: Date): number {
     return Math.ceil((onTheJobDate.getTime() - accidentDate.getTime()) / (1000 * 3600 * 24));
   }
 }

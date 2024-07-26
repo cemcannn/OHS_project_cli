@@ -13,7 +13,7 @@ import { List_Profession } from 'src/app/contracts/definitions/profession/list_p
   styleUrls: ['./personnel-add-dialog.component.scss']
 })
 export class PersonnelAddDialogComponent extends BaseDialog<PersonnelAddDialogComponent> implements OnInit {
-  unit: List_Profession; // Kaza türünü tutmak için
+  profession: List_Profession; // Kaza türünü tutmak için
 
   constructor(
     dialogRef: MatDialogRef<PersonnelAddDialogComponent>,
@@ -29,11 +29,11 @@ export class PersonnelAddDialogComponent extends BaseDialog<PersonnelAddDialogCo
     tkiId: string,
     name: string,
     surname: string,
-    unit: string,
-    startDateOfWork: string
+    profession: string,
+    bornDate: string
   ): void {
   // Convert necessary values to the expected types
-  const startDateOfWorkValue: Date = new Date(startDateOfWork);
+  const startDateOfWorkValue: Date = new Date(bornDate);
   
   // Tarihi UTC olarak ayarlayın
   startDateOfWorkValue.setMinutes(startDateOfWorkValue.getMinutes() - startDateOfWorkValue.getTimezoneOffset());
@@ -42,9 +42,9 @@ export class PersonnelAddDialogComponent extends BaseDialog<PersonnelAddDialogCo
       trIdNumber: trIdNumber,
       tkiId: tkiId,
       name: name,
-      unit: unit,
+      profession: profession,
       surname: surname,
-      startDateOfWork: startDateOfWorkValue
+      bornDate: startDateOfWorkValue
     };
 
     this.personnelService.createPersonnel(
@@ -60,7 +60,7 @@ export class PersonnelAddDialogComponent extends BaseDialog<PersonnelAddDialogCo
     );
   }
 
-  openUnitPicker(): void {
+  openProfessionPicker(): void {
     const dialogRef = this.dialog.open(ShowProfessionDialogComponent, {
       width: '600px',
       data: { isPicker: true } // Picker modunda açmak için
@@ -68,7 +68,7 @@ export class PersonnelAddDialogComponent extends BaseDialog<PersonnelAddDialogCo
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.unit = result; // Seçilen kaza türünü al
+        this.profession = result; // Seçilen kaza türünü al
       }
     });
   }

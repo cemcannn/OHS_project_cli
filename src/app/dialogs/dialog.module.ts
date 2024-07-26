@@ -21,7 +21,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AccidentUpdateDialogComponent } from './accident/accident-update-dialog/accident-update-dialog.component';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
-import { TimespanPipe } from '../pipes/timespan.pipe';
 import { PersonnelUpdateDialogComponent } from './personnel/personnel-update-dialog/personnel-update-dialog.component';
 import { PersonnelAddDialogComponent } from './personnel/personnel-add-dialog/personnel-add-dialog.component';
 import { DateNotInFutureValidatorDirective, TimeNotInFutureValidatorDirective } from '../directives/validator.directive';
@@ -31,6 +30,8 @@ import { ShowTypeOfAccidentDialogComponent } from './definition/show-type-of-acc
 import { ShowLimbDialogComponent } from './definition/show-limb-dialog/show-limb-dialog.component';
 import { ShowProfessionDialogComponent } from './definition/show-profession-dialog/show-profession-dialog.component';
 import { ShowAccidentAreaDialogComponent } from './definition/show-accident-area-dialog/show-accident-area-dialog.component';
+import { CommonPipesModule } from '../pipes/common-pipes.module';
+
 
 
 
@@ -44,7 +45,6 @@ import { ShowAccidentAreaDialogComponent } from './definition/show-accident-area
     PersonnelAddDialogComponent,
     AccidentListComponent,
     AccidentUpdateDialogComponent,
-    TimespanPipe,
     PersonnelUpdateDialogComponent,
     DateNotInFutureValidatorDirective,
     TimeNotInFutureValidatorDirective,
@@ -52,10 +52,9 @@ import { ShowAccidentAreaDialogComponent } from './definition/show-accident-area
     ShowLimbDialogComponent,
     ShowProfessionDialogComponent,
     ShowAccidentAreaDialogComponent
-
   ],
   imports: [
-    FormsModule, MatSelectModule, MatIconModule, MatDatepickerModule, MatNativeDateModule, MatPaginatorModule, MatSortModule, ReactiveFormsModule, CommonModule, MatDialogModule, MatButtonModule, MatCardModule, MatTableModule, MatToolbarModule, MatBadgeModule, MatListModule, MatFormFieldModule, MatInputModule, DeleteDirectiveModule
+    FormsModule, MatSelectModule, MatIconModule, MatDatepickerModule, MatNativeDateModule, MatPaginatorModule, MatSortModule, ReactiveFormsModule, CommonModule, MatDialogModule, MatButtonModule, MatCardModule, MatTableModule, MatToolbarModule, MatBadgeModule, MatListModule, MatFormFieldModule, MatInputModule, DeleteDirectiveModule, CommonPipesModule
   ]
 })
 export class DialogModule { }

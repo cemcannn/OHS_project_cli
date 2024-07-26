@@ -3,6 +3,6 @@ export class Create_Personnel {
     tkiId: string;
     name: string;
     surname: string;
-    unit: string;
-    startDateOfWork: Date;
+    profession: string;
+    bornDate: Date;
   }
