@@ -5,5 +5,6 @@ export class Update_Personnel {
     name: string;
     surname: string;
     profession: string;
+    directorate: string;
     bornDate: Date;
   }

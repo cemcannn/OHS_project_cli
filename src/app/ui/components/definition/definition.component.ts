@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { BaseComponent, SpinnerType } from 'src/app/base/base.component';
 import { ShowAccidentAreaDialogComponent } from 'src/app/dialogs/definition/show-accident-area-dialog/show-accident-area-dialog.component';
+import { ShowDirectorateDialogComponent } from 'src/app/dialogs/definition/show-directorate-dialog/show-directorate-dialog.component';
 import { ShowLimbDialogComponent } from 'src/app/dialogs/definition/show-limb-dialog/show-limb-dialog.component';
 import { ShowProfessionDialogComponent } from 'src/app/dialogs/definition/show-profession-dialog/show-profession-dialog.component';
 import { ShowTypeOfAccidentDialogComponent } from 'src/app/dialogs/definition/show-type-of-accident-dialog/show-type-of-accident-dialog.component';
@@ -25,10 +26,10 @@ export class DefinitionComponent extends BaseComponent implements OnInit {
 
   }
 
-  async showTypeOfAccidentDialog(accidentData: any): Promise<void> {
+  async showTypeOfAccidentDialog(typeOfAccidentData: any): Promise<void> {
     const dialogRef = await this.dialog.open(ShowTypeOfAccidentDialogComponent, {
       width: '500px',
-      data: accidentData
+      data: typeOfAccidentData
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -51,10 +52,10 @@ export class DefinitionComponent extends BaseComponent implements OnInit {
     });
   }
 
-  async showProfessionDialog(limbData: any): Promise<void> {
+  async showProfessionDialog(professionData: any): Promise<void> {
     const dialogRef = await this.dialog.open(ShowProfessionDialogComponent, {
       width: '500px',
-      data: limbData
+      data: professionData
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -64,15 +65,28 @@ export class DefinitionComponent extends BaseComponent implements OnInit {
     });
   }
 
-  async showAccidentAreaDialog(limbData: any): Promise<void> {
+  async showAccidentAreaDialog(accidentAreaData: any): Promise<void> {
     const dialogRef = await this.dialog.open(ShowAccidentAreaDialogComponent, {
       width: '500px',
-      data: limbData
+      data: accidentAreaData
     });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result && result.error) {
         console.error('Kaza yeri türü bilgileri getirilirken bir hata oluştu:', result.error);
+      }
+    });
+  }
+
+  async showDirectorateDialog(directorateData: any): Promise<void> {
+    const dialogRef = await this.dialog.open(ShowDirectorateDialogComponent, {
+      width: '500px',
+      data: directorateData
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result && result.error) {
+        console.error('İşletme türü bilgileri getirilirken bir hata oluştu:', result.error);
       }
     });
   }

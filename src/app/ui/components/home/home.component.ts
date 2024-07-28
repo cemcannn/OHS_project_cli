@@ -8,6 +8,7 @@ import { AccidentService } from 'src/app/services/common/models/accident.service
 import { PersonnelService } from 'src/app/services/common/models/personnel.service';
 import { Accident_Rate } from 'src/app/contracts/accidents/accident_rate';
 import { AccidentRateService } from 'src/app/services/common/accident-rate.service';
+
 import * as XLSX from 'xlsx'; // Import xlsx
 
 @Component({
@@ -26,12 +27,15 @@ export class HomeComponent implements OnInit {
   personnels: List_Personnel[] = [];
   totalCountAccidents: number = 0;
   accidents: List_Accident[] = [];
+  years: string[] = [];
+  selectedYear: string = 'All';
 
   constructor(
     private spinner: NgxSpinnerService,
     private personnelService: PersonnelService,
     private accidentService: AccidentService,
-    private accidentRateService: AccidentRateService // AccidentRateService servisini enjekte edin
+    private accidentRateService: AccidentRateService,
+
   ) {}
 
   ngOnInit(): void {
@@ -62,9 +66,8 @@ export class HomeComponent implements OnInit {
       response => {
         this.totalCountAccidents = response.totalCount;
         this.accidents = response.datas;
-        const groupedAccidents = this.accidentRateService.groupByMonth(this.accidents); // Accidents'ı aylara göre gruplayın
-        this.dataSource.data = groupedAccidents;
-        this.dataSource.sort = this.sort;
+        this.populateYears(this.accidents);
+        this.filterAccidentsByYear(this.selectedYear);
         this.spinner.hide(); // Hide spinner after loading
       },
       error => {
@@ -72,6 +75,21 @@ export class HomeComponent implements OnInit {
         this.spinner.hide(); // Hide spinner in case of error
       }
     );
+  }
+
+  populateYears(accidents: List_Accident[]) {
+    const groupedByYear = this.accidentRateService.groupByYear(accidents);
+    this.years = Object.keys(groupedByYear);
+  }
+
+  filterAccidentsByYear(year: string) {
+    let filteredAccidents = this.accidents;
+    if (year !== 'All') {
+      filteredAccidents = this.accidentRateService.groupByYear(this.accidents)[year];
+    }
+    const groupedAccidents = this.accidentRateService.groupByMonth(filteredAccidents); // Accidents'ı aylara göre gruplayın
+    this.dataSource.data = groupedAccidents;
+    this.dataSource.sort = this.sort;
   }
 
   exportToExcel() {

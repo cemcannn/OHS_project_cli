@@ -1,18 +1,50 @@
+.year-select {
+  margin-left: 20px;
+}
+
+.excel {
+  height: 55px; 
+  margin-bottom: 25px; 
+  margin-left: 20px;
+  position: absolute;
+  right: 20px;
+}
+
+.main-title {
+  height: 55px; 
+  margin-bottom: 25px;
+}
+
 .demo-table {
-    width: 100%;
-  }
-  
-  .mat-mdc-row .mat-mdc-cell {
-    border-bottom: 1px solid transparent;
-    border-top: 1px solid transparent;
-    cursor: pointer;
-  }
-  
-  .mat-mdc-row:hover .mat-mdc-cell {
-    border-color: currentColor;
-  }
-  
-  .demo-row-is-clicked {
-    font-weight: bold;
-  }
-  
+  margin-top: 20px;
+}
+
+.mat-elevation-z8 {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.mat-header-cell, .mat-cell {
+  padding: 16px;
+}
+
+.mat-header-cell {
+  background-color: #f1f1f1;
+  font-weight: bold;
+}
+
+.demo-row-is-clicked {
+  background-color: #d3d3d3;
+}
+
+.summary-table {
+  margin-top: 20px;
+  width: 100%;
+  text-align: left;
+  border-collapse: collapse;
+}
+
+.summary-table td {
+  padding: 16px;
+  border-top: 1px solid #ddd;
+  background-color: #f9f9f9;
+}

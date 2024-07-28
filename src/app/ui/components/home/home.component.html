@@ -1,196 +1,93 @@
-       <!-- ============================================================== -->
-        <!-- Bread crumb -->
-        <!-- ============================================================== -->
-        <div class="page-breadcrumb">
-          <div class="row">
-            <div class="col-12 d-flex no-block align-items-center">
-              <h2 class="page-title">Ana Sayfa</h2>
-          </div>
-        </div>
-        <!-- ============================================================== -->
-        <!-- End Bread crumb -->
-        <!-- ============================================================== -->
-        
-        <!-- ============================================================== -->
-        <!-- Container fluid  -->
-        <!-- ============================================================== -->
-        <div class="container-fluid">
-          <!-- ============================================================== -->
-          <!-- Sales Cards  -->
-          <!-- ============================================================== -->
-          <div class="row">
-            <!-- Column -->
-            <div class="col-md-6 col-lg-2 col-xlg-3">
-              <div class="card card-hover">
-                <div class="box bg-cyan text-center">
-                  <h1 class="font-light text-white">
-                    <i class="mdi mdi-view-dashboard"></i>
-                  </h1>
-                  <h6 class="text-white">Dashboard</h6>
-                </div>
-              </div>
-            </div>
-            <!-- Column -->
-            <div class="col-md-6 col-lg-4 col-xlg-3">
-              <div class="card card-hover">
-                <div class="box bg-success text-center">
-                  <h1 class="font-light text-white">
-                    <i class="mdi mdi-chart-areaspline"></i>
-                  </h1>
-                  <h6 class="text-white">Charts</h6>
-                </div>
-              </div>
-            </div>
-            <!-- Column -->
-            <div class="col-md-6 col-lg-2 col-xlg-3">
-              <div class="card card-hover">
-                <div class="box bg-warning text-center">
-                  <h1 class="font-light text-white">
-                    <i class="mdi mdi-collage"></i>
-                  </h1>
-                  <h6 class="text-white">Widgets</h6>
-                </div>
-              </div>
-            </div>
-            <!-- Column -->
-            <div class="col-md-6 col-lg-2 col-xlg-3">
-              <div class="card card-hover">
-                <div class="box bg-danger text-center">
-                  <h1 class="font-light text-white">
-                    <i class="mdi mdi-border-outside"></i>
-                  </h1>
-                  <h6 class="text-white">Tables</h6>
-                </div>
-              </div>
-            </div>
-            <!-- Column -->
-            <div class="col-md-6 col-lg-2 col-xlg-3">
-              <div class="card card-hover">
-                <div class="box bg-info text-center">
-                  <h1 class="font-light text-white">
-                    <i class="mdi mdi-arrow-all"></i>
-                  </h1>
-                  <h6 class="text-white">Full Width</h6>
-                </div>
-              </div>
-            </div>
-            <!-- Column -->
-            <!-- Column -->
-            <div class="col-md-6 col-lg-4 col-xlg-3">
-              <div class="card card-hover">
-                <div class="box bg-danger text-center">
-                  <h1 class="font-light text-white">
-                    <i class="mdi mdi-receipt"></i>
-                  </h1>
-                  <h6 class="text-white">Forms</h6>
-                </div>
-              </div>
-            </div>
-            <!-- Column -->
-            <div class="col-md-6 col-lg-2 col-xlg-3">
-              <div class="card card-hover">
-                <div class="box bg-info text-center">
-                  <h1 class="font-light text-white">
-                    <i class="mdi mdi-relative-scale"></i>
-                  </h1>
-                  <h6 class="text-white">Buttons</h6>
-                </div>
-              </div>
-            </div>
-            <!-- Column -->
-            <div class="col-md-6 col-lg-2 col-xlg-3">
-              <div class="card card-hover">
-                <div class="box bg-cyan text-center">
-                  <h1 class="font-light text-white">
-                    <i class="mdi mdi-pencil"></i>
-                  </h1>
-                  <h6 class="text-white">Elements</h6>
-                </div>
-              </div>
-            </div>
-            <!-- Column -->
-            <div class="col-md-6 col-lg-2 col-xlg-3">
-              <div class="card card-hover">
-                <div class="box bg-success text-center">
-                  <h1 class="font-light text-white">
-                    <i class="mdi mdi-calendar-check"></i>
-                  </h1>
-                  <h6 class="text-white">Calendar</h6>
-                </div>
-              </div>
-            </div>
-            <!-- Column -->
-            <div class="col-md-6 col-lg-2 col-xlg-3">
-              <div class="card card-hover">
-                <div class="box bg-warning text-center">
-                  <h1 class="font-light text-white">
-                    <i class="mdi mdi-alert"></i>
-                  </h1>
-                  <h6 class="text-white">Errors</h6>
-                </div>
-              </div>
-            </div>
-            <!-- Column -->
-          </div>
-  <!-- ============================================================== -->
-  <!-- Sales chart -->
-  <!-- ============================================================== -->
+<!-- ============================================================== -->
+<!-- Bread crumb -->
+<!-- ============================================================== -->
+<div class="page-breadcrumb">
   <div class="row">
-    <div class="col-md-12">
-      <div class="card">
-        <div class="card-body">
-          <div class="d-md-flex align-items-center">
-            <div>
-              <h3 class="card-title">İş Kazası Geçiren Çalışan Sayıları</h3>
-            </div>
-          </div>
-          <!-- Excel Export Button -->
-          <button mat-raised-button color="primary" (click)="exportToExcel()">Excel Olarak Dışa Aktar</button>
-          <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8 demo-table">
-            <ng-container matColumnDef="month">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header> Aylar </th>
-              <td mat-cell *matCellDef="let element"> {{element.month}} </td>
-            </ng-container>
-
-            <ng-container matColumnDef="zeroDay">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header> Kaza Sonrası Çalışır Durumdaki Çalışan Sayısı </th>
-              <td mat-cell *matCellDef="let element"> {{element.zeroDay}} </td>
-            </ng-container>
-
-            <ng-container matColumnDef="oneToFourDay">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header> Kaza Sonrası İş Göremez Raporlu Çalışan Sayısı (1-4 Gün) </th>
-              <td mat-cell *matCellDef="let element"> {{element.oneToFourDay}} </td>
-            </ng-container>
-
-            <ng-container matColumnDef="fiveAboveDay">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header> Kaza Sonrası İş Göremez Çalışan Sayısı (5 Gün ve Üzeri) </th>
-              <td mat-cell *matCellDef="let element"> {{element.fiveAboveDay}} </td>
-            </ng-container>
-
-            <ng-container matColumnDef="totalAccidentNumber">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header> Toplam İş Kazası Sayısı </th>
-              <td mat-cell *matCellDef="let element"> {{element.totalAccidentNumber}} </td>
-            </ng-container>
-
-            <ng-container matColumnDef="totalWorkDay">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header> Toplam İşgünü Kaybı </th>
-              <td mat-cell *matCellDef="let element"> {{element.totalWorkDay}} </td>
-            </ng-container>
-
-            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-            <tr mat-row 
-                (click)="clickedRows.add(row)"
-                [class.demo-row-is-clicked]="clickedRows.has(row)"
-                *matRowDef="let row; columns: displayedColumns;"></tr>
-          </table>
-        </div>
-      </div>
+    <div class="col-12 d-flex no-block align-items-center" >
+      <h2 class="page-title">Ana Sayfa</h2>
     </div>
   </div>
   <!-- ============================================================== -->
-  <!-- Sales chart -->
+  <!-- End Bread crumb -->
   <!-- ============================================================== -->
+
+  <!-- ============================================================== -->
+  <!-- Container fluid  -->
+  <!-- ============================================================== -->
+  <div class="container-fluid">
+    <!-- ============================================================== -->
+    <!-- Sales chart -->
+    <!-- ============================================================== -->
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card bg-danger">
+          <div class="card-body">
+            <div class="d-md-flex align-items-center">
+              <div>
+                <h3 class="card-title box bg-white main-title">İş Kazası Geçiren Çalışan Sayıları</h3>
+              </div>
+
+              <!-- Year Dropdown -->
+              <mat-form-field mat-raised-button appearance="fill" class="year-select">
+                <mat-label class="card-title text-dark" >Yıl Seçin</mat-label>
+                <mat-select [(value)]="selectedYear" (selectionChange)="filterAccidentsByYear($event.value)">
+                  <mat-option *ngFor="let year of years" [value]="year">{{ year }}</mat-option>
+                </mat-select>
+              </mat-form-field>
+
+              <button mat-raised-button class="card-title text-dark excel" (click)="exportToExcel()">Excel Olarak Dışa Aktar</button>
+
+            </div>
+
+            <!-- Excel Export Button -->
+            
+            <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8 demo-table">
+              <ng-container matColumnDef="month">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Aylar </th>
+                <td mat-cell *matCellDef="let element"> {{element.month}} </td>
+              </ng-container>
+
+              <ng-container matColumnDef="zeroDay">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Kaza Sonrası Çalışır Durumdaki Çalışan Sayısı
+                </th>
+                <td mat-cell *matCellDef="let element"> {{element.zeroDay}} </td>
+              </ng-container>
+
+              <ng-container matColumnDef="oneToFourDay">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Kaza Sonrası İş Göremez Raporlu Çalışan Sayısı
+                  (1-4 Gün) </th>
+                <td mat-cell *matCellDef="let element"> {{element.oneToFourDay}} </td>
+              </ng-container>
+
+              <ng-container matColumnDef="fiveAboveDay">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Kaza Sonrası İş Göremez Çalışan Sayısı (5 Gün ve
+                  Üzeri) </th>
+                <td mat-cell *matCellDef="let element"> {{element.fiveAboveDay}} </td>
+              </ng-container>
+
+              <ng-container matColumnDef="totalAccidentNumber">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Toplam İş Kazası Sayısı </th>
+                <td mat-cell *matCellDef="let element"> {{element.totalAccidentNumber}} </td>
+              </ng-container>
+
+              <ng-container matColumnDef="totalWorkDay">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Toplam İşgünü Kaybı </th>
+                <td mat-cell *matCellDef="let element"> {{element.totalWorkDay}} </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row (click)="clickedRows.add(row)" [class.demo-row-is-clicked]="clickedRows.has(row)"
+                *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+          </div>
         </div>
-        <!-- ============================================================== -->
-        <!-- End Container fluid  -->
-        <!-- ============================================================== -->
+      </div>
+    </div>
+
+    <!-- ============================================================== -->
+    <!-- Sales chart -->
+    <!-- ============================================================== -->
+  </div>
+  <!-- ============================================================== -->
+  <!-- End Container fluid  -->
+  <!-- ============================================================== -->

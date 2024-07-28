@@ -4,5 +4,6 @@ export class Create_Personnel {
     name: string;
     surname: string;
     profession: string;
+    directorate: string;
     bornDate: Date;
   }

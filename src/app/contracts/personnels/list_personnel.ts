@@ -7,6 +7,7 @@ export class List_Personnel {
     name: string;
     surname: string;
     profession: string;
+    directorate: string;
     bornDate: Date;
     accident: List_Accident[]; 
   }

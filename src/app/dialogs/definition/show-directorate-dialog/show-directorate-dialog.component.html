@@ -1,0 +1,63 @@
+<div class="mat-elevation-z8">
+    <div class="filter-container">
+      <mat-form-field appearance="fill">
+        <mat-label>Filtrele</mat-label>
+        <input matInput (keyup)="applyFilter($event)" placeholder="Uzuv Türünü Ara">
+      </mat-form-field>
+    </div>
+  
+    <table mat-table [dataSource]="dataSource" matSort>
+  
+      <ng-container matColumnDef="directorate">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Uzuv Türü </th>
+        <td mat-cell *matCellDef="let element; let i = index">
+          <div *ngIf="editIndex === i; else readMode">
+            <input matInput [(ngModel)]="element.name">
+          </div>
+          <ng-template #readMode>
+            {{element.name}}
+          </ng-template>
+        </td>
+      </ng-container>
+  
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef> İşlemler </th>
+        <td mat-cell *matCellDef="let element; let i = index">
+          <div *ngIf="editIndex === i; else editMode">
+            <button mat-icon-button color="primary" (click)="saveEdit(element)">
+              <mat-icon>save</mat-icon>
+            </button>
+            <button mat-icon-button color="warn" (click)="cancelEdit()">
+              <mat-icon>cancel</mat-icon>
+            </button>
+          </div>
+          <ng-template #editMode>
+            <button mat-icon-button color="primary" (click)="startEdit(i)" *ngIf="!data.isPicker">
+              <img src="../../../assets/icons/edit.png" alt="Edit" width="24" height="24">
+            </button>
+            <button mat-icon-button color="warn" appDelete [id]="element.id" (callback)="showDirectorates()" controller="directorates" *ngIf="!data.isPicker">
+            </button>
+            <button mat-icon-button color="primary" (click)="selectDirectorate(element)" *ngIf="data.isPicker">
+              <mat-icon>check</mat-icon>
+            </button>
+          </ng-template>
+        </td>
+      </ng-container>
+  
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  
+    <mat-paginator [pageSizeOptions]="[10, 20, 100]" showFirstLastButtons></mat-paginator>
+  </div>
+  
+  <div class="new-accident-container" *ngIf="!data.isPicker">
+    <mat-form-field appearance="fill">
+      <mat-label>Yeni Uzuv Türü</mat-label>
+      <input matInput [(ngModel)]="newDirectorate">
+    </mat-form-field>
+    <button mat-raised-button color="primary" (click)="createDirectorate()">Ekle
+      <mat-icon>save</mat-icon>
+    </button>
+  </div>
+  

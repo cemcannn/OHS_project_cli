@@ -51,7 +51,15 @@ export class AccidentRateService {
     return Object.values(accidentRates);
   }
 
-  private calculateReportDay(onTheJobDate: Date, accidentDate: Date): number {
-    return Math.ceil((onTheJobDate.getTime() - accidentDate.getTime()) / (1000 * 3600 * 24));
+  groupByYear(accidents: List_Accident[]): { [year: string]: List_Accident[] } {
+    return accidents.reduce((acc, accident) => {
+      const year = new Date(accident.accidentDate).getFullYear().toString();
+      if (!acc[year]) {
+        acc[year] = [];
+      }
+      acc[year].push(accident);
+      return acc;
+    }, {} as { [year: string]: List_Accident[] });
   }
 }
+

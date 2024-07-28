@@ -5,6 +5,8 @@ import { PersonnelService } from 'src/app/services/common/models/personnel.servi
 import { Create_Personnel } from 'src/app/contracts/personnels/create_personnel';
 import { ShowProfessionDialogComponent } from '../../definition/show-profession-dialog/show-profession-dialog.component';
 import { List_Profession } from 'src/app/contracts/definitions/profession/list_profession';
+import { ShowDirectorateDialogComponent } from '../../definition/show-directorate-dialog/show-directorate-dialog.component';
+import { List_Directorate } from 'src/app/contracts/definitions/directorate/list_directorate';
 
 
 @Component({
@@ -14,6 +16,7 @@ import { List_Profession } from 'src/app/contracts/definitions/profession/list_p
 })
 export class PersonnelAddDialogComponent extends BaseDialog<PersonnelAddDialogComponent> implements OnInit {
   profession: List_Profession; // Kaza türünü tutmak için
+  directorate: List_Directorate;
 
   constructor(
     dialogRef: MatDialogRef<PersonnelAddDialogComponent>,
@@ -30,21 +33,23 @@ export class PersonnelAddDialogComponent extends BaseDialog<PersonnelAddDialogCo
     name: string,
     surname: string,
     profession: string,
+    directorate: string,
     bornDate: string
   ): void {
   // Convert necessary values to the expected types
-  const startDateOfWorkValue: Date = new Date(bornDate);
+  const bornDateValue: Date = new Date(bornDate);
   
   // Tarihi UTC olarak ayarlayın
-  startDateOfWorkValue.setMinutes(startDateOfWorkValue.getMinutes() - startDateOfWorkValue.getTimezoneOffset());
+  bornDateValue.setMinutes(bornDateValue.getMinutes() - bornDateValue.getTimezoneOffset());
 
     const createPersonnel: Create_Personnel = {
       trIdNumber: trIdNumber,
       tkiId: tkiId,
       name: name,
-      profession: profession,
       surname: surname,
-      bornDate: startDateOfWorkValue
+      profession: profession,
+      directorate: directorate,
+      bornDate: bornDateValue
     };
 
     this.personnelService.createPersonnel(
@@ -69,6 +74,19 @@ export class PersonnelAddDialogComponent extends BaseDialog<PersonnelAddDialogCo
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.profession = result; // Seçilen kaza türünü al
+      }
+    });
+  }
+
+  openDirectoratePicker(): void {
+    const dialogRef = this.dialog.open(ShowDirectorateDialogComponent, {
+      width: '600px',
+      data: { isPicker: true } // Picker modunda açmak için
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.directorate = result; // Seçilen kaza türünü al
       }
     });
   }

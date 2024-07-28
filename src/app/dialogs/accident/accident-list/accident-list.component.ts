@@ -10,7 +10,6 @@ import { AlertifyService, MessageType, Position } from 'src/app/services/admin/a
 import { AccidentUpdateDialogComponent } from '../accident-update-dialog/accident-update-dialog.component';
 
 
-
 @Component({
   selector: 'app-accident-list',
   templateUrl: './accident-list.component.html',

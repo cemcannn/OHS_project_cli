@@ -4,6 +4,8 @@ import { HomeComponent } from './home.component';
 import { RouterModule } from '@angular/router';
 import { MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
 
 
 
@@ -13,7 +15,7 @@ import { MatSortModule } from '@angular/material/sort';
     HomeComponent
   ],
   imports: [
-    CommonModule, 
+    CommonModule, MatFormFieldModule, MatSelectModule,
     MatTableModule,
     MatSortModule,
     RouterModule.forChild([

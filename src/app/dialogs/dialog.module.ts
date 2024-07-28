@@ -31,6 +31,7 @@ import { ShowLimbDialogComponent } from './definition/show-limb-dialog/show-limb
 import { ShowProfessionDialogComponent } from './definition/show-profession-dialog/show-profession-dialog.component';
 import { ShowAccidentAreaDialogComponent } from './definition/show-accident-area-dialog/show-accident-area-dialog.component';
 import { CommonPipesModule } from '../pipes/common-pipes.module';
+import { ShowDirectorateDialogComponent } from './definition/show-directorate-dialog/show-directorate-dialog.component';
 
 
 
@@ -51,7 +52,8 @@ import { CommonPipesModule } from '../pipes/common-pipes.module';
     ShowTypeOfAccidentDialogComponent,
     ShowLimbDialogComponent,
     ShowProfessionDialogComponent,
-    ShowAccidentAreaDialogComponent
+    ShowAccidentAreaDialogComponent,
+    ShowDirectorateDialogComponent
   ],
   imports: [
     FormsModule, MatSelectModule, MatIconModule, MatDatepickerModule, MatNativeDateModule, MatPaginatorModule, MatSortModule, ReactiveFormsModule, CommonModule, MatDialogModule, MatButtonModule, MatCardModule, MatTableModule, MatToolbarModule, MatBadgeModule, MatListModule, MatFormFieldModule, MatInputModule, DeleteDirectiveModule, CommonPipesModule
