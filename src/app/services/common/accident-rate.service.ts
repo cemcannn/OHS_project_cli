@@ -48,7 +48,27 @@ export class AccidentRateService {
       accidentRate.totalWorkDay += reportDay;
     });
 
-    return Object.values(accidentRates);
+    // Calculate totals
+    const totals = {
+      month: 'Toplam',
+      zeroDay: 0,
+      oneToFourDay: 0,
+      fiveAboveDay: 0,
+      totalAccidentNumber: 0,
+      totalWorkDay: 0,
+    };
+
+    for (const key in accidentRates) {
+      if (accidentRates.hasOwnProperty(key)) {
+        totals.zeroDay += accidentRates[key].zeroDay;
+        totals.oneToFourDay += accidentRates[key].oneToFourDay;
+        totals.fiveAboveDay += accidentRates[key].fiveAboveDay;
+        totals.totalAccidentNumber += accidentRates[key].totalAccidentNumber;
+        totals.totalWorkDay += accidentRates[key].totalWorkDay;
+      }
+    }
+
+    return [...Object.values(accidentRates), totals];
   }
 
   groupByYear(accidents: List_Accident[]): { [year: string]: List_Accident[] } {

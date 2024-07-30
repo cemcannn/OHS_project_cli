@@ -6,6 +6,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 
 
@@ -15,7 +16,7 @@ import { MatSelectModule } from '@angular/material/select';
     HomeComponent
   ],
   imports: [
-    CommonModule, MatFormFieldModule, MatSelectModule,
+    CommonModule, MatFormFieldModule, MatSelectModule, FormsModule, ReactiveFormsModule,
     MatTableModule,
     MatSortModule,
     RouterModule.forChild([

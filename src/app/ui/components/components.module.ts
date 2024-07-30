@@ -16,8 +16,10 @@ import { AccidentModule } from './accident/accident.module';
 
 
 
+
 @NgModule({
-  declarations: [],
+  declarations: [
+  ],
   imports: [
     CommonModule,
     HomeModule,

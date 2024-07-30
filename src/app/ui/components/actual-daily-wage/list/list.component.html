@@ -1,0 +1,121 @@
+<!-- ============================================================== -->
+<!-- Bread Crumb -->
+<!-- ============================================================== -->
+<div class="page-breadcrumb">
+    <div class="row">
+        <div class="col-12 d-flex no-block align-items-center">
+        </div>
+    </div>
+</div>
+<!-- ============================================================== -->
+<!-- End Bread Crumb -->
+<!-- ============================================================== -->
+
+<!-- ============================================================== -->
+<!-- Container Fluid  -->
+<!-- ============================================================== -->
+<div class="container-fluid">
+    <!-- ============================================================== -->
+    <!-- Accident Rates by Month -->
+    <!-- ============================================================== -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card bg-danger">
+                <div class="card-body">
+                    <div class="d-md-flex align-items-center">
+                        <div>
+                            <h3 class="card-title box bg-white main-title">Kaza İstatistikleri</h3>
+                        </div>
+
+                        <!-- Year Dropdown -->
+                        <mat-form-field appearance="fill" class="header">
+                            <mat-label class="card-title text-dark" for="yearSelectStatistic">Yıl
+                                (İstatistikler):</mat-label>
+                            <mat-select id="yearSelectStatistic" [(ngModel)]="selectedYearStatistic"
+                                (ngModelChange)="filterStatisticsByYear($event)">
+                                <mat-option value="All">Tüm Yıllar</mat-option>
+                                <mat-option *ngFor="let year of yearsStatistic" [value]="year">{{ year }}</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+
+                        <!-- Actual Daily Wage Add Button -->
+                        <button mat-raised-button class="card-title text-dark actualWageAdd"
+                            (click)="openAddActualDailyWageDialog()">
+                            Fiili Yevmiye Sayısı Ekle
+                        </button>
+
+                        <!-- Excel Export Button -->
+                        <button mat-raised-button class="card-title text-dark excel"
+                            (click)="exportToExcelStatistics()">Excel
+                            Olarak
+                            Dışa Aktar</button>
+                    </div>
+
+                    <table mat-table [dataSource]="dataSourceStatistic" matSort class="mat-elevation-z8">
+                        <ng-container matColumnDef="month">
+                            <th mat-header-cell *matHeaderCellDef> Ay </th>
+                            <td mat-cell *matCellDef="let element"> {{element.month}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="actualWageSurface">
+                            <th mat-header-cell *matHeaderCellDef> Fiili Yevmiye Sayısı (Yerüstü) </th>
+                            <td mat-cell *matCellDef="let element"> {{element.actualWageSurface}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="actualWageUnderground">
+                            <th mat-header-cell *matHeaderCellDef> Fiili Yevmiye Sayısı (Yeraltı) </th>
+                            <td mat-cell *matCellDef="let element"> {{element.actualWageUnderground}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="employeesNumberSurface">
+                            <th mat-header-cell *matHeaderCellDef> Çalışan Sayısı (Yerüstü) </th>
+                            <td mat-cell *matCellDef="let element"> {{element.employeesNumberSurface}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="employeesNumberUnderground">
+                            <th mat-header-cell *matHeaderCellDef> Çalışan Sayısı (Yeraltı) </th>
+                            <td mat-cell *matCellDef="let element"> {{element.employeesNumberUnderground}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="workingHoursSurface">
+                            <th mat-header-cell *matHeaderCellDef> Çalışma Saati (Yerüstü) </th>
+                            <td mat-cell *matCellDef="let element"> {{element.workingHoursSurface}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="workingHoursUnderground">
+                            <th mat-header-cell *matHeaderCellDef> Çalışma Saati (Yeraltı) </th>
+                            <td mat-cell *matCellDef="let element"> {{element.workingHoursUnderground}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="workingHoursSummary">
+                            <th mat-header-cell *matHeaderCellDef> Toplam Çalışma Saati </th>
+                            <td mat-cell *matCellDef="let element"> {{element.workingHoursSummary}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="lostDayOfWorkSummary">
+                            <th mat-header-cell *matHeaderCellDef> İş Günü Kaybı </th>
+                            <td mat-cell *matCellDef="let element"> {{element.lostDayOfWorkSummary}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="delete">
+                            <th mat-header-cell *matHeaderCellDef width="30"> Sil </th>
+                            <td mat-cell *matCellDef="let element" appDelete [id]="element.id"
+                                (callback)="getActualDailyWages()" controller="actualDailyWages">
+                            </td>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="displayedColumnsStatistic"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumnsStatistic;"></tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================== -->
+    <!-- End Accident Rates by Month -->
+    <!-- ============================================================== -->
+</div>
+<!-- ============================================================== -->
+<!-- End Container Fluid  -->
+<!-- ============================================================== -->

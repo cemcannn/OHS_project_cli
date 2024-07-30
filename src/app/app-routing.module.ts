@@ -5,7 +5,6 @@ import { AuthGuard } from './guards/common/auth.guard';
 import { LayoutComponent } from './admin/layout/layout.component';
 import { LayoutComponent as UiLayoutComponent}  from './ui/layout/layout.component';
 import { HomeComponent } from './ui/components/home/home.component';
-import { EntranceComponent } from './ui/entrance/entrance.component';
 
 
 
@@ -24,8 +23,10 @@ const routes: Routes = [
     (module => module.AccidentModule) },
     { path: "definition", loadChildren : () => import("./ui/components/definition/definition.module").then
     (module => module.DefinitionModule) },
-    { path: "personnels", loadChildren : () => import("./ui/components/personnel/personnel.module").then
+    { path: "personnel", loadChildren : () => import("./ui/components/personnel/personnel.module").then
     (module => module.PersonnelModule) },
+    { path: "actual-daily-wage", loadChildren : () => import("./ui/components/actual-daily-wage/actual-daily-wage.module").then
+      (module => module.ActualDailyWageModule) },
     { path: "register", loadChildren: () => import("./ui/components/register/register.module").then(module => module.RegisterModule) },
     { path: "login", loadChildren: () => import("./ui/components/login/login.module").then(module => module.LoginModule) },
     { path: "password-reset", loadChildren: () => import("./ui/components/password-reset/password-reset.module").then(module => module.PasswordResetModule) },
