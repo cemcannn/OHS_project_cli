@@ -74,7 +74,7 @@ export class AccidentUpdateDialogComponent extends BaseDialog<AccidentUpdateDial
       accidentArea : this.data.accidentArea,
       accidentDate: new Date(this.data.accidentDate),
       accidentHour: this.data.accidentHour,
-      reportDay: this.data.reportDay,
+      lostDayOfWork: this.data.lostDayOfWork,
       description: this.data.description
     };
 

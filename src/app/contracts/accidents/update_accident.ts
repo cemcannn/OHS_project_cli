@@ -5,6 +5,6 @@ export class Update_Accident {
     limb: string;
     accidentDate : Date;
     accidentHour : string;
-    reportDay : string;
+    lostDayOfWork : string;
     description : string;
   }

@@ -82,7 +82,7 @@ export class AccidentAddComponent extends BaseDialog<AccidentAddComponent> imple
     accidentArea: string,
     accidentDateInput: string,
     accidentHour: string,
-    reportDay: string,
+    lostDayOfWork: string,
     description: string
   ): void {
     // gg.aa.yyyy formatındaki tarihi Date nesnesine çevirme ve UTC olarak ayarlama
@@ -96,7 +96,7 @@ export class AccidentAddComponent extends BaseDialog<AccidentAddComponent> imple
       accidentArea: this.accidentArea ? this.accidentArea.name : accidentArea,
       accidentDate: accidentDateValue,
       accidentHour: accidentHour,
-      reportDay: reportDay,
+      lostDayOfWork: lostDayOfWork,
       description: description
     };
   

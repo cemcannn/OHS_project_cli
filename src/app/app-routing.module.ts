@@ -27,6 +27,8 @@ const routes: Routes = [
     (module => module.PersonnelModule) },
     { path: "actual-daily-wage", loadChildren : () => import("./ui/components/actual-daily-wage/actual-daily-wage.module").then
       (module => module.ActualDailyWageModule) },
+      { path: "accident-rate", loadChildren : () => import("./ui/components/accident-rate/accident-rate.module").then
+        (module => module.ActualDailyWageModule) },
     { path: "register", loadChildren: () => import("./ui/components/register/register.module").then(module => module.RegisterModule) },
     { path: "login", loadChildren: () => import("./ui/components/login/login.module").then(module => module.LoginModule) },
     { path: "password-reset", loadChildren: () => import("./ui/components/password-reset/password-reset.module").then(module => module.PasswordResetModule) },

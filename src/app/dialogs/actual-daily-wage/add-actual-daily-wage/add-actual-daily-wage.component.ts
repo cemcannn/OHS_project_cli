@@ -14,8 +14,8 @@ import { List_Directorate } from 'src/app/contracts/definitions/directorate/list
 export class AddActualDailyWageComponent extends BaseDialog<AddActualDailyWageComponent> implements OnInit {
   month: string;
   year: string;
-  actualWageSurface: string;
-  actualWageUnderground: string;
+  actualDailyWageSurface: string;
+  actualDailyWageUnderground: string;
   employeesNumberSurface: string;
   employeesNumberUnderground: string;
   directorate: List_Directorate;
@@ -55,8 +55,8 @@ export class AddActualDailyWageComponent extends BaseDialog<AddActualDailyWageCo
     const createActualDailyWage: Create_Actual_Daily_Wage = {
       month: this.month,
       year: this.year,
-      actualWageSurface: this.actualWageSurface,
-      actualWageUnderground: this.actualWageUnderground,
+      actualDailyWageSurface: this.actualDailyWageSurface,
+      actualDailyWageUnderground: this.actualDailyWageUnderground,
       employeesNumberSurface: this.employeesNumberSurface,
       employeesNumberUnderground: this.employeesNumberUnderground,
       directorate: this.directorate.name

@@ -8,6 +8,9 @@ import { List_Actual_Daily_Wage } from 'src/app/contracts/actual_daily_wages/lis
 import { StatisticService } from 'src/app/services/common/statistic.service';
 import { AddActualDailyWageComponent } from 'src/app/dialogs/actual-daily-wage/add-actual-daily-wage/add-actual-daily-wage.component';
 import { MatDialog } from '@angular/material/dialog';
+import { AccidentService } from 'src/app/services/common/models/accident.service';
+import { AccidentRateService } from 'src/app/services/common/accident-rate.service';
+import { List_Accident } from 'src/app/contracts/accidents/list_accident';
 
 @Component({
   selector: 'app-list',
@@ -15,9 +18,10 @@ import { MatDialog } from '@angular/material/dialog';
   styleUrls: ['./list.component.scss']
 })
 export class ListComponent implements OnInit {
-  displayedColumnsStatistic: string[] = ['month', 'actualWageSurface', 'actualWageUnderground', 'employeesNumberSurface', 'employeesNumberUnderground','workingHoursSurface', 'workingHoursUnderground', 'workingHoursSummary', 'lostDayOfWorkSummary', 'delete'];
+  displayedColumnsStatistic: string[] = ['month', 'actualDailyWageSurface', 'actualDailyWageUnderground', 'actualDailyWageSummary', 'employeesNumberSurface', 'employeesNumberUnderground', 'employeesNumberSummary' ,'workingHoursSurface', 'workingHoursUnderground', 'workingHoursSummary', 'lostDayOfWorkSummary', 'accidentSeverityRate' ,'delete'];
   dataSourceStatistic: MatTableDataSource<any> = new MatTableDataSource<any>();
   clickedRowsStatistic = new Set<any>();
+  accidents: List_Accident[] = [];
 
   @ViewChild(MatSort) sort: MatSort;
 
@@ -30,6 +34,8 @@ export class ListComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private actualDailyWageService: ActualDailyWageService,
     private statisticService: StatisticService,
+    private accidentService: AccidentService,
+    private accidentRateService: AccidentRateService,
     private dialog: MatDialog
   ) {}
 
@@ -38,20 +44,24 @@ export class ListComponent implements OnInit {
   }
 
   async getActualDailyWages() {
-    this.spinner.show(); // Show spinner while loading
-
-    this.actualDailyWageService.getActualDailyWages().then(
-      response => {
-        this.actualDailyWages = response.datas;
-        this.populateYearsStatistic(this.actualDailyWages);
-        this.filterStatisticsByYear(this.selectedYearStatistic);
-        this.spinner.hide(); // Hide spinner after loading
-      },
-      error => {
-        console.error('Error loading actual daily wages:', error);
-        this.spinner.hide(); // Hide spinner in case of error
-      }
-    );
+    this.spinner.show();
+  
+    try {
+      const [dailyWagesResponse, accidentsResponse] = await Promise.all([
+        this.actualDailyWageService.getActualDailyWages(),
+        this.accidentService.getAccidents()
+      ]);
+  
+      this.actualDailyWages = dailyWagesResponse.datas;
+      this.accidents = accidentsResponse.datas;
+  
+      this.populateYearsStatistic(this.actualDailyWages);
+      this.filterStatisticsByYear(this.selectedYearStatistic);
+    } catch (error) {
+      console.error('Error loading data:', error);
+    } finally {
+      this.spinner.hide();
+    }
   }
 
   populateYearsStatistic(dailyWages: List_Actual_Daily_Wage[]) {
@@ -61,10 +71,12 @@ export class ListComponent implements OnInit {
 
   filterStatisticsByYear(year: string) {
     let filteredStatistics = this.actualDailyWages;
+    let filteredAccidents = this.accidents;
     if (year !== 'All') {
       filteredStatistics = this.statisticService.groupByYear(this.actualDailyWages)[year];
+      filteredAccidents = this.accidentRateService.groupByYear(this.accidents)[year];
     }
-    const groupedStatistics = this.statisticService.groupByMonth(filteredStatistics);
+    const groupedStatistics = this.statisticService.groupByMonth(filteredStatistics, filteredAccidents);
     this.dataSourceStatistic.data = groupedStatistics;
     this.dataSourceStatistic.sort = this.sort;
   }
@@ -72,11 +84,12 @@ export class ListComponent implements OnInit {
   exportToExcelStatistics() {
     const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.dataSourceStatistic.data.map(item => ({
       Month: item.month,
-      ActualWageSurface: item.actualWageSurface,
-      ActualWageUnderground: item.actualWageUnderground,
+      ActualDailyWageSurface: item.actualDailyWageSurface,
+      ActualDailyWageUnderground: item.actualDailyWageUnderground,
       EmployeesSurface: item.employeesSurface,
       employeesNumberUnderground: item.employeesNumberUnderground,
       employeesNumberSurface: item.employeesNumberSurface,
+      WorkingHoursSurface: item.workingHoursSurface,
       WorkingHoursUnderground: item.workingHoursUnderground,
       WorkingHoursSummary: item.workingHoursSummary,
       LostDayOfWorkSummary: item.lostDayOfWorkSummary

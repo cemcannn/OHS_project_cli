@@ -3,8 +3,8 @@ export class Update_Actual_Daily_Wage {
     month: string;
     year: string;
     directorate: string;
-    actualWageSurface: string;
-    actualWageUnderground: string;
+    actualDailyWageSurface: string;
+    actualDailyWageUnderground: string;
     employeesNumberSurface: string;
     employeesNumberUnderground: string;
   }

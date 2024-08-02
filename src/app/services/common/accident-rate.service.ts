@@ -25,27 +25,27 @@ export class AccidentRateService {
         oneToFourDay: 0,
         fiveAboveDay: 0,
         totalAccidentNumber: 0,
-        totalWorkDay: 0,
+        totalLostDayOfWork: 0,
       };
     });
 
     accidents.forEach(accident => {
       const monthIndex = new Date(accident.accidentDate).getMonth();
       const month = this.monthNames[monthIndex];
-      const reportDay = Number(accident.reportDay); 
+      const lostDayOfWork = Number(accident.lostDayOfWork); 
 
       const accidentRate = accidentRates[month];
 
-      if (reportDay === 0) {
+      if (lostDayOfWork === 0) {
         accidentRate.zeroDay += 1;
-      } else if (reportDay >= 1 && reportDay <= 4) {
+      } else if (lostDayOfWork >= 1 && lostDayOfWork <= 4) {
         accidentRate.oneToFourDay += 1;
-      } else if (reportDay >= 5) {
+      } else if (lostDayOfWork >= 5) {
         accidentRate.fiveAboveDay += 1;
       }
 
       accidentRate.totalAccidentNumber += 1;
-      accidentRate.totalWorkDay += reportDay;
+      accidentRate.totalLostDayOfWork += lostDayOfWork;
     });
 
     // Calculate totals
@@ -55,7 +55,7 @@ export class AccidentRateService {
       oneToFourDay: 0,
       fiveAboveDay: 0,
       totalAccidentNumber: 0,
-      totalWorkDay: 0,
+      totalLostDayOfWork: 0,
     };
 
     for (const key in accidentRates) {
@@ -64,7 +64,7 @@ export class AccidentRateService {
         totals.oneToFourDay += accidentRates[key].oneToFourDay;
         totals.fiveAboveDay += accidentRates[key].fiveAboveDay;
         totals.totalAccidentNumber += accidentRates[key].totalAccidentNumber;
-        totals.totalWorkDay += accidentRates[key].totalWorkDay;
+        totals.totalLostDayOfWork += accidentRates[key].totalLostDayOfWork;
       }
     }
 

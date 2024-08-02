@@ -26,7 +26,7 @@ export class ActualDailyWageService {
 
   async createActualDailyWage(actualDailyWage: Create_Actual_Daily_Wage, successCallBack?: () => void, errorCallBack?: (errorMessage: string) => void) {
     this.httpClientService.post({
-      controller: "actualDailyWages"
+      controller: "accidentStatistics"
     }, actualDailyWage)
       .subscribe(result => {
         if (successCallBack) successCallBack();
@@ -51,21 +51,21 @@ export class ActualDailyWageService {
 
   async getActualDailyWages(successCallBack?: () => void, errorCallBack?: (errorMessage: string) => void): Promise<{ totalCount: number; datas: List_Actual_Daily_Wage[] }> {
     const observable: Observable<{ totalCount: number; datas: List_Actual_Daily_Wage[] }> = this.httpClientService.get({
-      controller: "actualDailyWages"
+      controller: "accidentStatistics"
     });
     return this.handleRequest(observable, successCallBack, errorCallBack);
   }
 
   async updateActualDailyWage(actualDailyWage: Update_Actual_Daily_Wage, successCallBack?: () => void, errorCallBack?: (errorMessage: string) => void) {
     const observable = this.httpClientService.put({
-      controller: "actualDailyWages",
+      controller: "accidentStatistics",
     }, actualDailyWage);
     return this.handleRequest(observable, successCallBack, errorCallBack);
   }
 
   async deleteActualDailyWage(id: string, successCallBack?: () => void, errorCallBack?: (errorMessage: string) => void) {
     const observable = this.httpClientService.delete({
-      controller: "actualDailyWages"
+      controller: "accidentStatistics"
     }, id);
     return this.handleRequest(observable, successCallBack, errorCallBack);
   }

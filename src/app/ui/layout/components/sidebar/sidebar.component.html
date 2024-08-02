@@ -1,71 +1,43 @@
 <aside class="left-sidebar" data-sidebarbg="skin5">
-    <!-- Sidebar scroll-->
-    <div class="scroll-sidebar">
-      <!-- Sidebar navigation-->
-      <nav class="sidebar-nav">
-        <ul id="sidebarnav" class="pt-4">
-          <li class="sidebar-item">
-            <a
-              class="sidebar-link waves-effect waves-dark sidebar-link"
-              routerLink=""
-              aria-expanded="false"
-              ><i class="mdi mdi-view-dashboard"></i
-              ><span class="hide-menu">Ana Sayfa</span></a
-            >
-          </li>
-          <li class="sidebar-item">
-            <a
-              class="sidebar-link waves-effect waves-dark sidebar-link"
-              routerLink="accident"
-              aria-expanded="false"
-              ><i class="mdi mdi-alert"></i
-              ><span class="hide-menu">İş Kazaları</span></a
-            >
-          </li>
-          <li class="sidebar-item">
-            <a 
-              class="sidebar-link waves-effect waves-dark sidebar-link"
-
-              routerLink="definition"
-              aria-expanded="false"
-              ><i class="mdi mdi-blur-linear"></i
-              ><span class="hide-menu">Tanımlamalar</span></a
-            >
-          </li>
-          <li class="sidebar-item">
-            <a 
-              class="sidebar-link waves-effect waves-dark sidebar-link"
-
-              routerLink="personnel"
-              aria-expanded="false"
-              ><i class="mdi mdi-account-multiple"></i
-              ><span class="hide-menu">Personel</span></a
-            >
-          </li>
-          <li class="sidebar-item">
-            <a 
-              class="sidebar-link waves-effect waves-dark sidebar-link"
-
-              routerLink="actual-daily-wage"
-              aria-expanded="false"
-              ><i class="mdi mdi-account-multiple"></i
-              ><span class="hide-menu">Kaza İstatistikleri</span></a
-            >
-          </li>
-          <li class="sidebar-item">
-            <a 
-              class="sidebar-link waves-effect waves-dark sidebar-link"
-              *ngIf="authService.isAuthenticated"
-
-              routerLink="admin"
-              aria-expanded="false"
-              ><i class="mdi mdi-blur-linear"></i
-              ><span class="hide-menu">Admin</span></a
-            >
-          </li>
-        </ul>
-      </nav>
-      <!-- End Sidebar navigation -->
-    </div>
-    <!-- End Sidebar scroll-->
-  </aside>
+  <!-- Sidebar scroll-->
+  <div class="scroll-sidebar">
+    <!-- Sidebar navigation-->
+    <nav class="sidebar-nav">
+      <ul id="sidebarnav" class="pt-4">
+        <li class="sidebar-item">
+          <a class="sidebar-link waves-effect waves-dark sidebar-link" routerLink="" aria-expanded="false"><i
+              class="mdi mdi-view-dashboard"></i><span class="hide-menu">Ana Sayfa</span></a>
+        </li>
+        <li class="sidebar-item">
+          <a class="sidebar-link waves-effect waves-dark sidebar-link" routerLink="accident" aria-expanded="false"><i
+              class="mdi mdi-alert"></i><span class="hide-menu">İş Kazaları</span></a>
+        </li>
+        <li class="sidebar-item">
+          <a class="sidebar-link waves-effect waves-dark sidebar-link" routerLink="definition" aria-expanded="false"><i
+              class="mdi mdi-blur-linear"></i><span class="hide-menu">Tanımlamalar</span></a>
+        </li>
+        <li class="sidebar-item">
+          <a class="sidebar-link waves-effect waves-dark sidebar-link" routerLink="personnel" aria-expanded="false"><i
+              class="mdi mdi-account-multiple"></i><span class="hide-menu">Personel</span></a>
+        </li>
+        <li class="sidebar-item">
+          <a class="sidebar-link waves-effect waves-dark sidebar-link" routerLink="actual-daily-wage"
+            aria-expanded="false"><i class="mdi mdi-account-multiple"></i><span class="hide-menu">Kaza
+              İstatistikleri</span></a>
+        </li>
+        <li class="sidebar-item">
+          <a class="sidebar-link waves-effect waves-dark sidebar-link" routerLink="accident-rate"
+            aria-expanded="false"><i class="mdi mdi-account-multiple"></i><span class="hide-menu">Kaza Geçiren
+              Çalışan</span></a>
+        </li>
+        <li class="sidebar-item">
+          <a class="sidebar-link waves-effect waves-dark sidebar-link" *ngIf="authService.isAuthenticated"
+            routerLink="admin" aria-expanded="false"><i class="mdi mdi-blur-linear"></i><span
+              class="hide-menu">Admin</span></a>
+        </li>
+      </ul>
+    </nav>
+    <!-- End Sidebar navigation -->
+  </div>
+  <!-- End Sidebar scroll-->
+</aside>

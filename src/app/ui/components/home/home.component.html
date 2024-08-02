@@ -1,91 +1,19 @@
-<!-- ============================================================== -->
-<!-- Bread Crumb -->
-<!-- ============================================================== -->
-<div class="page-breadcrumb">
-  <div class="row">
-    <div class="col-12 d-flex no-block align-items-center">
-      <h2 class="page-title">Ana Sayfa</h2>
+<div class="container">
+    <h2>İstatistik Grafiği</h2>
+    
+    <div class="form-group">
+      <label for="yearSelect">Yıl Seçin:</label>
+      <select id="yearSelect" [(ngModel)]="selectedYear" (change)="onYearChange()">
+        <option *ngFor="let year of years" [value]="year">{{year}}</option>
+      </select>
     </div>
-  </div>
-</div>
-<!-- ============================================================== -->
-<!-- End Bread Crumb -->
-<!-- ============================================================== -->
-
-<!-- ============================================================== -->
-<!-- Container Fluid  -->
-<!-- ============================================================== -->
-<div class="container-fluid">
-  <!-- ============================================================== -->
-  <!-- Accident Rates by Month -->
-  <!-- ============================================================== -->
-  <div class="row">
-    <div class="col-md-12">
-      <div class="card bg-danger">
-        <div class="card-body">
-          <div class="d-md-flex align-items-center">
-            <div>
-              <h3 class="card-title box bg-white main-title">İş Kazası Geçiren Çalışan Sayıları</h3>
-            </div>
-
-            <!-- Year Dropdown -->
-            <mat-form-field appearance="fill" class="header">
-              <mat-label class="card-title text-dark" for="yearSelectAccident">Yıl (Kazalar):</mat-label>
-              <mat-select id="yearSelectAccident" [(ngModel)]="selectedYearAccident"
-                (ngModelChange)="filterAccidentsByYear($event)">
-                <mat-option value="All">Tüm Yıllar</mat-option>
-                <mat-option *ngFor="let year of yearsAccident" [value]="year">{{ year }}</mat-option>
-              </mat-select>
-            </mat-form-field>
-            <!-- Excel Export Button -->
-            <button mat-raised-button class="card-title text-dark excel" (click)="exportToExcelAccidents()">Excel Olarak
-              Dışa Aktar</button>
-          </div>
-
-          <table mat-table [dataSource]="dataSourceAccident" matSort class="mat-elevation-z8">
-            <ng-container matColumnDef="month">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header> Aylar </th>
-              <td mat-cell *matCellDef="let element"> {{element.month}} </td>
-            </ng-container>
-
-            <ng-container matColumnDef="zeroDay">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header> Kaza Sonrası Çalışır Durumdaki Çalışan Sayısı </th>
-              <td mat-cell *matCellDef="let element"> {{element.zeroDay}} </td>
-            </ng-container>
-
-            <ng-container matColumnDef="oneToFourDay">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header> Kaza Sonrası İş Göremez Raporlu Çalışan Sayısı (1-4
-                Gün) </th>
-              <td mat-cell *matCellDef="let element"> {{element.oneToFourDay}} </td>
-            </ng-container>
-
-            <ng-container matColumnDef="fiveAboveDay">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header> Kaza Sonrası İş Göremez Çalışan Sayısı (5 Gün ve
-                Üzeri) </th>
-              <td mat-cell *matCellDef="let element"> {{element.fiveAboveDay}} </td>
-            </ng-container>
-
-            <ng-container matColumnDef="totalAccidentNumber">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header> Toplam İş Kazası Sayısı </th>
-              <td mat-cell *matCellDef="let element"> {{element.totalAccidentNumber}} </td>
-            </ng-container>
-
-            <ng-container matColumnDef="totalWorkDay">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header> Toplam İşgünü Kaybı </th>
-              <td mat-cell *matCellDef="let element"> {{element.totalWorkDay}} </td>
-            </ng-container>
-
-            <tr mat-header-row *matHeaderRowDef="displayedColumnsAccident"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumnsAccident;"></tr>
-          </table>
-        </div>
-      </div>
+  
+    <div class="form-group">
+      <label for="metricSelect">Metrik Seçin:</label>
+      <select id="metricSelect" [(ngModel)]="selectedMetric" (change)="onMetricChange()">
+        <option *ngFor="let metric of metrics" [value]="metric.value">{{metric.label}}</option>
+      </select>
     </div>
+  
+    <canvas #chart></canvas>
   </div>
-  <!-- ============================================================== -->
-  <!-- End Accident Rates by Month -->
-  <!-- ============================================================== -->
-</div>
-<!-- ============================================================== -->
-<!-- End Container Fluid  -->
-<!-- ============================================================== -->
