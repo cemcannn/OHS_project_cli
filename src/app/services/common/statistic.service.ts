@@ -75,8 +75,10 @@ export class StatisticService {
       month: 'Toplam',
       actualDailyWageSurface: 0,
       actualDailyWageUnderground: 0,
+      actualDailyWageSummary: 0,
       employeesNumberSurface: 0,
       employeesNumberUnderground: 0,
+      employeesNumberSummary: 0,
       workingHoursSurface: 0,
       workingHoursUnderground: 0,
       workingHoursSummary: 0,
@@ -88,11 +90,14 @@ export class StatisticService {
       if (monthlyData.hasOwnProperty(key)) {
         totals.actualDailyWageSurface += monthlyData[key].actualDailyWageSurface;
         totals.actualDailyWageUnderground += monthlyData[key].actualDailyWageUnderground;
+        totals.actualDailyWageSummary = totals.actualDailyWageSurface + totals.actualDailyWageUnderground;
         totals.employeesNumberSurface += monthlyData[key].employeesNumberSurface;
         totals.employeesNumberUnderground += monthlyData[key].employeesNumberUnderground;
+        totals.employeesNumberSummary = totals.employeesNumberSurface + totals.employeesNumberUnderground;
         totals.workingHoursSurface += monthlyData[key].workingHoursSurface;
         totals.workingHoursUnderground += monthlyData[key].workingHoursUnderground;
         totals.workingHoursSummary += monthlyData[key].workingHoursSummary;
+        totals.lostDayOfWorkSummary += monthlyData[key].lostDayOfWorkSummary;
       }
     }
 

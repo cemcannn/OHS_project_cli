@@ -16,7 +16,7 @@ import { AccidentService } from 'src/app/services/common/models/accident.service
   styleUrls: ['./list.component.scss']
 })
 export class ListComponent extends BaseComponent implements OnInit {
-  displayedColumns: string[] = ['tkiId', 'name', 'surname', 'typeOfAccident', 'limb', 'accidentArea', 'accidentDate', 'accidentHour', 'reportDay', 'description', 'accidentUpdate', 'delete']; // Added 'reportDay' column
+  displayedColumns: string[] = ['tkiId', 'name', 'surname', 'typeOfAccident', 'limb', 'accidentArea', 'accidentDate', 'accidentHour', 'lostDayOfWork', 'description', 'accidentUpdate', 'delete']; // Added 'reportDay' column
   dataSource: MatTableDataSource<List_Accident> = null;
 
 

@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { Chart, ChartConfiguration } from 'chart.js';
-import { AccidentService } from 'src/app/services/common/models/accident.service';
+import { Chart, ChartConfiguration, registerables } from 'chart.js';
 import { ActualDailyWageService } from 'src/app/services/common/models/actual_daily_wage.service';
+import { AccidentService } from 'src/app/services/common/models/accident.service';
 import { StatisticService } from 'src/app/services/common/statistic.service';
 
 @Component({
@@ -29,7 +29,9 @@ export class HomeComponent implements OnInit {
     private actualDailyWageService: ActualDailyWageService,
     private accidentService: AccidentService,
     private statisticService: StatisticService
-  ) {}
+  ) {
+    Chart.register(...registerables);
+  }
 
   ngOnInit() {
     this.loadData();
