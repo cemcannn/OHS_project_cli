@@ -35,7 +35,7 @@ export const MY_FORMATS = {
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule,
+    AppRoutingModule, 
     AdminModule, UiModule, BrowserAnimationsModule, 
     ToastrModule.forRoot(),
     NgxSpinnerModule,

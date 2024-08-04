@@ -1,17 +1,18 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { BaseDialog } from '../../base/base-dialog';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { ActualDailyWageService } from 'src/app/services/common/models/actual_daily_wage.service';
-import { Create_Actual_Daily_Wage } from 'src/app/contracts/actual_daily_wages/create_actual_daily_wage';
 import { ShowDirectorateDialogComponent } from '../../definition/show-directorate-dialog/show-directorate-dialog.component';
 import { List_Directorate } from 'src/app/contracts/definitions/directorate/list_directorate';
+import { AccidentStatisticService } from 'src/app/services/common/models/accident-statistic.service';
+import { Create_Accident_Statistic } from 'src/app/contracts/accident_statistic/create-accident-statistic';
+
 
 @Component({
-  selector: 'app-add-actual-daily-wage',
-  templateUrl: './add-actual-daily-wage.component.html',
-  styleUrls: ['./add-actual-daily-wage.component.scss']
+  selector: 'app-add-accident-statistic-dialog',
+  templateUrl: './add-accident-statistic-dialog.component.html',
+  styleUrls: ['./add-accident-statistic-dialog.component.scss']
 })
-export class AddActualDailyWageComponent extends BaseDialog<AddActualDailyWageComponent> implements OnInit {
+export class AddAccidentStatisticDialogComponent extends BaseDialog<AddAccidentStatisticDialogComponent> implements OnInit {
   month: string;
   year: string;
   actualDailyWageSurface: string;
@@ -38,9 +39,9 @@ export class AddActualDailyWageComponent extends BaseDialog<AddActualDailyWageCo
   years: string[] = [];
 
   constructor(
-    dialogRef: MatDialogRef<AddActualDailyWageComponent>,
+    dialogRef: MatDialogRef<AddAccidentStatisticDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private actualDailyWageService: ActualDailyWageService,
+    private accidentStatisticService: AccidentStatisticService,
     private dialog: MatDialog
   ) { super(dialogRef); }
 
@@ -51,8 +52,8 @@ export class AddActualDailyWageComponent extends BaseDialog<AddActualDailyWageCo
     }
   }
 
-  createActualDailyWage(): void {
-    const createActualDailyWage: Create_Actual_Daily_Wage = {
+  createAccidentStatistic(): void {
+    const createActualDailyWage: Create_Accident_Statistic = {
       month: this.month,
       year: this.year,
       actualDailyWageSurface: this.actualDailyWageSurface,
@@ -62,7 +63,7 @@ export class AddActualDailyWageComponent extends BaseDialog<AddActualDailyWageCo
       directorate: this.directorate.name
     };
 
-    this.actualDailyWageService.createActualDailyWage(
+    this.accidentStatisticService.createAccidentStatistic(
       createActualDailyWage,
       () => {
         this.dialogRef.close({ success: true });

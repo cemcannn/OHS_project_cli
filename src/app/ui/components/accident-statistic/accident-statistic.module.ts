@@ -1,20 +1,20 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActualDailyWageComponent } from './actual-daily-wage.component';
+import { AccidentStatisticComponent } from './accident-statistic.component';
 import { ListComponent } from './list/list.component';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
+import { MatSortModule } from '@angular/material/sort';
 import { RouterModule } from '@angular/router';
 
 
 
 @NgModule({
   declarations: [
-    ActualDailyWageComponent,
+    AccidentStatisticComponent,
     ListComponent
   ],
   imports: [
@@ -22,8 +22,8 @@ import { RouterModule } from '@angular/router';
      MatTableModule,
     MatSortModule,
     RouterModule.forChild([
-      { path: "", component: ActualDailyWageComponent}
+      { path: "", component: AccidentStatisticComponent}
     ])
   ]
 })
-export class ActualDailyWageModule { }
+export class AccidentStatisticModule { }

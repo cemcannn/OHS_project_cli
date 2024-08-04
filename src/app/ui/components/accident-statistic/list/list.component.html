@@ -40,7 +40,7 @@
 
                         <!-- Actual Daily Wage Add Button -->
                         <button mat-raised-button class="card-title text-dark actualWageAdd"
-                            (click)="openAddActualDailyWageDialog()">
+                            (click)="openAddAccidentStatisticDialog()">
                             Fiili Yevmiye Sayısı Ekle
                         </button>
 
@@ -115,7 +115,7 @@
                         <ng-container matColumnDef="delete">
                             <th mat-header-cell *matHeaderCellDef width="30"> Sil </th>
                             <td mat-cell *matCellDef="let element" appDelete [id]="element.id"
-                                (callback)="getActualDailyWages()" controller="actualDailyWages">
+                                (callback)="getAccidentStatistics()" controller="accidentStatistics">
                             </td>
                         </ng-container>
 

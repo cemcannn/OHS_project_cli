@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { List_Actual_Daily_Wage } from 'src/app/contracts/actual_daily_wages/list_actual_daily_wage';
 import { AccidentRateService } from './accident-rate.service';
 import { List_Accident } from 'src/app/contracts/accidents/list_accident';
+import { List_Accident_Statistic } from 'src/app/contracts/accident_statistic/list_accident_statistic';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +16,7 @@ export class StatisticService {
 
   constructor(private accidentRateService: AccidentRateService) { }
 
-  groupByMonth(dailyWages: List_Actual_Daily_Wage[], accidents: List_Accident[]): any[] {
+  groupByMonth(dailyWages: List_Accident_Statistic[], accidents: List_Accident[]): any[] {
     const monthlyData: { [key: string]: any } = {};
 
     // Initialize the monthlyData object with all months
@@ -109,7 +109,7 @@ export class StatisticService {
     return [...Object.values(monthlyData), totals];
   }
 
-  groupByYear(dailyWages: List_Actual_Daily_Wage[]): { [year: string]: List_Actual_Daily_Wage[] } {
+  groupByYear(dailyWages: List_Accident_Statistic[]): { [year: string]: List_Accident_Statistic[] } {
     return dailyWages.reduce((acc, dailyWage) => {
       const year = dailyWage.year;
       if (!acc[year]) {
@@ -117,6 +117,6 @@ export class StatisticService {
       }
       acc[year].push(dailyWage);
       return acc;
-    }, {} as { [year: string]: List_Actual_Daily_Wage[] });
+    }, {} as { [year: string]: List_Accident_Statistic[] });
   }
 }

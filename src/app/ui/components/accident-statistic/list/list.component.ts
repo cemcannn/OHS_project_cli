@@ -3,14 +3,14 @@ import { MatSort } from '@angular/material/sort';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MatTableDataSource } from '@angular/material/table';
 import * as XLSX from 'xlsx'; // Import xlsx
-import { ActualDailyWageService } from 'src/app/services/common/models/actual_daily_wage.service';
-import { List_Actual_Daily_Wage } from 'src/app/contracts/actual_daily_wages/list_actual_daily_wage';
 import { StatisticService } from 'src/app/services/common/statistic.service';
-import { AddActualDailyWageComponent } from 'src/app/dialogs/actual-daily-wage/add-actual-daily-wage/add-actual-daily-wage.component';
 import { MatDialog } from '@angular/material/dialog';
 import { AccidentService } from 'src/app/services/common/models/accident.service';
 import { AccidentRateService } from 'src/app/services/common/accident-rate.service';
 import { List_Accident } from 'src/app/contracts/accidents/list_accident';
+import { List_Accident_Statistic } from 'src/app/contracts/accident_statistic/list_accident_statistic';
+import { AccidentStatisticService } from 'src/app/services/common/models/accident-statistic.service';
+import { AddAccidentStatisticDialogComponent } from 'src/app/dialogs/accident-statistic/add-accident-statistic-dialog/add-accident-statistic-dialog.component';
 
 @Component({
   selector: 'app-list',
@@ -28,11 +28,11 @@ export class ListComponent implements OnInit {
   totalCountPersonnels: number = 0;
   yearsStatistic: string[] = [];
   selectedYearStatistic: string = 'All';
-  actualDailyWages: List_Actual_Daily_Wage[] = [];
+  accidentStatistics: List_Accident_Statistic[] = [];
 
   constructor(
     private spinner: NgxSpinnerService,
-    private actualDailyWageService: ActualDailyWageService,
+    private accidentStatisticService: AccidentStatisticService,
     private statisticService: StatisticService,
     private accidentService: AccidentService,
     private accidentRateService: AccidentRateService,
@@ -40,22 +40,22 @@ export class ListComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.getActualDailyWages();
+    this.getAccidentStatistics();
   }
 
-  async getActualDailyWages() {
+  async getAccidentStatistics() {
     this.spinner.show();
   
     try {
       const [dailyWagesResponse, accidentsResponse] = await Promise.all([
-        this.actualDailyWageService.getActualDailyWages(),
+        this.accidentStatisticService.getAccidentStatistics(),
         this.accidentService.getAccidents()
       ]);
   
-      this.actualDailyWages = dailyWagesResponse.datas;
+      this.accidentStatistics = dailyWagesResponse.datas;
       this.accidents = accidentsResponse.datas;
   
-      this.populateYearsStatistic(this.actualDailyWages);
+      this.populateYearsStatistic(this.accidentStatistics);
       this.filterStatisticsByYear(this.selectedYearStatistic);
     } catch (error) {
       console.error('Error loading data:', error);
@@ -64,16 +64,16 @@ export class ListComponent implements OnInit {
     }
   }
 
-  populateYearsStatistic(dailyWages: List_Actual_Daily_Wage[]) {
+  populateYearsStatistic(dailyWages: List_Accident_Statistic[]) {
     const groupedByYear = this.statisticService.groupByYear(dailyWages);
     this.yearsStatistic = Object.keys(groupedByYear);
   }
 
   filterStatisticsByYear(year: string) {
-    let filteredStatistics = this.actualDailyWages;
+    let filteredStatistics = this.accidentStatistics;
     let filteredAccidents = this.accidents;
     if (year !== 'All') {
-      filteredStatistics = this.statisticService.groupByYear(this.actualDailyWages)[year];
+      filteredStatistics = this.statisticService.groupByYear(this.accidentStatistics)[year];
       filteredAccidents = this.accidentRateService.groupByYear(this.accidents)[year];
     }
     const groupedStatistics = this.statisticService.groupByMonth(filteredStatistics, filteredAccidents);
@@ -99,14 +99,14 @@ export class ListComponent implements OnInit {
     XLSX.writeFile(wb, 'statistics.xlsx');
   }
 
-  async openAddActualDailyWageDialog(): Promise<void> {
-    const dialogRef = this.dialog.open(AddActualDailyWageComponent, {
+  async openAddAccidentStatisticDialog(): Promise<void> {
+    const dialogRef = this.dialog.open(AddAccidentStatisticDialogComponent, {
       width: '400px',
     });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result && result.success) {
-        this.getActualDailyWages();
+        this.getAccidentStatistics();
       }
     });
   }

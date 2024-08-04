@@ -32,7 +32,7 @@ import { ShowProfessionDialogComponent } from './definition/show-profession-dial
 import { ShowAccidentAreaDialogComponent } from './definition/show-accident-area-dialog/show-accident-area-dialog.component';
 import { CommonPipesModule } from '../pipes/common-pipes.module';
 import { ShowDirectorateDialogComponent } from './definition/show-directorate-dialog/show-directorate-dialog.component';
-import { AddActualDailyWageComponent } from './actual-daily-wage/add-actual-daily-wage/add-actual-daily-wage.component';
+import { AddAccidentStatisticDialogComponent } from './accident-statistic/add-accident-statistic-dialog/add-accident-statistic-dialog.component';
 
 
 
@@ -55,7 +55,7 @@ import { AddActualDailyWageComponent } from './actual-daily-wage/add-actual-dail
     ShowProfessionDialogComponent,
     ShowAccidentAreaDialogComponent,
     ShowDirectorateDialogComponent,
-    AddActualDailyWageComponent
+    AddAccidentStatisticDialogComponent
   ],
   imports: [
     FormsModule, MatSelectModule, MatIconModule, MatDatepickerModule, MatNativeDateModule, MatPaginatorModule, MatSortModule, ReactiveFormsModule, CommonModule, MatDialogModule, MatButtonModule, MatCardModule, MatTableModule, MatToolbarModule, MatBadgeModule, MatListModule, MatFormFieldModule, MatInputModule, DeleteDirectiveModule, CommonPipesModule

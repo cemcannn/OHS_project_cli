@@ -2,15 +2,15 @@ import { Injectable } from '@angular/core';
 import { firstValueFrom, Observable } from 'rxjs';
 import { HttpClientService } from '../http-client.service';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Create_Actual_Daily_Wage } from 'src/app/contracts/actual_daily_wages/create_actual_daily_wage';
-import { List_Actual_Daily_Wage } from 'src/app/contracts/actual_daily_wages/list_actual_daily_wage';
-import { Update_Actual_Daily_Wage } from 'src/app/contracts/actual_daily_wages/update_actual_daily_wage';
+import { List_Accident_Statistic } from 'src/app/contracts/accident_statistic/list_accident_statistic';
+import { Update_Accident_Statistic } from 'src/app/contracts/accident_statistic/update-accident-statistic';
+import { Create_Accident_Statistic } from 'src/app/contracts/accident_statistic/create-accident-statistic';
 
 
 @Injectable({
   providedIn: 'root'
 })
-export class ActualDailyWageService {
+export class AccidentStatisticService {
 
   constructor(private httpClientService: HttpClientService) { }
 
@@ -24,10 +24,10 @@ export class ActualDailyWageService {
     return await promiseData;
   }
 
-  async createActualDailyWage(actualDailyWage: Create_Actual_Daily_Wage, successCallBack?: () => void, errorCallBack?: (errorMessage: string) => void) {
+  async createAccidentStatistic(accidentStatistic: Create_Accident_Statistic, successCallBack?: () => void, errorCallBack?: (errorMessage: string) => void) {
     this.httpClientService.post({
       controller: "accidentStatistics"
-    }, actualDailyWage)
+    }, accidentStatistic)
       .subscribe(result => {
         if (successCallBack) successCallBack();
       }, (errorResponse: HttpErrorResponse) => {
@@ -42,28 +42,28 @@ export class ActualDailyWageService {
       });
   }
 
-//   async getActualDailyWageById(id: string, successCallBack?: () => void, errorCallBack?: (errorMessage: string) => void): Promise<List_Actual_Daily_Wage> {
-//     const observable: Observable<List_Actual_Daily_Wage> = this.httpClientService.get<List_Actual_Daily_Wage>({
-//       controller: "actualDailyWages"
+//   async getAccidentStatisticById(id: string, successCallBack?: () => void, errorCallBack?: (errorMessage: string) => void): Promise<List_Accident_Statistic> {
+//     const observable: Observable<List_Accident_Statistic> = this.httpClientService.get<List_Accident_Statistic>({
+//       controller: "accidentStatistics"
 //     }, id);
 //     return this.handleRequest(observable, successCallBack, errorCallBack);
 //   }
 
-  async getActualDailyWages(successCallBack?: () => void, errorCallBack?: (errorMessage: string) => void): Promise<{ totalCount: number; datas: List_Actual_Daily_Wage[] }> {
-    const observable: Observable<{ totalCount: number; datas: List_Actual_Daily_Wage[] }> = this.httpClientService.get({
+  async getAccidentStatistics(successCallBack?: () => void, errorCallBack?: (errorMessage: string) => void): Promise<{ totalCount: number; datas: List_Accident_Statistic[] }> {
+    const observable: Observable<{ totalCount: number; datas: List_Accident_Statistic[] }> = this.httpClientService.get({
       controller: "accidentStatistics"
     });
     return this.handleRequest(observable, successCallBack, errorCallBack);
   }
 
-  async updateActualDailyWage(actualDailyWage: Update_Actual_Daily_Wage, successCallBack?: () => void, errorCallBack?: (errorMessage: string) => void) {
+  async updateAccidentStatistic(accidentStatistic: Update_Accident_Statistic, successCallBack?: () => void, errorCallBack?: (errorMessage: string) => void) {
     const observable = this.httpClientService.put({
       controller: "accidentStatistics",
-    }, actualDailyWage);
+    }, accidentStatistic);
     return this.handleRequest(observable, successCallBack, errorCallBack);
   }
 
-  async deleteActualDailyWage(id: string, successCallBack?: () => void, errorCallBack?: (errorMessage: string) => void) {
+  async deleteAccidentStatistic(id: string, successCallBack?: () => void, errorCallBack?: (errorMessage: string) => void) {
     const observable = this.httpClientService.delete({
       controller: "accidentStatistics"
     }, id);

@@ -1,4 +1,4 @@
-export class Update_Actual_Daily_Wage {
+export class Update_Accident_Statistic {
     id: string;
     month: string;
     year: string;

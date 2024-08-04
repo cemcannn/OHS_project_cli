@@ -26,4 +26,4 @@ import { RouterModule } from '@angular/router';
     ])
   ]
 })
-export class ActualDailyWageModule { }
+export class AccidentRateModule { }

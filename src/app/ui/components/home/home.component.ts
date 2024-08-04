@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Chart, ChartConfiguration, registerables } from 'chart.js';
-import { ActualDailyWageService } from 'src/app/services/common/models/actual_daily_wage.service';
+import { AccidentStatisticService } from 'src/app/services/common/models/accident-statistic.service';
 import { AccidentService } from 'src/app/services/common/models/accident.service';
 import { StatisticService } from 'src/app/services/common/statistic.service';
 
@@ -26,7 +26,7 @@ export class HomeComponent implements OnInit {
   ];
 
   constructor(
-    private actualDailyWageService: ActualDailyWageService,
+    private accidentStatisticService: AccidentStatisticService,
     private accidentService: AccidentService,
     private statisticService: StatisticService
   ) {
@@ -39,7 +39,7 @@ export class HomeComponent implements OnInit {
 
   async loadData() {
     const [dailyWagesResponse, accidentsResponse] = await Promise.all([
-      this.actualDailyWageService.getActualDailyWages(),
+      this.accidentStatisticService.getAccidentStatistics(),
       this.accidentService.getAccidents()
     ]);
 
@@ -47,6 +47,10 @@ export class HomeComponent implements OnInit {
     const accidents = accidentsResponse.datas;
 
     this.statisticData = this.statisticService.groupByMonth(dailyWages, accidents);
+
+    // "Toplam" değerini filtrele
+    this.statisticData = this.statisticData.filter(d => d.month !== 'Toplam');
+
     this.years = [...new Set(dailyWages.map(dw => dw.year))];
     this.years.unshift('All');
 
