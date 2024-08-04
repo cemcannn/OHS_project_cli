@@ -1,7 +1,11 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Chart, ChartConfiguration, registerables } from 'chart.js';
+import { HubUrls } from 'src/app/constants/hub-urls';
+import { ReceiveFunctions } from 'src/app/constants/receive-functions';
+import { AlertifyService, MessageType, Position } from 'src/app/services/admin/alertify.service';
 import { AccidentStatisticService } from 'src/app/services/common/models/accident-statistic.service';
 import { AccidentService } from 'src/app/services/common/models/accident.service';
+import { SignalRService } from 'src/app/services/common/signalr.service';
 import { StatisticService } from 'src/app/services/common/statistic.service';
 
 @Component({
@@ -28,13 +32,16 @@ export class HomeComponent implements OnInit {
   constructor(
     private accidentStatisticService: AccidentStatisticService,
     private accidentService: AccidentService,
-    private statisticService: StatisticService
+    private statisticService: StatisticService,
+    private signalRService: SignalRService,
+    private alertify: AlertifyService
   ) {
     Chart.register(...registerables);
   }
 
   ngOnInit() {
     this.loadData();
+
   }
 
   async loadData() {

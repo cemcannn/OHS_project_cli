@@ -1,4 +1,4 @@
 export enum HubUrls {
-    ProductHub = "products-hub",
-    OrderHub = "orders-hub"
+    AccidentHub = "accidents-hub",
+    PersonnelHub = "personnels-hub"
   }
