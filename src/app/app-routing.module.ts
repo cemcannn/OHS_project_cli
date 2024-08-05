@@ -41,6 +41,10 @@ const routes: Routes = [
         path: "accident-rate", loadChildren: () => import("./ui/components/accident-rate/accident-rate.module").then
           (module => module.AccidentRateModule)
       },
+      {
+        path: "chart", loadChildren: () => import("./ui/components/chart/chart.module").then
+          (module => module.ChartModule)
+      },
       { path: "register", loadChildren: () => import("./ui/components/register/register.module").then(module => module.RegisterModule) },
       { path: "login", loadChildren: () => import("./ui/components/login/login.module").then(module => module.LoginModule) },
       { path: "password-reset", loadChildren: () => import("./ui/components/password-reset/password-reset.module").then(module => module.PasswordResetModule) },

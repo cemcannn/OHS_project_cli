@@ -18,7 +18,7 @@ import { AddAccidentStatisticDialogComponent } from 'src/app/dialogs/accident-st
   styleUrls: ['./list.component.scss']
 })
 export class ListComponent implements OnInit {
-  displayedColumnsStatistic: string[] = ['month', 'actualDailyWageSurface', 'actualDailyWageUnderground', 'actualDailyWageSummary', 'employeesNumberSurface', 'employeesNumberUnderground', 'employeesNumberSummary' ,'workingHoursSurface', 'workingHoursUnderground', 'workingHoursSummary', 'lostDayOfWorkSummary', 'accidentSeverityRate' ,'delete'];
+  displayedColumnsStatistic: string[] = ['month', 'actualDailyWageSurface', 'actualDailyWageUnderground', 'actualDailyWageSummary', 'employeesNumberSurface', 'employeesNumberUnderground', 'employeesNumberSummary' ,'workingHoursSurface', 'workingHoursUnderground', 'workingHoursSummary', 'lostDayOfWorkSummary', 'accidentSeverityRate'];
   dataSourceStatistic: MatTableDataSource<any> = new MatTableDataSource<any>();
   clickedRowsStatistic = new Set<any>();
   accidents: List_Accident[] = [];
@@ -47,12 +47,12 @@ export class ListComponent implements OnInit {
     this.spinner.show();
   
     try {
-      const [dailyWagesResponse, accidentsResponse] = await Promise.all([
+      const [accidentStatisticsResponse, accidentsResponse] = await Promise.all([
         this.accidentStatisticService.getAccidentStatistics(),
         this.accidentService.getAccidents()
       ]);
   
-      this.accidentStatistics = dailyWagesResponse.datas;
+      this.accidentStatistics = accidentStatisticsResponse.datas;
       this.accidents = accidentsResponse.datas;
   
       this.populateYearsStatistic(this.accidentStatistics);
@@ -64,8 +64,8 @@ export class ListComponent implements OnInit {
     }
   }
 
-  populateYearsStatistic(dailyWages: List_Accident_Statistic[]) {
-    const groupedByYear = this.statisticService.groupByYear(dailyWages);
+  populateYearsStatistic(accidentStatistics: List_Accident_Statistic[]) {
+    const groupedByYear = this.statisticService.groupByYear(accidentStatistics);
     this.yearsStatistic = Object.keys(groupedByYear);
   }
 

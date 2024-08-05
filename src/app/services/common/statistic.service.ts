@@ -8,17 +8,17 @@ import { List_Accident_Statistic } from 'src/app/contracts/accident_statistic/li
 })
 export class StatisticService {
 
-  private monthNames: string[] = [
-    'Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran',
-    'Temmuz', 'Ağustos', 'Eylül', 'Ekim', 'Kasım', 'Aralık'
-  ];
-
+  private monthNames: string[] = ['Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran', 'Temmuz', 'Ağustos', 'Eylül', 'Ekim', 'Kasım', 'Aralık'];
 
   constructor(private accidentRateService: AccidentRateService) { }
 
-  groupByMonth(dailyWages: List_Accident_Statistic[], accidents: List_Accident[]): any[] {
-    const monthlyData: { [key: string]: any } = {};
+  getMonthNames(): string[] {
+    return this.monthNames;
+  }
 
+  groupByMonth(accidentStatistics: List_Accident_Statistic[], accidents: List_Accident[]): any[] {
+    const monthlyData: { [key: string]: any } = {};
+  
     // Initialize the monthlyData object with all months
     this.monthNames.forEach((month, index) => {
       const key = (index + 1).toString().padStart(2, '0'); // '01', '02', ..., '12'
@@ -34,42 +34,47 @@ export class StatisticService {
         workingHoursUnderground: 0,
         workingHoursSummary: 0,
         lostDayOfWorkSummary: 0,
-        accidentSeverityRate: 0
+        accidentSeverityRate: 0,
+        year: '', // Initialize year
       };
     });
-
+  
     // Process daily wages
-    dailyWages.forEach(dailyWage => {
-      const monthCode = dailyWage.month;
+    accidentStatistics.forEach(accidentStatistic => {
+      const monthCode = accidentStatistic.month;
       const monthData = monthlyData[monthCode];
-
-      monthData.actualDailyWageSurface += Number(dailyWage.actualDailyWageSurface);
-      monthData.actualDailyWageUnderground += Number(dailyWage.actualDailyWageUnderground);
+  
+      monthData.actualDailyWageSurface += Number(accidentStatistic.actualDailyWageSurface);
+      monthData.actualDailyWageUnderground += Number(accidentStatistic.actualDailyWageUnderground);
       monthData.actualDailyWageSummary = monthData.actualDailyWageSurface + monthData.actualDailyWageUnderground;
-      monthData.employeesNumberSurface += Number(dailyWage.employeesNumberSurface);
-      monthData.employeesNumberUnderground += Number(dailyWage.employeesNumberUnderground);
+      monthData.employeesNumberSurface += Number(accidentStatistic.employeesNumberSurface);
+      monthData.employeesNumberUnderground += Number(accidentStatistic.employeesNumberUnderground);
       monthData.employeesNumberSummary = monthData.employeesNumberSurface + monthData.employeesNumberUnderground;
       monthData.workingHoursSurface = monthData.actualDailyWageSurface * 8;
       monthData.workingHoursUnderground = monthData.actualDailyWageUnderground * 8;
       monthData.workingHoursSummary = monthData.workingHoursSurface + monthData.workingHoursUnderground;
+      monthData.lostDayOfWorkSummary += Number(accidentStatistic.lostDayOfWorkSummary);
+      monthData.year = accidentStatistic.year; // Set the year
     });
-
+  
     // Process accidents
     const accidentRates = this.accidentRateService.groupByMonth(accidents);
     accidentRates.forEach(rate => {
       const monthIndex = this.monthNames.indexOf(rate.month);
       if (monthIndex !== -1) {
         const monthCode = (monthIndex + 1).toString().padStart(2, '0');
-        monthlyData[monthCode].lostDayOfWorkSummary = rate.totalLostDayOfWork;
-
+        const monthData = monthlyData[monthCode];
+  
+        monthData.lostDayOfWorkSummary = rate.totalLostDayOfWork;
+  
         // Calculate accident severity rate
-        if (monthlyData[monthCode].workingHoursSummary > 0) {
-          monthlyData[monthCode].accidentSeverityRate =
-            (monthlyData[monthCode].lostDayOfWorkSummary / monthlyData[monthCode].workingHoursSummary) * 1000;
+        if (monthData.workingHoursSummary > 0) {
+          monthData.accidentSeverityRate =
+            (monthData.lostDayOfWorkSummary / monthData.workingHoursSummary) * 1000;
         }
       }
     });
-
+  
     // Calculate totals
     const totals = {
       month: 'Toplam',
@@ -83,9 +88,10 @@ export class StatisticService {
       workingHoursUnderground: 0,
       workingHoursSummary: 0,
       lostDayOfWorkSummary: 0,
-      accidentSeverityRate: 0
+      accidentSeverityRate: 0,
+      year: 'Toplam' // Set year for totals
     };
-
+  
     for (const key in monthlyData) {
       if (monthlyData.hasOwnProperty(key)) {
         totals.actualDailyWageSurface += monthlyData[key].actualDailyWageSurface;
@@ -100,22 +106,23 @@ export class StatisticService {
         totals.lostDayOfWorkSummary += monthlyData[key].lostDayOfWorkSummary;
       }
     }
-
+  
     // Calculate total accident severity rate
     if (totals.workingHoursSummary > 0) {
       totals.accidentSeverityRate = (totals.lostDayOfWorkSummary / totals.workingHoursSummary) * 1000;
     }
-
-    return [...Object.values(monthlyData), totals];
+  
+    // Return the sorted monthly data and totals
+    return [...this.monthNames.map((_, index) => monthlyData[(index + 1).toString().padStart(2, '0')]), totals];
   }
 
-  groupByYear(dailyWages: List_Accident_Statistic[]): { [year: string]: List_Accident_Statistic[] } {
-    return dailyWages.reduce((acc, dailyWage) => {
-      const year = dailyWage.year;
+  groupByYear(accidentStatistics: List_Accident_Statistic[]): { [year: string]: List_Accident_Statistic[] } {
+    return accidentStatistics.reduce((acc, accidentStatistic) => {
+      const year = accidentStatistic.year;
       if (!acc[year]) {
         acc[year] = [];
       }
-      acc[year].push(dailyWage);
+      acc[year].push(accidentStatistic);
       return acc;
     }, {} as { [year: string]: List_Accident_Statistic[] });
   }

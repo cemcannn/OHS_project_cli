@@ -1,27 +1,7 @@
-<div class="page-breadcrumb bg-danger">
-  <div class="row">
-    <div class="col-12 d-flex no-block align-items-center">
+<div class="container-fluid">
+  <div class="row bg-danger">
+    <div class="col-12 no-block align-items-center">
       <h2 class="page-title">Ana Sayfa</h2>
+      <img src="../../../../assets/images/tki.jfif" style="object-fit: contain;" alt="">
     </div>
   </div>
-<div class="container-fluid bg-white">
-  <div class="row">
-    <h2>İstatistik Grafiği</h2>
-    
-    <div class="form-group">
-      <label for="yearSelect">Yıl Seçin:</label>
-      <select id="yearSelect" [(ngModel)]="selectedYear" (change)="onYearChange()">
-        <option *ngFor="let year of years" [value]="year">{{year}}</option>
-      </select>
-    </div>
-  
-    <div class="form-group">
-      <label for="metricSelect">Metrik Seçin:</label>
-      <select id="metricSelect" [(ngModel)]="selectedMetric" (change)="onMetricChange()">
-        <option *ngFor="let metric of metrics" [value]="metric.value">{{metric.label}}</option>
-      </select>
-    </div>
-  
-    <canvas #chart></canvas>
-  </div>
-</div>
