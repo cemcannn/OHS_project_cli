@@ -116,7 +116,7 @@ export class StatisticService {
     return [...this.monthNames.map((_, index) => monthlyData[(index + 1).toString().padStart(2, '0')]), totals];
   }
 
-  groupByYear(accidentStatistics: List_Accident_Statistic[]): { [year: string]: List_Accident_Statistic[] } {
+  groupByYearList(accidentStatistics: List_Accident_Statistic[]): { [year: string]: List_Accident_Statistic[] } {
     return accidentStatistics.reduce((acc, accidentStatistic) => {
       const year = accidentStatistic.year;
       if (!acc[year]) {
@@ -125,5 +125,50 @@ export class StatisticService {
       acc[year].push(accidentStatistic);
       return acc;
     }, {} as { [year: string]: List_Accident_Statistic[] });
+  }
+
+  groupByYearChart(accidentStatistics: List_Accident_Statistic[]): { [year: string]: any } {
+    const yearlyData = accidentStatistics.reduce((acc, stat) => {
+      if (!acc[stat.year]) {
+        acc[stat.year] = {
+          year: stat.year,
+          actualDailyWageSurface: 0,
+          actualDailyWageUnderground: 0,
+          actualDailyWageSummary: 0,
+          employeesNumberSurface: 0,
+          employeesNumberUnderground: 0,
+          employeesNumberSummary: 0,
+          workingHoursSurface: 0,
+          workingHoursUnderground: 0,
+          workingHoursSummary: 0,
+          lostDayOfWorkSummary: 0,
+          accidentSeverityRate: 0
+        };
+      }
+
+      const yearData = acc[stat.year];
+
+      yearData.actualDailyWageSurface += Number(stat.actualDailyWageSurface);
+      yearData.actualDailyWageUnderground += Number(stat.actualDailyWageUnderground);
+      yearData.actualDailyWageSummary = yearData.actualDailyWageSurface + yearData.actualDailyWageUnderground;
+      yearData.employeesNumberSurface += Number(stat.employeesNumberSurface);
+      yearData.employeesNumberUnderground += Number(stat.employeesNumberUnderground);
+      yearData.employeesNumberSummary = yearData.employeesNumberSurface + yearData.employeesNumberUnderground;
+      yearData.workingHoursSurface = yearData.actualDailyWageSurface * 8;
+      yearData.workingHoursUnderground = yearData.actualDailyWageUnderground * 8;
+      yearData.workingHoursSummary = yearData.workingHoursSurface + yearData.workingHoursUnderground;
+      yearData.lostDayOfWorkSummary += Number(stat.lostDayOfWorkSummary);
+
+      return acc;
+    }, {});
+
+    // Calculate accident severity rates for each year
+    Object.values(yearlyData).forEach((data: any) => {
+      if (data.workingHoursSummary > 0) {
+        data.accidentSeverityRate = (data.lostDayOfWorkSummary / data.workingHoursSummary) * 1000;
+      }
+    });
+
+    return yearlyData;
   }
 }

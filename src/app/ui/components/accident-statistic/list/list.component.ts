@@ -65,7 +65,7 @@ export class ListComponent implements OnInit {
   }
 
   populateYearsStatistic(accidentStatistics: List_Accident_Statistic[]) {
-    const groupedByYear = this.statisticService.groupByYear(accidentStatistics);
+    const groupedByYear = this.statisticService.groupByYearList(accidentStatistics);
     this.yearsStatistic = Object.keys(groupedByYear);
   }
 
@@ -73,7 +73,7 @@ export class ListComponent implements OnInit {
     let filteredStatistics = this.accidentStatistics;
     let filteredAccidents = this.accidents;
     if (year !== 'All') {
-      filteredStatistics = this.statisticService.groupByYear(this.accidentStatistics)[year];
+      filteredStatistics = this.statisticService.groupByYearList(this.accidentStatistics)[year];
       filteredAccidents = this.accidentRateService.groupByYear(this.accidents)[year];
     }
     const groupedStatistics = this.statisticService.groupByMonth(filteredStatistics, filteredAccidents);

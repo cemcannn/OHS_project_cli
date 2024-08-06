@@ -15,6 +15,7 @@ export class ChartComponent implements OnInit {
   monthlyChart: Chart;
   yearlyChart: Chart;
   statisticData: any[];
+  yearlyStatisticData: any[];
   years: string[] = [];
   selectedYear: string = 'All';
   selectedMonthlyMetric: string = 'actualDailyWageSummary';
@@ -42,20 +43,21 @@ export class ChartComponent implements OnInit {
   }
 
   async loadData() {
-    const [dailyWagesResponse, accidentsResponse] = await Promise.all([
+    const [accidentStatisticsResponse, accidentsResponse] = await Promise.all([
       this.accidentStatisticService.getAccidentStatistics(),
       this.accidentService.getAccidents()
     ]);
 
-    const dailyWages = dailyWagesResponse.datas;
+    const accidentStatistics = accidentStatisticsResponse.datas;
     const accidents = accidentsResponse.datas;
 
-    this.statisticData = this.statisticService.groupByMonth(dailyWages, accidents);
+    this.statisticData = this.statisticService.groupByMonth(accidentStatistics, accidents);
+    this.yearlyStatisticData = Object.values(this.statisticService.groupByYearChart(accidentStatistics));
 
     // "Toplam" değerini filtrele
     this.statisticData = this.statisticData.filter(d => d.month !== 'Toplam');
 
-    this.years = [...new Set(dailyWages.map(dw => dw.year))];
+    this.years = [...new Set(accidentStatistics.map(dw => dw.year))];
     this.years.sort((a, b) => parseInt(a) - parseInt(b));
     this.years.unshift('All');
 
@@ -152,7 +154,7 @@ export class ChartComponent implements OnInit {
     const minYear = this.selectedTimeRange === '5' ? currentYear - 5 :
                     this.selectedTimeRange === '10' ? currentYear - 10 : currentYear - 20;
 
-    return this.statisticData.filter(d => parseInt(d.year) >= minYear && parseInt(d.year) <= currentYear);
+    return this.yearlyStatisticData.filter(d => parseInt(d.year) >= minYear && parseInt(d.year) <= currentYear);
   }
 
   onYearChange() {

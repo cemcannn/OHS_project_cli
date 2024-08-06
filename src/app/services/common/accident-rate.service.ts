@@ -81,5 +81,35 @@ export class AccidentRateService {
       return acc;
     }, {} as { [year: string]: List_Accident[] });
   }
-}
 
+  groupByYearChart(accidents: List_Accident[]): { [year: string]: any } {
+    const yearlyData = accidents.reduce((acc, accident) => {
+      const year = new Date(accident.accidentDate).getFullYear().toString();
+      if (!acc[year]) {
+        acc[year] = {
+          month: year,
+          zeroDay: 0,
+          oneToFourDay: 0,
+          fiveAboveDay: 0,
+          totalAccidentNumber: 0,
+          totalLostDayOfWork: 0,
+        };
+      }
+
+      const yearData = acc[year];
+
+
+
+      return acc;
+    }, {});
+
+    // Calculate accident severity rates for each year
+    Object.values(yearlyData).forEach((data: any) => {
+      if (data.workingHoursSummary > 0) {
+        data.accidentSeverityRate = (data.lostDayOfWorkSummary / data.workingHoursSummary) * 1000;
+      }
+    });
+
+    return yearlyData;
+  }
+}
