@@ -52,7 +52,7 @@ export class ChartComponent implements OnInit {
     const accidents = accidentsResponse.datas;
 
     this.statisticData = this.statisticService.groupByMonth(accidentStatistics, accidents);
-    this.yearlyStatisticData = Object.values(this.statisticService.groupByYearChart(accidentStatistics));
+    this.yearlyStatisticData = Object.values(this.statisticService.groupByYearChart(accidentStatistics, accidents));
 
     // "Toplam" değerini filtrele
     this.statisticData = this.statisticData.filter(d => d.month !== 'Toplam');
@@ -67,14 +67,47 @@ export class ChartComponent implements OnInit {
 
   updateMonthlyChart() {
     const filteredData = this.getMonthlyFilteredData();
-
+  
+    // Eğer veri yoksa, grafiği boş gösterebilirsiniz veya varsayılan değerler kullanabilirsiniz
+    if (!filteredData.length) {
+      // Örneğin, veri yoksa boş bir grafik oluşturun
+      const chartConfig: ChartConfiguration = {
+        type: 'line',
+        data: {
+          labels: [],
+          datasets: [{
+            label: 'Veri Bulunamadı',
+            data: [],
+            fill: false,
+            borderColor: 'rgb(75, 192, 192)',
+            tension: 0.1
+          }]
+        },
+        options: {
+          responsive: true,
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      };
+  
+      if (this.monthlyChart) {
+        this.monthlyChart.destroy();
+      }
+  
+      this.monthlyChart = new Chart(this.monthlyChartCanvas.nativeElement, chartConfig);
+      return;
+    }
+  
     const months = this.statisticService.getMonthNames();
     const labels = months.filter(month => filteredData.some(d => d.month === month));
     const data = labels.map(label => {
       const monthData = filteredData.find(d => d.month === label);
       return monthData ? monthData[this.selectedMonthlyMetric] : 0;
     });
-
+  
     const chartConfig: ChartConfiguration = {
       type: 'line',
       data: {
@@ -96,13 +129,13 @@ export class ChartComponent implements OnInit {
         }
       }
     };
-
+  
     if (this.monthlyChart) {
       this.monthlyChart.destroy();
     }
-
+  
     this.monthlyChart = new Chart(this.monthlyChartCanvas.nativeElement, chartConfig);
-  }
+  }  
 
   updateYearlyChart() {
     const filteredData = this.getYearlyFilteredData();
@@ -141,11 +174,11 @@ export class ChartComponent implements OnInit {
 
   getMonthlyFilteredData() {
     let filteredData = this.statisticData;
-
+  
     if (this.selectedYear !== 'All') {
       filteredData = filteredData.filter(d => d.year === this.selectedYear);
     }
-
+  
     return filteredData;
   }
 

@@ -18,7 +18,7 @@ export class StatisticService {
 
   groupByMonth(accidentStatistics: List_Accident_Statistic[], accidents: List_Accident[]): any[] {
     const monthlyData: { [key: string]: any } = {};
-  
+
     // Initialize the monthlyData object with all months
     this.monthNames.forEach((month, index) => {
       const key = (index + 1).toString().padStart(2, '0'); // '01', '02', ..., '12'
@@ -38,12 +38,12 @@ export class StatisticService {
         year: '', // Initialize year
       };
     });
-  
+
     // Process daily wages
     accidentStatistics.forEach(accidentStatistic => {
       const monthCode = accidentStatistic.month;
       const monthData = monthlyData[monthCode];
-  
+
       monthData.actualDailyWageSurface += Number(accidentStatistic.actualDailyWageSurface);
       monthData.actualDailyWageUnderground += Number(accidentStatistic.actualDailyWageUnderground);
       monthData.actualDailyWageSummary = monthData.actualDailyWageSurface + monthData.actualDailyWageUnderground;
@@ -56,7 +56,7 @@ export class StatisticService {
       monthData.lostDayOfWorkSummary += Number(accidentStatistic.lostDayOfWorkSummary);
       monthData.year = accidentStatistic.year; // Set the year
     });
-  
+
     // Process accidents
     const accidentRates = this.accidentRateService.groupByMonth(accidents);
     accidentRates.forEach(rate => {
@@ -64,9 +64,9 @@ export class StatisticService {
       if (monthIndex !== -1) {
         const monthCode = (monthIndex + 1).toString().padStart(2, '0');
         const monthData = monthlyData[monthCode];
-  
+
         monthData.lostDayOfWorkSummary = rate.totalLostDayOfWork;
-  
+
         // Calculate accident severity rate
         if (monthData.workingHoursSummary > 0) {
           monthData.accidentSeverityRate =
@@ -74,7 +74,7 @@ export class StatisticService {
         }
       }
     });
-  
+
     // Calculate totals
     const totals = {
       month: 'Toplam',
@@ -91,7 +91,7 @@ export class StatisticService {
       accidentSeverityRate: 0,
       year: 'Toplam' // Set year for totals
     };
-  
+
     for (const key in monthlyData) {
       if (monthlyData.hasOwnProperty(key)) {
         totals.actualDailyWageSurface += monthlyData[key].actualDailyWageSurface;
@@ -106,12 +106,12 @@ export class StatisticService {
         totals.lostDayOfWorkSummary += monthlyData[key].lostDayOfWorkSummary;
       }
     }
-  
+
     // Calculate total accident severity rate
     if (totals.workingHoursSummary > 0) {
       totals.accidentSeverityRate = (totals.lostDayOfWorkSummary / totals.workingHoursSummary) * 1000;
     }
-  
+
     // Return the sorted monthly data and totals
     return [...this.monthNames.map((_, index) => monthlyData[(index + 1).toString().padStart(2, '0')]), totals];
   }
@@ -127,7 +127,7 @@ export class StatisticService {
     }, {} as { [year: string]: List_Accident_Statistic[] });
   }
 
-  groupByYearChart(accidentStatistics: List_Accident_Statistic[]): { [year: string]: any } {
+  groupByYearChart(accidentStatistics: List_Accident_Statistic[], accidents: List_Accident[]): { [year: string]: any } {
     const yearlyData = accidentStatistics.reduce((acc, stat) => {
       if (!acc[stat.year]) {
         acc[stat.year] = {
@@ -157,10 +157,18 @@ export class StatisticService {
       yearData.workingHoursSurface = yearData.actualDailyWageSurface * 8;
       yearData.workingHoursUnderground = yearData.actualDailyWageUnderground * 8;
       yearData.workingHoursSummary = yearData.workingHoursSurface + yearData.workingHoursUnderground;
-      yearData.lostDayOfWorkSummary += Number(stat.lostDayOfWorkSummary);
 
       return acc;
     }, {});
+
+    // Process accidents and add lost days of work to yearly data
+    const accidentRates = this.accidentRateService.groupByYearChart(accidents);
+    Object.keys(accidentRates).forEach((yearIndex) => {
+      const year = accidentRates[yearIndex]?.year; // accidentRates içindeki gerçek yıl bilgisini alın
+      if (yearlyData[year]) {
+        yearlyData[year].lostDayOfWorkSummary = accidentRates[yearIndex].lostDayOfWorkSummary;
+      }
+    });
 
     // Calculate accident severity rates for each year
     Object.values(yearlyData).forEach((data: any) => {

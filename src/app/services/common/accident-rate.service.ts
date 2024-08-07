@@ -82,34 +82,24 @@ export class AccidentRateService {
     }, {} as { [year: string]: List_Accident[] });
   }
 
-  groupByYearChart(accidents: List_Accident[]): { [year: string]: any } {
-    const yearlyData = accidents.reduce((acc, accident) => {
+  groupByYearChart(accidents: List_Accident[]): any[] {
+    const yearlyData: { [key: string]: any } = {};
+  
+    // Initialize the yearlyData object with all years
+    accidents.forEach(accident => {
       const year = new Date(accident.accidentDate).getFullYear().toString();
-      if (!acc[year]) {
-        acc[year] = {
-          month: year,
-          zeroDay: 0,
-          oneToFourDay: 0,
-          fiveAboveDay: 0,
-          totalAccidentNumber: 0,
-          totalLostDayOfWork: 0,
+      if (!yearlyData[year]) {
+        yearlyData[year] = {
+          year: year,
+          lostDayOfWorkSummary: 0,
+          // Other properties...
         };
       }
-
-      const yearData = acc[year];
-
-
-
-      return acc;
-    }, {});
-
-    // Calculate accident severity rates for each year
-    Object.values(yearlyData).forEach((data: any) => {
-      if (data.workingHoursSummary > 0) {
-        data.accidentSeverityRate = (data.lostDayOfWorkSummary / data.workingHoursSummary) * 1000;
-      }
+  
+      yearlyData[year].lostDayOfWorkSummary += Number(accident.lostDayOfWork);
+      // Update other properties if needed...
     });
 
-    return yearlyData;
-  }
+    return Object.values(yearlyData);
+  }  
 }
