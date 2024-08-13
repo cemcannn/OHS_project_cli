@@ -1,5 +1,8 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Chart, ChartConfiguration, registerables } from 'chart.js';
+import { List_Accident_Statistic } from 'src/app/contracts/accident_statistic/list_accident_statistic';
+import { List_Accident } from 'src/app/contracts/accidents/list_accident';
+import { AccidentRateService } from 'src/app/services/common/accident-rate.service';
 import { AccidentStatisticService } from 'src/app/services/common/models/accident-statistic.service';
 import { AccidentService } from 'src/app/services/common/models/accident.service';
 import { StatisticService } from 'src/app/services/common/statistic.service';
@@ -21,6 +24,9 @@ export class ChartComponent implements OnInit {
   selectedMonthlyMetric: string = 'actualDailyWageSummary';
   selectedYearlyMetric: string = 'actualDailyWageSummary';
   selectedTimeRange: string = '5';
+  accidents: List_Accident[] = [];
+  accidentStatistics: List_Accident_Statistic[] = [];
+
 
   metrics = [
     { value: 'actualDailyWageSummary', label: 'Fiili Yevmiye Sayısı (Toplam)' },
@@ -33,6 +39,7 @@ export class ChartComponent implements OnInit {
   constructor(
     private accidentStatisticService: AccidentStatisticService,
     private accidentService: AccidentService,
+    private accidentRateService: AccidentRateService,
     private statisticService: StatisticService
   ) {
     Chart.register(...registerables);
@@ -48,16 +55,17 @@ export class ChartComponent implements OnInit {
       this.accidentService.getAccidents()
     ]);
 
-    const accidentStatistics = accidentStatisticsResponse.datas;
-    const accidents = accidentsResponse.datas;
+    this.accidentStatistics = accidentStatisticsResponse.datas;
+    this.accidents = accidentsResponse.datas;
 
-    this.statisticData = this.statisticService.groupByMonth(accidentStatistics, accidents);
-    this.yearlyStatisticData = Object.values(this.statisticService.groupByYearChart(accidentStatistics, accidents));
+
+    this.statisticData = this.statisticService.groupByMonth(this.accidentStatistics, this.accidents);
+    this.yearlyStatisticData = Object.values(this.statisticService.groupByYearChart(this.accidentStatistics, this.accidents));
 
     // "Toplam" değerini filtrele
     this.statisticData = this.statisticData.filter(d => d.month !== 'Toplam');
 
-    this.years = [...new Set(accidentStatistics.map(dw => dw.year))];
+    this.years = [...new Set(this.accidentStatistics.map(dw => dw.year))];
     this.years.sort((a, b) => parseInt(a) - parseInt(b));
     this.years.unshift('All');
 
@@ -173,13 +181,16 @@ export class ChartComponent implements OnInit {
   }
 
   getMonthlyFilteredData() {
-    let filteredData = this.statisticData;
+    let filteredStatistics = this.accidentStatistics;
+    let filteredAccidents = this.accidents;
   
     if (this.selectedYear !== 'All') {
-      filteredData = filteredData.filter(d => d.year === this.selectedYear);
+      filteredStatistics = this.statisticService.groupByYearList(this.accidentStatistics)[this.selectedYear];
+      filteredAccidents = this.accidentRateService.groupByYear(this.accidents)[this.selectedYear];
     }
+    const groupedStatistics = this.statisticService.groupByMonth(filteredStatistics, filteredAccidents);
   
-    return filteredData;
+    return groupedStatistics;
   }
 
   getYearlyFilteredData() {

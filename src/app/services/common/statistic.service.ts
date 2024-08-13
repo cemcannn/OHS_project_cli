@@ -35,7 +35,7 @@ export class StatisticService {
         workingHoursSummary: 0,
         lostDayOfWorkSummary: 0,
         accidentSeverityRate: 0,
-        year: '', // Initialize year
+        year: 0,
       };
     });
 
@@ -54,7 +54,6 @@ export class StatisticService {
       monthData.workingHoursUnderground = monthData.actualDailyWageUnderground * 8;
       monthData.workingHoursSummary = monthData.workingHoursSurface + monthData.workingHoursUnderground;
       monthData.lostDayOfWorkSummary += Number(accidentStatistic.lostDayOfWorkSummary);
-      monthData.year = accidentStatistic.year; // Set the year
     });
 
     // Process accidents
@@ -89,7 +88,6 @@ export class StatisticService {
       workingHoursSummary: 0,
       lostDayOfWorkSummary: 0,
       accidentSeverityRate: 0,
-      year: 'Toplam' // Set year for totals
     };
 
     for (const key in monthlyData) {
@@ -111,7 +109,7 @@ export class StatisticService {
     if (totals.workingHoursSummary > 0) {
       totals.accidentSeverityRate = (totals.lostDayOfWorkSummary / totals.workingHoursSummary) * 1000;
     }
-
+console.log(monthlyData)
     // Return the sorted monthly data and totals
     return [...this.monthNames.map((_, index) => monthlyData[(index + 1).toString().padStart(2, '0')]), totals];
   }

@@ -10,14 +10,14 @@
         <!-- Aylık Grafik Seçimleri -->
         <div class="form-group mt-4">
           <label for="yearSelect">Yıl Seçin:</label>
-          <select id="yearSelect" [(ngModel)]="selectedYear" (change)="onYearChange()">
+          <select id="yearSelect" [(ngModel)]="selectedYear" (ngModelChange)="onYearChange()">
             <option *ngFor="let year of years" [value]="year">{{year}}</option>
           </select>
         </div>
         
         <div class="form-group">
           <label for="monthlyMetricSelect">Metrik Seçin:</label>
-          <select id="monthlyMetricSelect" [(ngModel)]="selectedMonthlyMetric" (change)="onMonthlyMetricChange()">
+          <select id="monthlyMetricSelect" [(ngModel)]="selectedMonthlyMetric" (ngModelChange)="onMonthlyMetricChange()">
             <option *ngFor="let metric of metrics" [value]="metric.value">{{metric.label}}</option>
           </select>
         </div>
@@ -27,7 +27,7 @@
         <!-- Yıllık Grafik Seçimleri -->
         <div class="form-group mt-4">
           <label for="timeRangeSelect">Zaman Aralığı Seçin:</label>
-          <select id="timeRangeSelect" [(ngModel)]="selectedTimeRange" (change)="onTimeRangeChange()">
+          <select id="timeRangeSelect" [(ngModel)]="selectedTimeRange" (ngModelChange)="onTimeRangeChange()">
             <option value="5">Son 5 Yıl</option>
             <option value="10">Son 10 Yıl</option>
             <option value="20">Son 20 Yıl</option>
@@ -36,7 +36,7 @@
   
         <div class="form-group">
           <label for="yearlyMetricSelect">Metrik Seçin:</label>
-          <select id="yearlyMetricSelect" [(ngModel)]="selectedYearlyMetric" (change)="onYearlyMetricChange()">
+          <select id="yearlyMetricSelect" [(ngModel)]="selectedYearlyMetric" (ngModelChange)="onYearlyMetricChange()">
             <option *ngFor="let metric of metrics" [value]="metric.value">{{metric.label}}</option>
           </select>
         </div>

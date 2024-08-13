@@ -22,13 +22,12 @@ export class ListComponent implements OnInit {
   dataSourceStatistic: MatTableDataSource<any> = new MatTableDataSource<any>();
   clickedRowsStatistic = new Set<any>();
   accidents: List_Accident[] = [];
-
-  @ViewChild(MatSort) sort: MatSort;
-
   totalCountPersonnels: number = 0;
   yearsStatistic: string[] = [];
   selectedYearStatistic: string = 'All';
   accidentStatistics: List_Accident_Statistic[] = [];
+
+  @ViewChild(MatSort) sort: MatSort;
 
   constructor(
     private spinner: NgxSpinnerService,
