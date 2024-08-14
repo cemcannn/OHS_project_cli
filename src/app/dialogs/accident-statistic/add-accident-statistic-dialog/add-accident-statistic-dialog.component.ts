@@ -4,7 +4,7 @@ import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dial
 import { ShowDirectorateDialogComponent } from '../../definition/show-directorate-dialog/show-directorate-dialog.component';
 import { List_Directorate } from 'src/app/contracts/definitions/directorate/list_directorate';
 import { AccidentStatisticService } from 'src/app/services/common/models/accident-statistic.service';
-import { Create_Accident_Statistic } from 'src/app/contracts/accident_statistic/create-accident-statistic';
+import { Create_Monthly_Directorate_Data } from 'src/app/contracts/monthly_directorate_data/create-monthly-directorate-data';
 
 
 @Component({
@@ -53,7 +53,7 @@ export class AddAccidentStatisticDialogComponent extends BaseDialog<AddAccidentS
   }
 
   createAccidentStatistic(): void {
-    const createActualDailyWage: Create_Accident_Statistic = {
+    const createActualDailyWage: Create_Monthly_Directorate_Data = {
       month: this.month,
       year: this.year,
       actualDailyWageSurface: this.actualDailyWageSurface,

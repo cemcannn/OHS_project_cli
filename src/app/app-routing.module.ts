@@ -34,6 +34,10 @@ const routes: Routes = [
           (module => module.PersonnelModule)
       },
       {
+        path: "monthly-directorate-data", loadChildren: () => import("./ui/components/monthly-directorate-data/monthly-directorate-data.module").then
+          (module => module.MonthlyDirectorateDataModule)
+      },
+      {
         path: "accident-statistic", loadChildren: () => import("./ui/components/accident-statistic/accident-statistic.module").then
           (module => module.AccidentStatisticModule)
       },

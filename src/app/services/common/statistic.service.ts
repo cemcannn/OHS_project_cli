@@ -114,6 +114,7 @@ console.log(monthlyData)
     return [...this.monthNames.map((_, index) => monthlyData[(index + 1).toString().padStart(2, '0')]), totals];
   }
 
+
   groupByYearList(accidentStatistics: List_Accident_Statistic[]): { [year: string]: List_Accident_Statistic[] } {
     return accidentStatistics.reduce((acc, accidentStatistic) => {
       const year = accidentStatistic.year;

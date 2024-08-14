@@ -68,7 +68,7 @@ export class AccidentUpdateDialogComponent extends BaseDialog<AccidentUpdateDial
 
   updateAccident(): void {
     const updateAccident: Update_Accident = {
-      id: this.data. id,
+      id: this.data.id,
       typeOfAccident: this.data.typeOfAccident,
       limb: this.data.limb,
       accidentArea : this.data.accidentArea,

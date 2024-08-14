@@ -20,8 +20,7 @@ import { AccidentRateModule } from './accident-rate/accident-rate.module';
 
 
 @NgModule({
-  declarations: [
-  ],
+  declarations: [],
   imports: [
     CommonModule,
     HomeModule,

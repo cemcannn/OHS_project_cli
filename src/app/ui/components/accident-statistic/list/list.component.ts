@@ -97,16 +97,4 @@ export class ListComponent implements OnInit {
     XLSX.utils.book_append_sheet(wb, ws, 'Statistics');
     XLSX.writeFile(wb, 'statistics.xlsx');
   }
-
-  async openAddAccidentStatisticDialog(): Promise<void> {
-    const dialogRef = this.dialog.open(AddAccidentStatisticDialogComponent, {
-      width: '400px',
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result && result.success) {
-        this.getAccidentStatistics();
-      }
-    });
-  }
 }

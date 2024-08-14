@@ -1,0 +1,51 @@
+<h2 mat-dialog-title>Aylık İşletme Verisi Güncelle</h2>
+<div mat-dialog-content>
+    <form #form="ngForm">
+        <mat-form-field appearance="fill" class="field">
+            <mat-label>Ay</mat-label>
+            <mat-select [(ngModel)]="data.month">
+                <mat-option *ngFor="let month of months" [value]="month.value">{{ month.viewValue }}</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="field">
+            <mat-label>Yıl</mat-label>
+            <mat-select [(ngModel)]="data.year">
+                <mat-option *ngFor="let year of years" [value]="year">{{ year }}</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="field">
+            <mat-label>İşletme</mat-label>
+            <input matInput [value]="directorate?.name" readonly (click)="openDirectoratePicker()">
+            <button mat-icon-button matSuffix (click)="openDirectoratePicker()">
+                <mat-icon>arrow_drop_down</mat-icon>
+            </button>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="field">
+            <mat-label>Fiili Yevmiye Sayısı (Yerüstü)</mat-label>
+            <input matInput [(ngModel)]="data.actualDailyWageSurface">
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="field">
+            <mat-label>Fiili Yevmiye Sayısı (Yeraltı)</mat-label>
+            <input matInput [(ngModel)]="data.actualDailyWageUnderground">
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="field">
+            <mat-label>Çalışan Sayısı (Yerüstü)</mat-label>
+            <input matInput [(ngModel)]="data.employeesNumberSurface">
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="field">
+            <mat-label>Çalışan Sayısı (Yeraltı)</mat-label>
+            <input matInput [(ngModel)]="data.employeesNumberUnderground">
+        </mat-form-field>
+    </form>
+</div>
+<div mat-dialog-actions>
+    <button mat-button (click)="close()">İptal</button>
+    <button mat-raised-button color="primary" [disabled]="form.invalid"
+        (click)="updateAccidentStatistic()">Güncelle</button>
+</div>
