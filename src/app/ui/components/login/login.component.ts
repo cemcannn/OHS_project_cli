@@ -23,7 +23,7 @@ export class LoginComponent extends BaseComponent implements OnInit {
   }
 
   async login(usernameOrEmail: string, password: string) {
-    this.showSpinner(SpinnerType.BallAtom);
+    this.showSpinner(SpinnerType.Cog);
     await this.userAuthService.login(usernameOrEmail, password, () => {
       this.authService.identityCheck();
 
@@ -36,7 +36,7 @@ export class LoginComponent extends BaseComponent implements OnInit {
           this.router.navigate([""]);
         
       });
-      this.hideSpinner(SpinnerType.BallAtom);
+      this.hideSpinner(SpinnerType.Cog);
     });
   }
 }

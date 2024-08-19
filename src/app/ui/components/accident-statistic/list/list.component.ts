@@ -11,13 +11,15 @@ import { List_Accident } from 'src/app/contracts/accidents/list_accident';
 import { List_Accident_Statistic } from 'src/app/contracts/accident_statistic/list_accident_statistic';
 import { AccidentStatisticService } from 'src/app/services/common/models/accident-statistic.service';
 import { AddAccidentStatisticDialogComponent } from 'src/app/dialogs/accident-statistic/add-accident-statistic-dialog/add-accident-statistic-dialog.component';
+import { BaseComponent, SpinnerType } from 'src/app/base/base.component';
+import { AlertifyService, MessageType, Position } from 'src/app/services/admin/alertify.service';
 
 @Component({
   selector: 'app-list',
   templateUrl: './list.component.html',
   styleUrls: ['./list.component.scss']
 })
-export class ListComponent implements OnInit {
+export class ListComponent extends BaseComponent implements OnInit {
   displayedColumnsStatistic: string[] = ['month', 'actualDailyWageSurface', 'actualDailyWageUnderground', 'actualDailyWageSummary', 'employeesNumberSurface', 'employeesNumberUnderground', 'employeesNumberSummary' ,'workingHoursSurface', 'workingHoursUnderground', 'workingHoursSummary', 'lostDayOfWorkSummary', 'accidentSeverityRate'];
   dataSourceStatistic: MatTableDataSource<any> = new MatTableDataSource<any>();
   clickedRowsStatistic = new Set<any>();
@@ -30,23 +32,26 @@ export class ListComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
 
   constructor(
-    private spinner: NgxSpinnerService,
+    spinner: NgxSpinnerService,
     private accidentStatisticService: AccidentStatisticService,
     private statisticService: StatisticService,
     private accidentService: AccidentService,
     private accidentRateService: AccidentRateService,
+    private alertifyService: AlertifyService,
     private dialog: MatDialog
-  ) {}
+  ) {super(spinner)}
 
   ngOnInit(): void {
-    this.getAccidentStatistics();
+    this.getAccidentStatistics();    
   }
 
   async getAccidentStatistics() {
-    this.spinner.show();
-  
-    try {
-      const [accidentStatisticsResponse, accidentsResponse] = await Promise.all([
+    this.showSpinner(SpinnerType.Cog)
+
+    let accidentStatisticsResponse, accidentsResponse;
+
+      try {
+      [accidentStatisticsResponse, accidentsResponse] = await Promise.all([
         this.accidentStatisticService.getAccidentStatistics(),
         this.accidentService.getAccidents()
       ]);
@@ -56,10 +61,14 @@ export class ListComponent implements OnInit {
   
       this.populateYearsStatistic(this.accidentStatistics);
       this.filterStatisticsByYear(this.selectedYearStatistic);
-    } catch (error) {
-      console.error('Error loading data:', error);
+    } catch (errorMessage) {
+        this.alertifyService.message(errorMessage, {
+          dismissOthers: true,
+          messageType: MessageType.Error,
+          position: Position.TopRight
+        });
     } finally {
-      this.spinner.hide();
+      this.hideSpinner(SpinnerType.Cog);
     }
   }
 

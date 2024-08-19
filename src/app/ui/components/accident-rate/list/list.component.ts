@@ -9,13 +9,15 @@ import { PersonnelService } from 'src/app/services/common/models/personnel.servi
 import { Accident_Rate } from 'src/app/contracts/accidents/accident_rate';
 import { AccidentRateService } from 'src/app/services/common/accident-rate.service';
 import * as XLSX from 'xlsx'; // Import xlsx
+import { BaseComponent, SpinnerType } from 'src/app/base/base.component';
+import { AlertifyService, MessageType, Position } from 'src/app/services/admin/alertify.service';
 
 @Component({
   selector: 'app-list',
   templateUrl: './list.component.html',
   styleUrls: ['./list.component.scss']
 })
-export class ListComponent implements OnInit {
+export class ListComponent extends BaseComponent implements OnInit {
   displayedColumnsAccident: string[] = ['month', 'zeroDay', 'oneToFourDay', 'fiveAboveDay', 'totalAccidentNumber', 'totalLostDayOfWork'];
   dataSourceAccident: MatTableDataSource<Accident_Rate> = new MatTableDataSource<Accident_Rate>();
   clickedRowsAccident = new Set<Accident_Rate>();
@@ -30,11 +32,12 @@ export class ListComponent implements OnInit {
   selectedYearAccident: string = 'All';
 
   constructor(
-    private spinner: NgxSpinnerService,
+    spinner: NgxSpinnerService,
     private personnelService: PersonnelService,
     private accidentService: AccidentService,
     private accidentRateService: AccidentRateService,
-  ) {}
+    private alertifyService: AlertifyService,
+  ) {super(spinner);}
 
   ngOnInit(): void {
     this.getPersonnels();
@@ -42,37 +45,43 @@ export class ListComponent implements OnInit {
   }
 
   async getPersonnels() {
-    this.spinner.show(); // Show spinner while loading
-
+    this.showSpinner(SpinnerType.Cog)
+    try{
     this.personnelService.getPersonnels().then(
       response => {
         this.totalCountPersonnels = response.totalCount;
         this.personnels = response.datas;
-        this.spinner.hide(); // Hide spinner after loading
-      },
-      error => {
-        console.error('Error loading personnels:', error);
-        this.spinner.hide(); // Hide spinner in case of error
-      }
-    );
+      });
+    } catch (errorMessage) {
+      this.alertifyService.message(errorMessage, {
+        dismissOthers: true,
+        messageType: MessageType.Error,
+        position: Position.TopRight
+      });
+    } finally {
+      this.hideSpinner(SpinnerType.Cog);
+    }
   }
 
   async getAccidents() {
-    this.spinner.show(); // Show spinner while loading
-
+    this.showSpinner(SpinnerType.Cog)
+    try{
     this.accidentService.getAccidents().then(
       response => {
         this.totalCountAccidents = response.totalCount;
         this.accidents = response.datas;
         this.populateYears(this.accidents);
         this.filterAccidentsByYear(this.selectedYearAccident);
-        this.spinner.hide(); // Hide spinner after loading
-      },
-      error => {
-        console.error('Error loading accidents:', error);
-        this.spinner.hide(); // Hide spinner in case of error
-      }
-    );
+      });
+    } catch (errorMessage) {
+      this.alertifyService.message(errorMessage, {
+        dismissOthers: true,
+        messageType: MessageType.Error,
+        position: Position.TopRight
+      });
+    } finally {
+      this.hideSpinner(SpinnerType.Cog);
+    }
   }
 
   populateYears(accidents: List_Accident[]) {
@@ -92,15 +101,15 @@ export class ListComponent implements OnInit {
 
   exportToExcelAccidents() {
     const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.dataSourceAccident.data.map(item => ({
-      Month: item.month,
-      ZeroDay: item.zeroDay,
-      OneToFourDay: item.oneToFourDay,
-      FiveAboveDay: item.fiveAboveDay,
-      TotalAccidentNumber: item.totalAccidentNumber,
-      TotalLostDayOfWork: item.totalLostDayOfWork
+      "Aylar": item.month,
+      "Kaza Sonrası Çalışır Durumdaki Çalışan Sayısı": item.zeroDay,
+      "Kaza Sonrası İş Göremez Raporlu Çalışan Sayısı (1-4 Gün)": item.oneToFourDay,
+      "Kaza Sonrası İş Göremez Çalışan Sayısı (5 Gün ve Üzeri)": item.fiveAboveDay,
+      "Toplam İş Kazası Sayısı": item.totalAccidentNumber,
+      "Toplam İşgünü Kaybı": item.totalLostDayOfWork
     })));
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Accident Rates');
-    XLSX.writeFile(wb, 'accident_rates.xlsx');
+    XLSX.writeFile(wb, 'Kaza İstatistikleri.xlsx');
   }
 }

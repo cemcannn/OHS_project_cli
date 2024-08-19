@@ -4,11 +4,12 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { BaseComponent } from 'src/app/base/base.component';
+import { BaseComponent, SpinnerType } from 'src/app/base/base.component';
 import { List_Monthly_Directorate_Data } from 'src/app/contracts/monthly_directorate_data/list-monthly-directorate-data';
 import { AddAccidentStatisticDialogComponent } from 'src/app/dialogs/accident-statistic/add-accident-statistic-dialog/add-accident-statistic-dialog.component';
 import { UpdateAccidentStatisticDialogComponent } from 'src/app/dialogs/accident-statistic/update-accident-statistic-dialog/update-accident-statistic-dialog.component';
 import { AccidentUpdateDialogComponent } from 'src/app/dialogs/accident/accident-update-dialog/accident-update-dialog.component';
+import { AlertifyService, MessageType, Position } from 'src/app/services/admin/alertify.service';
 import { AccidentStatisticService } from 'src/app/services/common/models/accident-statistic.service';
 
 
@@ -42,6 +43,7 @@ export class ListComponent extends BaseComponent implements OnInit {
   constructor(
     spinner: NgxSpinnerService,
     private accidentStatisticService: AccidentStatisticService,
+    private alertifyService: AlertifyService,
     private dialog: MatDialog,
   ) {
     super(spinner);
@@ -72,7 +74,12 @@ export class ListComponent extends BaseComponent implements OnInit {
   }
 
   async loadMonthlyDirectorateData(): Promise<void> {
-    const allMonthlyDirectorateDatas: { datas: List_Monthly_Directorate_Data[], totalCount: number } = await this.accidentStatisticService.getAccidentStatistics();
+    this.showSpinner(SpinnerType.Cog);
+    const allMonthlyDirectorateDatas: { datas: List_Monthly_Directorate_Data[], totalCount: number } = await this.accidentStatisticService.getAccidentStatistics(() => this.hideSpinner(SpinnerType.Cog), errorMessage => this.alertifyService.message(errorMessage, {
+      dismissOthers: true,
+      messageType: MessageType.Error,
+      position: Position.TopRight
+    }))
 
   // Convert month values from string to number and then to month names
   const convertedData = allMonthlyDirectorateDatas.datas.map(data => {

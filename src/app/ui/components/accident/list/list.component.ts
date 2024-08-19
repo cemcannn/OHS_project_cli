@@ -4,9 +4,10 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { BaseComponent } from 'src/app/base/base.component';
+import { BaseComponent, SpinnerType } from 'src/app/base/base.component';
 import { List_Accident } from 'src/app/contracts/accidents/list_accident';
 import { AccidentUpdateDialogComponent } from 'src/app/dialogs/accident/accident-update-dialog/accident-update-dialog.component';
+import { AlertifyService, MessageType, Position } from 'src/app/services/admin/alertify.service';
 import { AccidentService } from 'src/app/services/common/models/accident.service';
 
 
@@ -26,6 +27,7 @@ export class ListComponent extends BaseComponent implements OnInit {
   constructor(
     spinner: NgxSpinnerService,
     private accidentService: AccidentService,
+    private alertifyService: AlertifyService,
     private dialog: MatDialog,
   ) {
     super(spinner);
@@ -37,6 +39,7 @@ export class ListComponent extends BaseComponent implements OnInit {
 
   async ngOnInit() {
     await this.loadAccidents();
+
   }
 
   async openUpdateAccidentDialog(accidentData: any): Promise<void> {
@@ -56,7 +59,12 @@ export class ListComponent extends BaseComponent implements OnInit {
   }
 
   async loadAccidents(): Promise<void> {
-    const allAccidents: { datas: List_Accident[], totalCount: number } = await this.accidentService.getAccidents();
+    this.showSpinner(SpinnerType.Cog)
+    const allAccidents: { datas: List_Accident[], totalCount: number } = await this.accidentService.getAccidents(() => this.hideSpinner(SpinnerType.Cog), errorMessage => this.alertifyService.message(errorMessage, {
+      dismissOthers: true,
+      messageType: MessageType.Error,
+      position: Position.TopRight
+    }))
   
     // Use the correct type for MatTableDataSource
     this.dataSource = new MatTableDataSource<List_Accident>(allAccidents.datas);

@@ -19,7 +19,7 @@ export class AuthGuard implements CanActivate {
     this.spinner.show(SpinnerType.BallAtom);
 
     if (!_isAuthenticated) {
-      // this.router.navigate(["login"], { queryParams: { returnUrl: state.url } });
+      this.router.navigate(["login"], { queryParams: { returnUrl: state.url } });
       this.toastrService.message("Oturum açmanız gerekiyor!", "Yetkisiz Erişim!", {
         messageType: ToastrMessageType.Warning,
         position: ToastrPosition.TopRight

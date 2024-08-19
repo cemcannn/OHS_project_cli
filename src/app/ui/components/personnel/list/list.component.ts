@@ -49,7 +49,8 @@ export class ListComponent extends BaseComponent implements OnInit, AfterViewIni
   }
 
   async getPersonnels() {
-    const allPersonnels: {datas: List_Personnel[], totalCount: number} = await this.personnelService.getPersonnels(() => this.hideSpinner(SpinnerType.BallAtom), errorMessage => this.alertifyService.message(errorMessage, {
+    this.showSpinner(SpinnerType.Cog);
+    const allPersonnels: {datas: List_Personnel[], totalCount: number} = await this.personnelService.getPersonnels(() => this.hideSpinner(SpinnerType.Cog), errorMessage => this.alertifyService.message(errorMessage, {
       dismissOthers: true,
       messageType: MessageType.Error,
       position: Position.TopRight

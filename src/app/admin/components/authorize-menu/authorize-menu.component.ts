@@ -2,7 +2,7 @@ import { FlatTreeControl } from '@angular/cdk/tree';
 import { Component, OnInit } from '@angular/core';
 import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { BaseComponent } from '../../../base/base.component';
+import { BaseComponent, SpinnerType } from '../../../base/base.component';
 import { Menu } from '../../../contracts/application-configurations/menu';
 import { AuthorizeMenuDialogComponent } from '../../../dialogs/authorize/authorize-menu-dialog/authorize-menu-dialog.component';
 import { DialogService } from '../../../services/common/dialog.service';
@@ -38,21 +38,28 @@ export class AuthorizeMenuComponent extends BaseComponent implements OnInit {
   }
 
   async ngOnInit() {
-    this.dataSource.data = await (await this.applicationService.getAuthorizeDefinitionEndpoints())
-      .map(m => {
-        const treeMenu: ITreeMenu = {
-          name: m.name,
-          actions: m.actions.map(a => {
-            const _treeMenu: ITreeMenu = {
-              name: a.definition,
-              code: a.code,
-              menuName: m.name
-            }
-            return _treeMenu;
-          })
-        };
-        return treeMenu;
-      });
+    this.showSpinner(SpinnerType.Cog);
+    try {
+      this.dataSource.data = await (await this.applicationService.getAuthorizeDefinitionEndpoints())
+        .map(m => {
+          const treeMenu: ITreeMenu = {
+            name: m.name,
+            actions: m.actions.map(a => {
+              const _treeMenu: ITreeMenu = {
+                name: a.definition,
+                code: a.code,
+                menuName: m.name
+              }
+              return _treeMenu;
+            })
+          };
+          return treeMenu;
+        });
+    } catch (error) {
+      console.error(error);
+    } finally {
+      this.hideSpinner(SpinnerType.Cog);
+    }
   }
 
   treeControl = new FlatTreeControl<ExampleFlatNode>(
@@ -76,7 +83,6 @@ export class AuthorizeMenuComponent extends BaseComponent implements OnInit {
   );
 
   dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
-
 
   hasChild = (_: number, node: ExampleFlatNode) => node.expandable;
 

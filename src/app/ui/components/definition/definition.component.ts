@@ -14,16 +14,12 @@ import { AlertifyService } from 'src/app/services/admin/alertify.service';
   templateUrl: './definition.component.html',
   styleUrls: ['./definition.component.scss']
 })
-export class DefinitionComponent extends BaseComponent implements OnInit {
+export class DefinitionComponent implements OnInit {
   constructor(
     private alertify: AlertifyService,
-    spinner: NgxSpinnerService,
-    private dialog: MatDialog) {
-    super(spinner);
-  }
+    private dialog: MatDialog) {}
 
   ngOnInit(): void {
-
   }
 
   async showTypeOfAccidentDialog(typeOfAccidentData: any): Promise<void> {

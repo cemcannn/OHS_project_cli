@@ -24,11 +24,11 @@ export class CreateComponent extends BaseComponent implements OnInit {
   @Output() createdRole: EventEmitter<string> = new EventEmitter();
 
   create(name: HTMLInputElement) {
-    this.showSpinner(SpinnerType.BallAtom);
+    this.showSpinner(SpinnerType.Cog);
 
 
     this.roleService.create(name.value, () => {
-      this.hideSpinner(SpinnerType.BallAtom);
+      this.hideSpinner(SpinnerType.Cog);
       this.alertify.message("Role başarıyla eklenmiştir.", {
         dismissOthers: true,
         messageType: MessageType.Success,

@@ -8,7 +8,6 @@ import { AuthorizationEndpointService } from '../../../services/common/models/au
 import { RoleService } from '../../../services/common/models/role.service';
 import { BaseDialog } from '../../base/base-dialog';
 
-
 @Component({
   selector: 'app-authorize-menu-dialog',
   templateUrl: './authorize-menu-dialog.component.html',
@@ -49,7 +48,6 @@ export class AuthorizeMenuDialogComponent extends BaseDialog<AuthorizeMenuDialog
         // handle error
       })
   }
-
 }
 
 export enum AuthorizeMenuState {

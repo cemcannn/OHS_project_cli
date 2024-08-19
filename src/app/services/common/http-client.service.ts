@@ -53,7 +53,6 @@ export class HttpClientService {
   }
 }
 
-
 export class RequestParameters {
   controller?: string;
   action?: string;

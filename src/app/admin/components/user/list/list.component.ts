@@ -30,9 +30,9 @@ export class ListComponent extends BaseComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
   async getUsers() {
-    this.showSpinner(SpinnerType.BallAtom);
+    this.showSpinner(SpinnerType.Cog);
 
-    const allUsers: { totalUsersCount: number; users: List_User[] } = await this.userService.getAllUsers(() => this.hideSpinner(SpinnerType.BallAtom), errorMessage => this.alertifyService.message(errorMessage, {
+    const allUsers: { totalUsersCount: number; users: List_User[] } = await this.userService.getAllUsers(() => this.hideSpinner(SpinnerType.Cog), errorMessage => this.alertifyService.message(errorMessage, {
       dismissOthers: true,
       messageType: MessageType.Error,
       position: Position.TopRight

@@ -23,7 +23,6 @@ export class RoleService {
   }
 
   async create(name: string, successCallBack?: () => void, errorCallBack?: (error) => void) {
-    debugger
     const observable: Observable<any> = this.httpClientService.post({
       controller: "roles"
     }, { name: name });
