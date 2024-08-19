@@ -19,3 +19,17 @@
     height: 55px; 
     margin-bottom: 25px;
   }
+
+  .table-container {
+    width: 100%;
+    overflow-x: auto;
+  }
+  
+  mat-table {
+    width: 100%;
+    table-layout: auto; /* Gerekiyorsa genişliği otomatik olarak ayarlar */
+  }
+  
+  mat-paginator {
+    margin-top: 1rem; /* Paginator ile içerik arasında boşluk bırakır */
+  }

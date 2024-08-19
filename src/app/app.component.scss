@@ -1,0 +1,26 @@
+.dropdown-menu {
+    position: absolute; /* veya position: fixed; */
+    z-index: 1050;
+  }
+
+  html, body {
+    height: 100%;
+    margin: 0;
+  }
+
+  #main-wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+
+  footer {
+    margin-top: auto;
+    background-color: #dc3545; /* bg-danger class ile aynı */
+    text-align: center;
+    padding: 10px;
+  }
+  .navbar-brand {
+    background-color: #141619 ; /* Örneğin, koyu gri renk */
+  }
+  

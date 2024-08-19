@@ -29,5 +29,4 @@ export class AuthService {
     return _isAuthenticated;
   }
 }
-
 export let _isAuthenticated: boolean;

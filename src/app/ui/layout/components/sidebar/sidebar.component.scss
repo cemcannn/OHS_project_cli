@@ -1,0 +1,23 @@
+/* container for sidebar and main content */
+.container {
+    display: flex;
+  }
+  
+  /* sidebar */
+  .left-sidebar {
+    position: fixed; /* Fixed position to keep it on the side */
+    top: 0; /* Align to the top */
+    left: 0; /* Align to the left */
+    bottom: 0; /* Full height */
+    width: 250px; /* Adjust based on your sidebar width */
+    background-color: #141619 !important ; /* Örneğin, koyu gri renk *//* Örneğin, koyu gri renk */; /* Adjust based on your sidebar color */
+    overflow-y: auto; /* Enable scrolling if necessary */
+  }
+  
+  
+  /* main content */
+  .main-content {
+    flex: 1;
+    padding: 20px; /* Adjust as needed */
+  }
+  

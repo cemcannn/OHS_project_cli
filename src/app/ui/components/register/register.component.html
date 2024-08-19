@@ -4,10 +4,10 @@
       <h2 class="page-title mt-3">Kullanıcı Kaydı</h2>
       <form [formGroup]="frm" (ngSubmit)="onSubmit(frm.value)">
         <div class="form-group">
-          <label for="nameSurname">Ad Soyad</label>
-          <input type="text" formControlName="nameSurname" class="form-control" id="nameSurname" placeholder="Ad Soyad" [ngClass]="{'is-invalid': submitted && component.nameSurname.errors}">
-          <small class="form-text text-muted invalid-feedback" *ngIf="submitted && component.nameSurname.errors?.required">Lütfen ad soyadı boş geçmeyiniz.</small>
-          <small class="form-text text-muted invalid-feedback" *ngIf="submitted && (component.nameSurname.errors?.maxlength || component.nameSurname.errors?.minlength)">Lütfen ad soyadı 3 ile 50 karakter arasında yazınız.</small>
+          <label for="name">Ad Soyad</label>
+          <input type="text" formControlName="name" class="form-control" id="name" placeholder="Ad Soyad" [ngClass]="{'is-invalid': submitted && component.name.errors}">
+          <small class="form-text text-muted invalid-feedback" *ngIf="submitted && component.name.errors?.required">Lütfen ad soyadı boş geçmeyiniz.</small>
+          <small class="form-text text-muted invalid-feedback" *ngIf="submitted && (component.name.errors?.maxlength || component.name.errors?.minlength)">Lütfen ad soyadı 3 ile 50 karakter arasında yazınız.</small>
         </div>
         <div class="form-group">
           <label for="username">Kullanıcı Adı</label>

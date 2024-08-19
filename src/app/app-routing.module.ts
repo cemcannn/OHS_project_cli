@@ -6,8 +6,6 @@ import { LayoutComponent } from './admin/layout/layout.component';
 import { LayoutComponent as UiLayoutComponent } from './ui/layout/layout.component';
 import { HomeComponent } from './ui/components/home/home.component';
 
-
-
 const routes: Routes = [
   {
     path: "admin", component: LayoutComponent, children: [
@@ -17,37 +15,29 @@ const routes: Routes = [
       { path: "users", loadChildren: () => import("./admin/components/user/user.module").then(module => module.UserModule), canActivate: [AuthGuard] },
     ], canActivate: [AuthGuard]
   },
-  // { path: "", component: EntranceComponent },
   {
     path: "", component: UiLayoutComponent, children: [
-      { path: "", component: HomeComponent },
+      { path: "", component: HomeComponent, canActivate: [AuthGuard] },
       {
-        path: "accident", loadChildren: () => import("./ui/components/accident/accident.module").then
-          (module => module.AccidentModule)
+        path: "accident", loadChildren: () => import("./ui/components/accident/accident.module").then(module => module.AccidentModule), canActivate: [AuthGuard]
       },
       {
-        path: "definition", loadChildren: () => import("./ui/components/definition/definition.module").then
-          (module => module.DefinitionModule)
+        path: "definition", loadChildren: () => import("./ui/components/definition/definition.module").then(module => module.DefinitionModule), canActivate: [AuthGuard]
       },
       {
-        path: "personnel", loadChildren: () => import("./ui/components/personnel/personnel.module").then
-          (module => module.PersonnelModule)
+        path: "personnel", loadChildren: () => import("./ui/components/personnel/personnel.module").then(module => module.PersonnelModule), canActivate: [AuthGuard]
       },
       {
-        path: "monthly-directorate-data", loadChildren: () => import("./ui/components/monthly-directorate-data/monthly-directorate-data.module").then
-          (module => module.MonthlyDirectorateDataModule)
+        path: "monthly-directorate-data", loadChildren: () => import("./ui/components/monthly-directorate-data/monthly-directorate-data.module").then(module => module.MonthlyDirectorateDataModule), canActivate: [AuthGuard]
       },
       {
-        path: "accident-statistic", loadChildren: () => import("./ui/components/accident-statistic/accident-statistic.module").then
-          (module => module.AccidentStatisticModule)
+        path: "accident-statistic", loadChildren: () => import("./ui/components/accident-statistic/accident-statistic.module").then(module => module.AccidentStatisticModule), canActivate: [AuthGuard]
       },
       {
-        path: "accident-rate", loadChildren: () => import("./ui/components/accident-rate/accident-rate.module").then
-          (module => module.AccidentRateModule)
+        path: "accident-rate", loadChildren: () => import("./ui/components/accident-rate/accident-rate.module").then(module => module.AccidentRateModule), canActivate: [AuthGuard]
       },
       {
-        path: "chart", loadChildren: () => import("./ui/components/chart/chart.module").then
-          (module => module.ChartModule)
+        path: "chart", loadChildren: () => import("./ui/components/chart/chart.module").then(module => module.ChartModule), canActivate: [AuthGuard]
       },
       { path: "register", loadChildren: () => import("./ui/components/register/register.module").then(module => module.RegisterModule) },
       { path: "login", loadChildren: () => import("./ui/components/login/login.module").then(module => module.LoginModule) },
