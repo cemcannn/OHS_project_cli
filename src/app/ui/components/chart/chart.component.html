@@ -1,48 +1,55 @@
-<div class="page-breadcrumb bg-white ">
-    <div class="row bg-danger">
-      <div class="col-12 d-flex no-block align-items-center">
-        <h2 class="page-title">İstatistik Grafiği</h2>
-      </div>
-    </div>
-    <div class="container bg-white">
-      <div class="row">
-  
-        <!-- Aylık Grafik Seçimleri -->
-        <div class="form-group mt-4">
-          <label for="yearSelect">Yıl Seçin:</label>
-          <select id="yearSelect" [(ngModel)]="selectedYear" (ngModelChange)="onYearChange()">
-            <option *ngFor="let year of years" [value]="year">{{year}}</option>
-          </select>
-        </div>
-        
-        <div class="form-group">
-          <label for="monthlyMetricSelect">Metrik Seçin:</label>
-          <select id="monthlyMetricSelect" [(ngModel)]="selectedMonthlyMetric" (ngModelChange)="onMonthlyMetricChange()">
-            <option *ngFor="let metric of metrics" [value]="metric.value">{{metric.label}}</option>
-          </select>
-        </div>
-  
-        <canvas #monthlyChart></canvas>
-  
-        <!-- Yıllık Grafik Seçimleri -->
-        <div class="form-group mt-4">
-          <label for="timeRangeSelect">Zaman Aralığı Seçin:</label>
-          <select id="timeRangeSelect" [(ngModel)]="selectedTimeRange" (ngModelChange)="onTimeRangeChange()">
-            <option value="5">Son 5 Yıl</option>
-            <option value="10">Son 10 Yıl</option>
-            <option value="20">Son 20 Yıl</option>
-          </select>
-        </div>
-  
-        <div class="form-group">
-          <label for="yearlyMetricSelect">Metrik Seçin:</label>
-          <select id="yearlyMetricSelect" [(ngModel)]="selectedYearlyMetric" (ngModelChange)="onYearlyMetricChange()">
-            <option *ngFor="let metric of metrics" [value]="metric.value">{{metric.label}}</option>
-          </select>
-        </div>
-  
-        <canvas #yearlyChart></canvas>
-      </div>
+<div class="page-breadcrumb bg-white">
+  <div class="row bg-danger">
+    <div class="col-12 d-flex no-block align-items-center">
+      <h2 class="page-title">İstatistik Grafiği</h2>
     </div>
   </div>
-  
+  <div class="container bg-white">
+    <div class="row">
+      <!-- Yıl Seçimi -->
+      <div class="form-group mt-4">
+        <label for="yearSelect">Yıl Seçin:</label>
+        <select id="yearSelect" [(ngModel)]="selectedYear" (ngModelChange)="onYearChange()">
+          <option *ngFor="let year of years" [value]="year">{{year}}</option>
+        </select>
+      </div>
+      
+      <!-- İşletme Seçimi -->
+      <div class="form-group">
+        <label for="directorateSelect">İşletme Seçin:</label>
+        <select id="directorateSelect" [(ngModel)]="selectedMonthlyDirectorate" (ngModelChange)="onDirectorateChange()">
+          <option *ngFor="let directorate of directorates" [value]="directorate">{{directorate}}</option>
+        </select>
+      </div>
+
+      <!-- Aylık Grafik Seçimleri -->
+      <div class="form-group mt-4">
+        <label for="monthlyMetricSelect">Metrik Seçin:</label>
+        <select id="monthlyMetricSelect" [(ngModel)]="selectedMonthlyMetric" (ngModelChange)="onMonthlyMetricChange()">
+          <option *ngFor="let metric of metrics" [value]="metric.value">{{metric.label}}</option>
+        </select>
+      </div>
+
+      <canvas #monthlyChart></canvas>
+
+      <!-- Yıllık Grafik Seçimleri -->
+      <div class="form-group mt-4">
+        <label for="timeRangeSelect">Zaman Aralığı Seçin:</label>
+        <select id="timeRangeSelect" [(ngModel)]="selectedTimeRange" (ngModelChange)="onTimeRangeChange()">
+          <option value="5">Son 5 Yıl</option>
+          <option value="10">Son 10 Yıl</option>
+          <option value="20">Son 20 Yıl</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="yearlyMetricSelect">Metrik Seçin:</label>
+        <select id="yearlyMetricSelect" [(ngModel)]="selectedYearlyMetric" (ngModelChange)="onYearlyMetricChange()">
+          <option *ngFor="let metric of metrics" [value]="metric.value">{{metric.label}}</option>
+        </select>
+      </div>
+
+      <canvas #yearlyChart></canvas>
+    </div>
+  </div>
+</div>

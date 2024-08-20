@@ -26,7 +26,9 @@ export class ListComponent extends BaseComponent implements OnInit {
   accidents: List_Accident[] = [];
   totalCountPersonnels: number = 0;
   yearsStatistic: string[] = [];
+  directorates: string[] = []; // İşletmeleri tutacak dizi
   selectedYearStatistic: string = 'All';
+  selectedDirectorate: string = 'All'; // İşletme seçimi
   accidentStatistics: List_Accident_Statistic[] = [];
 
   @ViewChild(MatSort) sort: MatSort;
@@ -50,23 +52,24 @@ export class ListComponent extends BaseComponent implements OnInit {
 
     let accidentStatisticsResponse, accidentsResponse;
 
-      try {
+    try {
       [accidentStatisticsResponse, accidentsResponse] = await Promise.all([
         this.accidentStatisticService.getAccidentStatistics(),
         this.accidentService.getAccidents()
       ]);
-  
+
       this.accidentStatistics = accidentStatisticsResponse.datas;
       this.accidents = accidentsResponse.datas;
-  
+
       this.populateYearsStatistic(this.accidentStatistics);
-      this.filterStatisticsByYear(this.selectedYearStatistic);
+      this.populateDirectorates(this.accidents);
+      this.filterStatisticsByYearAndDirectorate(this.selectedYearStatistic, this.selectedDirectorate);
     } catch (errorMessage) {
-        this.alertifyService.message(errorMessage, {
-          dismissOthers: true,
-          messageType: MessageType.Error,
-          position: Position.TopRight
-        });
+      this.alertifyService.message(errorMessage, {
+        dismissOthers: true,
+        messageType: MessageType.Error,
+        position: Position.TopRight
+      });
     } finally {
       this.hideSpinner(SpinnerType.Cog);
     }
@@ -77,14 +80,33 @@ export class ListComponent extends BaseComponent implements OnInit {
     this.yearsStatistic = Object.keys(groupedByYear);
   }
 
-  filterStatisticsByYear(year: string) {
+  populateDirectorates(accidents: List_Accident[]) {
+    const directoratesSet = new Set(accidents.map(a => a.directorate));
+    this.directorates = Array.from(directoratesSet);
+  }
+
+  onFiltersChanged() {
+    this.filterStatisticsByYearAndDirectorate(this.selectedYearStatistic, this.selectedDirectorate);
+  }
+
+  filterStatisticsByYearAndDirectorate(year: string, directorate: string) {
     let filteredStatistics = this.accidentStatistics;
     let filteredAccidents = this.accidents;
+
     if (year !== 'All') {
       filteredStatistics = this.statisticService.groupByYearList(this.accidentStatistics)[year];
       filteredAccidents = this.accidentRateService.groupByYear(this.accidents)[year];
     }
+
+    if (directorate !== 'All') {
+      filteredStatistics = filteredStatistics.filter(a => a.directorate === directorate)
+      filteredAccidents = filteredAccidents.filter(a => a.directorate === directorate);
+    }
+
+    // Gruplama ve filtreleme işlemleri
     const groupedStatistics = this.statisticService.groupByMonth(filteredStatistics, filteredAccidents);
+
+    // `accidentId` özelliği kullanılmadığı için mevcut özelliklerle uyumlu hale getirildi
     this.dataSourceStatistic.data = groupedStatistics;
     this.dataSourceStatistic.sort = this.sort;
   }

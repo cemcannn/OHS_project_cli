@@ -30,6 +30,8 @@ export class ListComponent extends BaseComponent implements OnInit {
   accidents: List_Accident[] = [];
   yearsAccident: string[] = [];
   selectedYearAccident: string = 'All';
+  selectedDirectorate: string = 'All'; // Yeni özellik: seçilen işletme
+  directorates: string[] = []; // İşletmeleri tutacak dizi
 
   constructor(
     spinner: NgxSpinnerService,
@@ -47,11 +49,10 @@ export class ListComponent extends BaseComponent implements OnInit {
   async getPersonnels() {
     this.showSpinner(SpinnerType.Cog)
     try{
-    this.personnelService.getPersonnels().then(
-      response => {
-        this.totalCountPersonnels = response.totalCount;
-        this.personnels = response.datas;
-      });
+      const response = await this.personnelService.getPersonnels();
+      this.totalCountPersonnels = response.totalCount;
+      this.personnels = response.datas;
+      this.populateDirectorates(this.personnels); // İşletmeleri güncelle
     } catch (errorMessage) {
       this.alertifyService.message(errorMessage, {
         dismissOthers: true,
@@ -66,13 +67,11 @@ export class ListComponent extends BaseComponent implements OnInit {
   async getAccidents() {
     this.showSpinner(SpinnerType.Cog)
     try{
-    this.accidentService.getAccidents().then(
-      response => {
-        this.totalCountAccidents = response.totalCount;
-        this.accidents = response.datas;
-        this.populateYears(this.accidents);
-        this.filterAccidentsByYear(this.selectedYearAccident);
-      });
+      const response = await this.accidentService.getAccidents();
+      this.totalCountAccidents = response.totalCount;
+      this.accidents = response.datas;
+      this.populateYears(this.accidents);
+      this.filterAccidentsByYearAndDirectorate(this.selectedYearAccident, this.selectedDirectorate);
     } catch (errorMessage) {
       this.alertifyService.message(errorMessage, {
         dismissOthers: true,
@@ -89,10 +88,18 @@ export class ListComponent extends BaseComponent implements OnInit {
     this.yearsAccident = Object.keys(groupedByYear);
   }
 
-  filterAccidentsByYear(year: string) {
+  populateDirectorates(personnels: List_Personnel[]) {
+    const directoratesSet = new Set(personnels.map(p => p.directorate));
+    this.directorates = Array.from(directoratesSet);
+  }
+
+  filterAccidentsByYearAndDirectorate(year: string, directorate: string) {
     let filteredAccidents = this.accidents;
     if (year !== 'All') {
       filteredAccidents = this.accidentRateService.groupByYear(this.accidents)[year];
+    }
+    if (directorate !== 'All') {
+      filteredAccidents = filteredAccidents.filter(a => a.directorate === directorate);
     }
     const groupedAccidents = this.accidentRateService.groupByMonth(filteredAccidents); // Accidents'ı aylara göre gruplayın
     this.dataSourceAccident.data = groupedAccidents;

@@ -102,4 +102,52 @@ export class AccidentRateService {
 
     return Object.values(yearlyData);
   }  
+
+  groupByDirectorate(accidents: List_Accident[]): { [directorate: string]: Accident_Rate[] } {
+    const directorateData: { [key: string]: { [month: string]: Accident_Rate } } = {};
+
+    accidents.forEach(accident => {
+      const directorate = accident.directorate || 'Diğer'; // Eğer işletme bilgisi yoksa 'Diğer' olarak adlandırılır
+      const monthIndex = new Date(accident.accidentDate).getMonth();
+      const month = this.monthNames[monthIndex];
+      const lostDayOfWork = Number(accident.lostDayOfWork);
+
+      if (!directorateData[directorate]) {
+        directorateData[directorate] = {};
+        this.monthNames.forEach(monthName => {
+          directorateData[directorate][monthName] = {
+            month: monthName,
+            zeroDay: 0,
+            oneToFourDay: 0,
+            fiveAboveDay: 0,
+            totalAccidentNumber: 0,
+            totalLostDayOfWork: 0,
+          };
+        });
+      }
+
+      const accidentRate = directorateData[directorate][month];
+
+      if (lostDayOfWork === 0) {
+        accidentRate.zeroDay += 1;
+      } else if (lostDayOfWork >= 1 && lostDayOfWork <= 4) {
+        accidentRate.oneToFourDay += 1;
+      } else if (lostDayOfWork >= 5) {
+        accidentRate.fiveAboveDay += 1;
+      }
+
+      accidentRate.totalAccidentNumber += 1;
+      accidentRate.totalLostDayOfWork += lostDayOfWork;
+    });
+
+    const result = {};
+    for (const directorate in directorateData) {
+      if (directorateData.hasOwnProperty(directorate)) {
+        const monthlyData = directorateData[directorate];
+        result[directorate] = [...Object.values(monthlyData)];
+      }
+    }
+
+    return result;
+  }
 }

@@ -178,4 +178,66 @@ console.log(monthlyData)
 
     return yearlyData;
   }
+
+  groupByDirectorate(accidentStatistics: List_Accident_Statistic[], accidents: List_Accident[]): { [directorate: string]: any[] } {
+  const directorateData: { [key: string]: any } = {};
+
+  accidentStatistics.forEach(stat => {
+    const directorate = stat.directorate || 'Diğer'; // Eğer işletme bilgisi yoksa 'Diğer' olarak adlandırılır
+    if (!directorateData[directorate]) {
+      directorateData[directorate] = this.monthNames.map((month, index) => ({
+        month: month,
+        actualDailyWageSurface: 0,
+        actualDailyWageUnderground: 0,
+        actualDailyWageSummary: 0,
+        employeesNumberSurface: 0,
+        employeesNumberUnderground: 0,
+        employeesNumberSummary: 0,
+        workingHoursSurface: 0,
+        workingHoursUnderground: 0,
+        workingHoursSummary: 0,
+        lostDayOfWorkSummary: 0,
+        accidentSeverityRate: 0,
+        year: stat.year,
+      }));
+    }
+
+    const monthData = directorateData[directorate][Number(stat.month) - 1];
+
+    monthData.actualDailyWageSurface += Number(stat.actualDailyWageSurface);
+    monthData.actualDailyWageUnderground += Number(stat.actualDailyWageUnderground);
+    monthData.actualDailyWageSummary = monthData.actualDailyWageSurface + monthData.actualDailyWageUnderground;
+    monthData.employeesNumberSurface += Number(stat.employeesNumberSurface);
+    monthData.employeesNumberUnderground += Number(stat.employeesNumberUnderground);
+    monthData.employeesNumberSummary = monthData.employeesNumberSurface + monthData.employeesNumberUnderground;
+    monthData.workingHoursSurface = monthData.actualDailyWageSurface * 8;
+    monthData.workingHoursUnderground = monthData.actualDailyWageUnderground * 8;
+    monthData.workingHoursSummary = monthData.workingHoursSurface + monthData.workingHoursUnderground;
+    monthData.lostDayOfWorkSummary += Number(stat.lostDayOfWorkSummary);
+  });
+
+  // Process accidents for each directorate
+  const accidentRates = this.accidentRateService.groupByDirectorate(accidents);
+  Object.keys(accidentRates).forEach((directorate) => {
+    const accidentRate = accidentRates[directorate];
+    if (directorateData[directorate]) {
+      accidentRate.forEach(rate => {
+        const monthIndex = this.monthNames.indexOf(rate.month);
+        if (monthIndex !== -1) {
+          const monthData = directorateData[directorate][monthIndex];
+
+          monthData.lostDayOfWorkSummary = rate.totalLostDayOfWork;
+
+          // Calculate accident severity rate
+          if (monthData.workingHoursSummary > 0) {
+            monthData.accidentSeverityRate =
+              (monthData.lostDayOfWorkSummary / monthData.workingHoursSummary) * 1000;
+          }
+        }
+      });
+    }
+  });
+
+  return directorateData;
+}
 }
