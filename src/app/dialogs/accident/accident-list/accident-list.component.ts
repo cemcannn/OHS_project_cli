@@ -27,8 +27,7 @@ export class AccidentListComponent extends BaseDialog<AccidentListComponent> imp
     @Inject(MAT_DIALOG_DATA) public data: any,
     private accidentService: AccidentService,
     private alertifyService: AlertifyService,
-    private dialog: MatDialog,
-
+    private dialog: MatDialog
   ) {
     super(dialogRef);
   }
@@ -38,7 +37,6 @@ export class AccidentListComponent extends BaseDialog<AccidentListComponent> imp
       await this.loadAccidents(this.data.personId);
     }
   }
-
 
   async ngAfterViewInit(): Promise<void> {
     this.dataSource.paginator = this.paginator;

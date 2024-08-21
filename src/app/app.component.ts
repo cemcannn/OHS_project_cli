@@ -25,7 +25,7 @@ export class AppComponent {
   signOut() {
     localStorage.removeItem("accessToken");
     this.authService.identityCheck();
-    this.router.navigate([""]);
+    this.router.navigate(["/login"]);
     this.toastrService.message("Oturum kapatılmıştır!", "Oturum Kapatıldı", {
       messageType: ToastrMessageType.Warning,
       position: ToastrPosition.TopRight

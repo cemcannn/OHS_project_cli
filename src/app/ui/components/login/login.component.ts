@@ -1,13 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { async } from 'rxjs';
 import { BaseComponent, SpinnerType } from '../../../base/base.component';
-import { TokenResponse } from '../../../contracts/token/tokenResponse';
-import { AuthService, _isAuthenticated } from '../../../services/common/auth.service';
-import { HttpClientService } from '../../../services/common/http-client.service';
+import { AuthService } from '../../../services/common/auth.service';
 import { UserAuthService } from '../../../services/common/models/user-auth.service';
-import { UserService } from '../../../services/common/models/user.service';
 
 @Component({
   selector: 'app-login',
@@ -16,11 +12,17 @@ import { UserService } from '../../../services/common/models/user.service';
 })
 export class LoginComponent extends BaseComponent implements OnInit {
 
-  constructor(private userAuthService: UserAuthService, spinner: NgxSpinnerService, private authService: AuthService, private activatedRoute: ActivatedRoute, private router: Router) {
-    super(spinner) }
-
-  ngOnInit(): void {
+  constructor(
+    private userAuthService: UserAuthService,
+    spinner: NgxSpinnerService,
+    private authService: AuthService,
+    private activatedRoute: ActivatedRoute,
+    private router: Router
+  ) {
+    super(spinner);
   }
+
+  ngOnInit(): void {}
 
   async login(usernameOrEmail: string, password: string) {
     this.showSpinner(SpinnerType.Cog);
@@ -28,14 +30,14 @@ export class LoginComponent extends BaseComponent implements OnInit {
       this.authService.identityCheck();
 
       this.activatedRoute.queryParams.subscribe(params => {
-        const returnUrl: string = params["returnUrl"];
-        if (returnUrl)
+        const returnUrl: string = params['returnUrl'];
+        if (returnUrl) {
           this.router.navigate([returnUrl]);
-
-        if (_isAuthenticated) 
-          this.router.navigate([""]);
-        
+        } else if (this.authService.isAuthenticated) {
+          this.router.navigate(['']);
+        }
       });
+
       this.hideSpinner(SpinnerType.Cog);
     });
   }

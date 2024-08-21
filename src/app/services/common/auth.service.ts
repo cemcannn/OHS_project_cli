@@ -1,21 +1,28 @@
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
-import { UserService } from './models/user.service';
-import { Token } from 'src/app/contracts/token/token';
-import { firstValueFrom } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
+  private checkTokenInterval: any;
 
-  constructor(private jwtHelper: JwtHelperService, private userService: UserService) { }
+  constructor(private jwtHelper: JwtHelperService, private router: Router) {
+    this.startTokenExpirationCheck();
+  }
+
+  startTokenExpirationCheck() {
+    this.checkTokenInterval = setInterval(() => {
+      const token = localStorage.getItem('accessToken');
+      if (token && this.jwtHelper.isTokenExpired(token)) {
+        this.signOut();
+      }
+    }, 1000); // 1 saniyede bir kontrol edilir
+  }
 
   identityCheck() {
     const token: string = localStorage.getItem("accessToken");
-
-    //const decodeToken = this.jwtHelper.decodeToken(token);
-    //const expirationDate: Date = this.jwtHelper.getTokenExpirationDate(token);
     let expired: boolean;
     try {
       expired = this.jwtHelper.isTokenExpired(token);
@@ -25,8 +32,15 @@ export class AuthService {
     _isAuthenticated = token != null && !expired;
   }
 
+  signOut() {
+    localStorage.removeItem("accessToken");
+    _isAuthenticated = false;
+    this.router.navigate(['/login']);
+  }
+
   get isAuthenticated(): boolean {
     return _isAuthenticated;
   }
 }
+
 export let _isAuthenticated: boolean;
