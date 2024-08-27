@@ -9,6 +9,7 @@ import { List_User } from '../../../contracts/users/list_user';
 import { User } from '../../../entities/user';
 import { CustomToastrService, ToastrMessageType, ToastrPosition } from '../../ui/custom-toastr.service';
 import { HttpClientService } from '../http-client.service';
+import { Update_User } from 'src/app/contracts/users/update_user';
 
 @Injectable({
   providedIn: 'root'
@@ -22,6 +23,16 @@ export class UserService {
     }, user);
 
     return await firstValueFrom(observable) as Create_User;
+  }
+
+  async updateUser(personnel: Update_User, successCallBack?: () => void, errorCallBack?: (errorMessage: string) => void) {
+    const observable = this.httpClientService.put({
+      controller: "users",
+    }, personnel);
+
+    const promiseData: Promise<Update_User> = firstValueFrom(observable);
+    promiseData.then(value => successCallBack()).catch(error => errorCallBack(error));
+    await promiseData;
   }
 
   async updatePassword(userId: string, resetToken: string, password: string, passwordConfirm: string, successCallBack?: () => void, errorCallBack?: (error) => void) {

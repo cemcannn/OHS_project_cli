@@ -6,6 +6,7 @@ import { Create_User } from '../../../contracts/users/create_user';
 import { User } from '../../../entities/user';
 import { UserService } from '../../../services/common/models/user.service';
 import { CustomToastrService, ToastrMessageType, ToastrPosition } from 'src/app/services/ui/custom-toastr.service';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -15,7 +16,7 @@ import { CustomToastrService, ToastrMessageType, ToastrPosition } from 'src/app/
 })
 export class RegisterComponent extends BaseComponent implements OnInit {
 
-  constructor(private formBuilder: UntypedFormBuilder, private userService: UserService, private toastrService: CustomToastrService, spinner: NgxSpinnerService) { 
+  constructor(private formBuilder: UntypedFormBuilder, private userService: UserService, private toastrService: CustomToastrService, spinner: NgxSpinnerService, private router: Router) { 
     super(spinner)
   }
 
@@ -67,15 +68,19 @@ export class RegisterComponent extends BaseComponent implements OnInit {
       return;
 
     const result: Create_User = await this.userService.create(user);
-    if (result.succeeded)
+    if (result.succeeded) {
       this.toastrService.message(result.message, "Kullanıcı Kaydı Başarılı", {
         messageType: ToastrMessageType.Success,
         position: ToastrPosition.TopRight
-      })
-    else
+      });
+      
+      // Kullanıcı kaydı başarılı olduğunda login sayfasına yönlendirme
+      this.router.navigate(['/login']);
+    } else {
       this.toastrService.message(result.message, "Hata", {
         messageType: ToastrMessageType.Error,
         position: ToastrPosition.TopRight
-      })
+      });
+    }
   }
 }

@@ -24,14 +24,23 @@
       </ng-container>
   
       <ng-container matColumnDef="role">
-        <th mat-header-cell *matHeaderCellDef> </th>
+        <th mat-header-cell *matHeaderCellDef> Kullanıcıya Rol Ata </th>
         <td mat-cell *matCellDef="let element">
           <button mat-button color="primary" (click)="assignRole(element.id)">Rol Ata</button>
         </td>
       </ng-container>
-  
+
+      <ng-container matColumnDef="userUpdate" >
+        <th mat-header-cell *matHeaderCellDef> Kullanıcı Bilgilerini Güncelle </th>
+        <td mat-cell *matCellDef="let element">
+          <button mat-icon-button color="primary" (click)="openUpdateUserDialog(element)">
+            <img src="../../../../../../assets/icons/edit.png" alt="Kullanıcı Güncelle">
+          </button>
+        </td>
+      </ng-container>
+
       <ng-container matColumnDef="delete">
-        <th mat-header-cell *matHeaderCellDef width="30">  </th>
+        <th mat-header-cell *matHeaderCellDef> Kulllanıcıyı Sil </th>
         <td mat-cell *matCellDef="let element"
             appDelete
             [id]="element.id"

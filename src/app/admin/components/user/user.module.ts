@@ -11,6 +11,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { DeleteDirectiveModule } from '../../../directives/admin/delete.directive.module';
 import { DialogModule } from '../../../dialogs/dialog.module';
 import { RouterModule } from '@angular/router';
+import { MatIconModule } from '@angular/material/icon';
 
 
 
@@ -23,6 +24,7 @@ import { RouterModule } from '@angular/router';
     CommonModule,
     MatSidenavModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatTableModule, MatPaginatorModule,
     DialogModule,
+    MatIconModule,
     DeleteDirectiveModule,
     RouterModule.forChild([
       { path: "", component: UserComponent }

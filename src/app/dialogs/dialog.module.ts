@@ -34,6 +34,8 @@ import { CommonPipesModule } from '../pipes/common-pipes.module';
 import { ShowDirectorateDialogComponent } from './definition/show-directorate-dialog/show-directorate-dialog.component';
 import { AddAccidentStatisticDialogComponent } from './accident-statistic/add-accident-statistic-dialog/add-accident-statistic-dialog.component';
 import { UpdateAccidentStatisticDialogComponent } from './accident-statistic/update-accident-statistic-dialog/update-accident-statistic-dialog.component';
+import { UserUpdateDialogComponent } from './user/user-update-dialog/user-update-dialog.component';
+
 
 
 
@@ -57,7 +59,8 @@ import { UpdateAccidentStatisticDialogComponent } from './accident-statistic/upd
     ShowAccidentAreaDialogComponent,
     ShowDirectorateDialogComponent,
     AddAccidentStatisticDialogComponent,
-    UpdateAccidentStatisticDialogComponent
+    UpdateAccidentStatisticDialogComponent,
+    UserUpdateDialogComponent
   ],
   imports: [
     FormsModule, MatSelectModule, MatIconModule, MatDatepickerModule, MatNativeDateModule, MatPaginatorModule, MatSortModule, ReactiveFormsModule, CommonModule, MatDialogModule, MatButtonModule, MatCardModule, MatTableModule, MatToolbarModule, MatBadgeModule, MatListModule, MatFormFieldModule, MatInputModule, DeleteDirectiveModule, CommonPipesModule

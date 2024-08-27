@@ -1,0 +1,33 @@
+<h1 mat-dialog-title>Kullanıcı Bilgilerini Güncelle:</h1>
+<div mat-dialog-content>
+  <form #userForm="ngForm">
+    <mat-form-field appearance="fill" class="field">
+        <mat-label>E-mail Adresi</mat-label>
+        <input matInput type="text" name="email" [(ngModel)]="data.email">
+        <mat-error *ngIf="userForm.controls['email'].invalid && (userForm.controls['email'].dirty || userForm.controls['email'].touched)">
+          <span *ngIf="userForm.controls['userName'].errors?.required">E-mail adresi gereklidir.</span>
+        </mat-error>
+      </mat-form-field>
+
+    <mat-form-field appearance="fill" class="field">
+      <mat-label>İsim</mat-label>
+      <input matInput type="text" name="name" [(ngModel)]="data.name">
+      <mat-error *ngIf="userForm.controls['name'].invalid && (userForm.controls['name'].dirty || userForm.controls['name'].touched)">
+        <span *ngIf="userForm.controls['name'].errors?.required">İsim gereklidir.</span>
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="field">
+      <mat-label>Kulllanıcı Adı</mat-label>
+      <input matInput type="text" name="userName" [(ngModel)]="data.userName">
+      <mat-error *ngIf="userForm.controls['userName'].invalid && (userForm.controls['userName'].dirty || userForm.controls['userName'].touched)">
+        <span *ngIf="userForm.controls['userName'].errors?.required">Kullanıcı adı gereklidir.</span>
+      </mat-error>
+    </mat-form-field>
+  </form>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="close()">İptal</button>
+  <button mat-raised-button color="primary" [disabled]="userForm.invalid"
+    (click)="updateUser()">Güncelle</button>
+</div>

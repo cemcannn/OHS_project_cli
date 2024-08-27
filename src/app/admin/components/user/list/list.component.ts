@@ -8,6 +8,7 @@ import { AuthorizeUserDialogComponent } from '../../../../dialogs/authorize/auth
 import { AlertifyService, MessageType, Position } from '../../../../services/admin/alertify.service';
 import { DialogService } from '../../../../services/common/dialog.service';
 import { UserService } from '../../../../services/common/models/user.service';
+import { UserUpdateDialogComponent } from 'src/app/dialogs/user/user-update-dialog/user-update-dialog.component';
 
 @Component({
   selector: 'app-list',
@@ -25,7 +26,7 @@ export class ListComponent extends BaseComponent implements OnInit {
   }
 
 
-  displayedColumns: string[] = ['userName', 'name', 'email', 'twoFactorEnabled', 'role', 'delete'];
+  displayedColumns: string[] = ['userName', 'name', 'email', 'twoFactorEnabled', 'role', 'userUpdate', 'delete'];
   dataSource: MatTableDataSource<List_User> = null;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
@@ -58,6 +59,22 @@ export class ListComponent extends BaseComponent implements OnInit {
       },
       afterClosed: () => {
         this.alertifyService.message("Roller başarıyla atanmıştır!", {
+          messageType: MessageType.Success,
+          position: Position.TopRight
+        })
+      }
+    });
+  }
+
+  openUpdateUserDialog(id: string) {
+    this.dialogService.openDialog({
+      componentType: UserUpdateDialogComponent,
+      data: id,
+      options: {
+        width: "750px"
+      },
+      afterClosed: () => {
+        this.alertifyService.message("Kullanıcı başarıyla güncellenmiştir!", {
           messageType: MessageType.Success,
           position: Position.TopRight
         })
