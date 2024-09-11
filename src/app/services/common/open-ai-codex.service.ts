@@ -7,7 +7,7 @@ import { catchError, Observable, throwError } from 'rxjs';
 })
 export class OpenAiCodexService {
   private apiUrl = 'https://api.openai.com/v1/completions';
- // Buraya OpenAI API anahtarını eklemelisin
+
 
   constructor(private httpClient: HttpClient) { }
 
