@@ -7,7 +7,7 @@ import { catchError, Observable, throwError } from 'rxjs';
 })
 export class OpenAiCodexService {
   private apiUrl = 'https://api.openai.com/v1/completions';
-  private apiKey = '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';  // Buraya OpenAI API anahtarını eklemelisin
+  private apiKey = '';  // Buraya OpenAI API anahtarını eklemelisin
 
   constructor(private httpClient: HttpClient) { }
 
