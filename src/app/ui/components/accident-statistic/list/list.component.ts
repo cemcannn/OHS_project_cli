@@ -25,7 +25,7 @@ export class ListComponent extends BaseComponent implements OnInit {
   clickedRowsStatistic = new Set<any>();
   accidents: List_Accident[] = [];
   totalCountPersonnels: number = 0;
-  yearsStatistic: string[] = [];
+  years: string[] = [];
   directorates: string[] = []; // İşletmeleri tutacak dizi
   selectedYearStatistic: string = 'All';
   selectedDirectorate: string = 'All'; // İşletme seçimi
@@ -77,7 +77,7 @@ export class ListComponent extends BaseComponent implements OnInit {
 
   populateYearsStatistic(accidentStatistics: List_Accident_Statistic[]) {
     const groupedByYear = this.statisticService.groupByYearList(accidentStatistics);
-    this.yearsStatistic = Object.keys(groupedByYear);
+    this.years = Object.keys(groupedByYear);
   }
 
   populateDirectorates(accidents: List_Accident[]) {

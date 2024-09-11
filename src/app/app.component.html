@@ -1,282 +1,137 @@
+<!-- ============================================================== -->
+<!-- Main wrapper - style you can find in pages.scss -->
+<!-- ============================================================== -->
+<div
+  id="main-wrapper"
+  data-layout="vertical"
+  data-navbarbg="skin5"
+  data-sidebartype="full"
+  data-sidebar-position="absolute"
+  data-header-position="absolute"
+  data-boxed-layout=""
+>
+  <!-- ============================================================== -->
+  <!-- Topbar header - style you can find in pages.scss -->
+  <!-- ============================================================== -->
+  <header class="topbar" data-navbarbg="skin5">
+    <nav class="navbar top-navbar navbar-expand-md navbar-dark">
+      <div class="navbar-header" data-logobg="skin5">
+        <!-- ============================================================== -->
+        <!-- Logo -->
+        <!-- ============================================================== -->
+        <a class="navbar-brand" routerLink="">
+          <b class="logo-icon ps-2">
+            <img
+              src="../assets/images/logo-tki.png"
+              alt="homepage"
+              class="light-logo"
+              width="40%"
+            />
+          </b>
+        </a>
+        <a
+          class="nav-toggler waves-effect waves-light d-block d-md-none"
+          href="javascript:void(0)"
+          ><i class="ti-menu ti-close"></i
+        ></a>
+      </div>
 
-    <!-- ============================================================== -->
-    <!-- Main wrapper - style you can find in pages.scss -->
-    <!-- ============================================================== -->
-    <div
-      id="main-wrapper"
-      data-layout="vertical"
-      data-navbarbg="skin5"
-      data-sidebartype="full"
-      data-sidebar-position="absolute"
-      data-header-position="absolute"
-      data-boxed-layout=""
-    >
-      <!-- ============================================================== -->
-      <!-- Topbar header - style you can find in pages.scss -->
-      <!-- ============================================================== -->
-      <header class="topbar" data-navbarbg="skin5">
-        <nav class="navbar top-navbar navbar-expand-md navbar-dark">
-          <div class="navbar-header" data-logobg="skin5">
-            <!-- ============================================================== -->
-            <!-- Logo -->
-            <!-- ============================================================== -->
-            <a class="navbar-brand" routerLink="">
-              <!-- Logo icon -->
-              <b class="logo-icon ps-2">
-                <!--You can put here icon as well // <i class="wi wi-sunset"></i> //-->
-                <!-- Dark Logo icon -->
-                <img
-                  src="../assets/images/logo-tki.png"
-                  alt="homepage"
-                  class="light-logo"
-                  width="40%"
-                />
-              </b>
-              <!--End Logo icon -->
-            </a>
-            <!-- ============================================================== -->
-            <!-- End Logo -->
-            <!-- ============================================================== -->
-            <!-- ============================================================== -->
-            <!-- Toggle which is visible on mobile only -->
-            <!-- ============================================================== -->
+      <div
+        class="navbar-collapse collapse"
+        id="navbarSupportedContent"
+        data-navbarbg="skin5"
+      >
+        <ul class="navbar-nav float-end">
+          <li class="nav-item dropdown">
             <a
-              class="nav-toggler waves-effect waves-light d-block d-md-none"
-              href="javascript:void(0)"
-              ><i class="ti-menu ti-close"></i
-            ></a>
-          </div>
-          <!-- ============================================================== -->
-          <!-- End Logo -->
-          <!-- ============================================================== -->
-          <div
-            class="navbar-collapse collapse"
-            id="navbarSupportedContent"
-            data-navbarbg="skin5"
-          >
-            <!-- ============================================================== -->
-            <!-- toggle and nav items -->
-            <!-- ============================================================== -->
-            <ul class="navbar-nav float-start me-auto">
-              <!-- ============================================================== -->
-              <!-- Search -->
-              <!-- ============================================================== -->
-              <!-- <li class="nav-item search-box">
-                <a
-                  class="nav-link waves-effect waves-dark"
-                  href="javascript:void(0)"
-                  ><i class="mdi mdi-magnify fs-4"></i
-                ></a>
-                <form class="app-search position-absolute">
-                  <input
-                    type="text"
-                    class="form-control"
-                    placeholder="Search &amp; enter"
-                  />
-                  <a class="srh-btn"><i class="mdi mdi-window-close"></i></a>
-                </form>
-              </li> -->
-            </ul>
-            <!-- ============================================================== -->
-            <!-- Right side toggle and nav items -->
-            <!-- ============================================================== -->
-            <ul class="navbar-nav float-end">
-
-              <!-- ============================================================== -->
-              <!-- User profile and search -->
-              <!-- ============================================================== -->
-              <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle text-muted waves-dark" href="#" id="navbarDropdown"
-                  type="button"
-                  aria-expanded="false"
-                  data-toggle="dropdown"
-                >
-                  <img
-                    src="../assets/images/users/1.jpg"
-                    alt="user"
-                    class="rounded-circle"
-                    width="31"
-                  />
-                  <div class="dropdown-menu">
-                    <a class="dropdown-item" aria-current="page" routerLink="register" *ngIf="!authService.isAuthenticated"><i class="mdi mdi-account me-1 ms-1">Kayıt Ol</i></a>
-                    <a class="dropdown-item" aria-current="page" routerLink="login" *ngIf="!authService.isAuthenticated"><i class="mdi mdi-account me-1 ms-1">Giriş Yap</i></a>
-                    <a class="dropdown-item" href="#"><i class="mdi mdi-account me-1 ms-1">Profilim</i></a>
-                    <a class="dropdown-item" href="#"><i class="mdi mdi-email me-1 ms-1">Mesajlar</i></a>
-                    <a class="dropdown-item" href="#"><i class="mdi mdi-settings me-1 ms-1"></i>Hesap Ayarları</a>
-                    <a class="dropdown-item" aria-current="page" routerLink="admin" *ngIf="authService.isAuthenticated"><i class="mdi mdi-account me-1 ms-1">Admin</i></a>
-                    <a class="dropdown-item" aria-current="page" style="color:red;cursor:pointer;" (click)="signOut()" *ngIf="authService.isAuthenticated"><i class="mdi mdi-account me-1 ms-1">Çıkış Yap</i></a>
-                  </div>
-                </a>
-              </li>
-              <!-- ============================================================== -->
-              <!-- User profile and search -->
-              <!-- ============================================================== -->
-              <!-- ============================================================== -->
-              <!-- Comment -->
-              <!-- ============================================================== -->
-              <li class="nav-item dropdown">
-                <a
-                  class="nav-link dropdown-toggle"
-                  href="#"
-                  id="navbarDropdown"
-                  role="button"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                >
-                  <i class="mdi mdi-bell font-24"></i>
-                </a>
-                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <li><a class="dropdown-item" href="#">Action</a></li>
-                  <li><a class="dropdown-item" href="#">Another action</a></li>
-                  <li><hr class="dropdown-divider" /></li>
-                  <li>
-                    <a class="dropdown-item" href="#">Something else here</a>
-                  </li>
-                </ul>
-              </li>
-              <!-- ============================================================== -->
-              <!-- End Comment -->
-              <!-- ============================================================== -->
-              <!-- ============================================================== -->
-              <!-- Messages -->
-              <!-- ============================================================== -->
-              <li class="nav-item dropdown">
-                <a
-                  class="nav-link dropdown-toggle waves-effect waves-dark"
-                  href="#"
-                  id="2"
-                  role="button"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                >
-                  <i class="font-24 mdi mdi-comment-processing"></i>
-                </a>
-                <ul
-                  class="
-                    dropdown-menu dropdown-menu-end
-                    mailbox
-                    animated
-                    bounceInDown
-                  "
-                  aria-labelledby="2"
-                >
-                  <ul class="list-style-none">
-                    <li>
-                      <div class="">
-                        <!-- Message -->
-                        <a href="javascript:void(0)" class="link border-top">
-                          <div class="d-flex no-block align-items-center p-10">
-                            <span
-                              class="
-                                btn btn-success btn-circle
-                                d-flex
-                                align-items-center
-                                justify-content-center
-                              "
-                              ><i class="mdi mdi-calendar text-white fs-4"></i
-                            ></span>
-                            <div class="ms-2">
-                              <h5 class="mb-0">Event today</h5>
-                              <span class="mail-desc"
-                                >Just a reminder that event</span
-                              >
-                            </div>
-                          </div>
-                        </a>
-                        <!-- Message -->
-                        <a href="javascript:void(0)" class="link border-top">
-                          <div class="d-flex no-block align-items-center p-10">
-                            <span
-                              class="
-                                btn btn-info btn-circle
-                                d-flex
-                                align-items-center
-                                justify-content-center
-                              "
-                              ><i class="mdi mdi-settings fs-4"></i
-                            ></span>
-                            <div class="ms-2">
-                              <h5 class="mb-0">Settings</h5>
-                              <span class="mail-desc"
-                                >You can customize this template</span
-                              >
-                            </div>
-                          </div>
-                        </a>
-                        <!-- Message -->
-                        <a href="javascript:void(0)" class="link border-top">
-                          <div class="d-flex no-block align-items-center p-10">
-                            <span
-                              class="
-                                btn btn-primary btn-circle
-                                d-flex
-                                align-items-center
-                                justify-content-center
-                              "
-                              ><i class="mdi mdi-account fs-4"></i
-                            ></span>
-                            <div class="ms-2">
-                              <h5 class="mb-0">Pavan kumar</h5>
-                              <span class="mail-desc"
-                                >Just see the my admin!</span
-                              >
-                            </div>
-                          </div>
-                        </a>
-                        <!-- Message -->
-                        <a href="javascript:void(0)" class="link border-top">
-                          <div class="d-flex no-block align-items-center p-10">
-                            <span
-                              class="
-                                btn btn-danger btn-circle
-                                d-flex
-                                align-items-center
-                                justify-content-center
-                              "
-                              ><i class="mdi mdi-link fs-4"></i
-                            ></span>
-                            <div class="ms-2">
-                              <h5 class="mb-0">Luanch Admin</h5>
-                              <span class="mail-desc"
-                                >Just see the my new admin!</span
-                              >
-                            </div>
-                          </div>
-                        </a>
-                      </div>
-                    </li>
-                  </ul>
-                </ul>
-              </li>
-              <!-- ============================================================== -->
-              <!-- End Messages -->
-              <!-- ============================================================== -->
-            </ul>
-          </div>
-        </nav>
-      </header>
-      <!-- ============================================================== -->
-      <!-- End Topbar header -->
-      <!-- ============================================================== -->
-
-        <router-outlet></router-outlet>
-
-        <!-- ============================================================== -->
-        <!-- footer -->
-        <!-- ============================================================== -->
-        <footer class="footer text-center bg-danger">
-            Tüm hakları saklıdır.
-            <a>
-                <img src="../assets/images/logo-tki.png" width="50" alt="">
+              class="nav-link dropdown-toggle text-muted waves-dark"
+              href="#"
+              id="navbarDropdown"
+              type="button"
+              aria-expanded="false"
+              data-toggle="dropdown"
+            >
+              <img
+                src="../assets/images/users/1.jpg"
+                alt="user"
+                class="rounded-circle"
+                width="31"
+              />
             </a>
-          </footer>
-          <!-- ============================================================== -->
-          <!-- End footer -->
-          <!-- ============================================================== -->
+            <div class="dropdown-menu">
+              <a class="dropdown-item" href="#"
+                ><i class="mdi mdi-account me-1 ms-1">Profilim</i></a
+              >
+              <a class="dropdown-item" href="#"
+                ><i class="mdi mdi-settings me-1 ms-1"></i>Hesap Ayarları</a
+              >
+              <a
+                class="dropdown-item"
+                style="color: red; cursor: pointer"
+                (click)="signOut()"
+                *ngIf="authService.isAuthenticated"
+              >
+                <i class="mdi mdi-account me-1 ms-1">Çıkış Yap</i>
+              </a>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  </header>
+  <!-- ============================================================== -->
+  <!-- End Topbar header -->
+  <!-- ============================================================== -->
 
+  <router-outlet></router-outlet>
+
+  <!-- ============================================================== -->
+  <!-- Codex Interaction Section -->
+  <!-- ============================================================== -->
+
+  <div class="container mt-4 mb-4 d-flex justify-content-center align-items-center">
+    <div class="col-md-3"></div>
+    <div class="col-md-9">
+      <!-- Prompt alanı -->
+      <div class="form-group">
+        <label for="codex-prompt">Yapay Zeka Desteği: </label>
+        <textarea
+          id="codex-prompt"
+          [(ngModel)]="prompt"
+          class="form-control"
+          rows="4"
+          placeholder="Buraya sorularını yaz..."
+        ></textarea>
+      </div>
+
+      <!-- Gönder butonu -->
+      <button class="btn btn-primary mt-3" (click)="getCodexCompletion()">
+        Yanıt Al
+      </button>
+
+      <!-- Codex yanıtının gösterileceği alan -->
+      <div *ngIf="completion" class="mt-4">
+        <h4>Codex Yanıtı:</h4>
+        <pre>{{ completion }}</pre>
+      </div>
     </div>
-    <!-- ============================================================== -->
-    <!-- End Wrapper -->
-    <!-- ============================================================== -->
+  </div>
 
-    <ngx-spinner size="default" name="s1" type="cog"></ngx-spinner>
+  <!-- ============================================================== -->
+  <!-- footer -->
+  <!-- ============================================================== -->
+  <footer class="footer text-center bg-danger">
+    Tüm hakları saklıdır.
+    <a>
+      <img src="../assets/images/logo-tki.png" width="50" alt="" />
+    </a>
+  </footer>
+  <!-- ============================================================== -->
+  <!-- End footer -->
+  <!-- ============================================================== -->
+</div>
+<!-- ============================================================== -->
+<!-- End Wrapper -->
+<!-- ============================================================== -->
+
+<ngx-spinner size="default" name="s1" type="cog"></ngx-spinner>

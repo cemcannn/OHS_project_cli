@@ -15,6 +15,7 @@ import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/materia
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { JwtInterceptor } from './interceptors/jwt-interceptor';
 import { DynamicLoadComponentDirective } from './directives/common/dynamic-load-component.directive';
+import { FormsModule } from '@angular/forms';
 
 
 
@@ -41,6 +42,7 @@ export const MY_FORMATS = {
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule, 
+    FormsModule,
     AdminModule, UiModule,  
     ToastrModule.forRoot(),
     NgxSpinnerModule,

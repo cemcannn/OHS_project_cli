@@ -39,7 +39,6 @@ export class ListComponent extends BaseComponent implements OnInit {
 
   async ngOnInit() {
     await this.loadAccidents();
-
   }
 
   async openUpdateAccidentDialog(accidentData: any): Promise<void> {

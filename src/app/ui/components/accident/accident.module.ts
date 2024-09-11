@@ -13,6 +13,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { DialogModule } from 'src/app/dialogs/dialog.module';
 import { MatSortModule } from '@angular/material/sort';
 import { CommonPipesModule } from 'src/app/pipes/common-pipes.module';
+import { MatSelectModule } from '@angular/material/select';
 
 
 
@@ -23,7 +24,7 @@ import { CommonPipesModule } from 'src/app/pipes/common-pipes.module';
   ],
   imports: [
     CommonModule, MatSidenavModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatTableModule, MatPaginatorModule,
-    DialogModule, MatSortModule, 
+    DialogModule, MatSortModule, MatSelectModule,
     DeleteDirectiveModule, CommonPipesModule,
     RouterModule.forChild([
       { path: "", component: AccidentComponent}

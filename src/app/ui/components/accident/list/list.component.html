@@ -1,89 +1,173 @@
-<div class="mat-elevation-z8">
-  <div class="filter-container">
-    <mat-form-field appearance="fill">
-      <mat-label>Filtrele</mat-label>
-      <input matInput (keyup)="applyFilter($event)" placeholder="Kaza Ara">
-    </mat-form-field>
-  </div>
-
-  <table mat-table [dataSource]="dataSource" matSort>
-
-    <ng-container matColumnDef="tkiId">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> TKi Sicil Numarası </th>
-      <td mat-cell *matCellDef="let element"> {{element.tkiId | integer}} </td>
-    </ng-container>
-
-    <ng-container matColumnDef="name">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> İsim </th>
-      <td mat-cell *matCellDef="let element"> {{element.name}} </td>
-    </ng-container>
-
-    <ng-container matColumnDef="surname">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Soyisim </th>
-      <td mat-cell *matCellDef="let element"> {{element.surname}} </td>
-    </ng-container>
-
-    <ng-container matColumnDef="typeOfAccident">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Kaza Oluşum Türü </th>
-      <td mat-cell *matCellDef="let element"> {{element.typeOfAccident }} </td>
-    </ng-container>
-
-    <ng-container matColumnDef="limb">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Uzuv Türü </th>
-      <td mat-cell *matCellDef="let element"> {{element.limb }} </td>
-    </ng-container>
-
-    <ng-container matColumnDef="accidentArea">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Kaza Yeri </th>
-      <td mat-cell *matCellDef="let element"> {{element.accidentArea}} </td>
-    </ng-container>
-
-    <ng-container matColumnDef="accidentDate">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Kaza Tarihi </th>
-      <td mat-cell *matCellDef="let element"> {{element.accidentDate | date:'dd/MM/yyyy'}} </td>
-    </ng-container>
-
-    <ng-container matColumnDef="accidentHour">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Kaza Saati </th>
-      <td mat-cell *matCellDef="let element"> {{ element.accidentHour | timespan}} </td>
-    </ng-container>
-
-    <ng-container matColumnDef="lostDayOfWork">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Raporlu Olduğu Gün Sayısı</th>
-      <td mat-cell *matCellDef="let element">{{element.lostDayOfWork | integer}}</td>
-    </ng-container>
-
-    <ng-container matColumnDef="description">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Açıklama </th>
-      <td mat-cell *matCellDef="let element"> {{element.description}} </td>
-    </ng-container>
-
-    <ng-container matColumnDef="accidentUpdate">
-      <th mat-header-cell *matHeaderCellDef> Kazayı Güncelle </th>
-      <td mat-cell *matCellDef="let element">
-        <button mat-icon-button color="primary" (click)="openUpdateAccidentDialog(element)">
-          <img src="../../../../../../assets/icons/edit.png" alt="Kaza Güncelle">
-        </button>
-      </td>
-    </ng-container>
-
-    <ng-container matColumnDef="delete">
-      <th mat-header-cell *matHeaderCellDef width="30"> Sil </th>
-      <td mat-cell *matCellDef="let element" appDelete [id]="element.id" (callback)="loadAccidents()"
-        controller="accidents">
-      </td>
-    </ng-container>
-
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-  </table>
-
+<!-- ============================================================== -->
+<!-- Bread Crumb -->
+<!-- ============================================================== -->
+<div class="page-breadcrumb">
   <div class="row">
-    <div class="col-6">
-      <mat-paginator (page)="pageChanged()" [pageSizeOptions]="[10, 20, 100]" showFirstLastButtons
-        aria-label="Select page of periodic elements">
-      </mat-paginator>
+    <div class="col-12 d-flex no-block align-items-center"></div>
+  </div>
+</div>
+<!-- ============================================================== -->
+<!-- End Bread Crumb -->
+<!-- ============================================================== -->
+
+<!-- ============================================================== -->
+<!-- Container Fluid  -->
+<!-- ============================================================== -->
+<div class="container-fluid">
+  <!-- ============================================================== -->
+  <!-- Accident Rates by Month -->
+  <!-- ============================================================== -->
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card bg-danger">
+        <div class="card-body">
+          <div class="d-md-flex align-items-center">
+            <div>
+              <h3 class="card-title box bg-white main-title">
+                Kaza İstatistikleri
+              </h3>
+            </div>
+
+            <div class="filter-container filter">
+              <mat-form-field appearance="fill">
+                <mat-label>Filtrele</mat-label>
+                <input
+                  matInput
+                  (keyup)="applyFilter($event)"
+                  placeholder="Kaza Ara"
+                />
+              </mat-form-field>
+            </div>
+          </div>
+          
+          <table mat-table [dataSource]="dataSource" matSort>
+            <ng-container matColumnDef="tkiId">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                TKi Sicil Numarası
+              </th>
+              <td mat-cell *matCellDef="let element">
+                {{ element.tkiId | integer }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="name">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>İsim</th>
+              <td mat-cell *matCellDef="let element">{{ element.name }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="surname">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Soyisim</th>
+              <td mat-cell *matCellDef="let element">
+                {{ element.surname }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="typeOfAccident">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                Kaza Oluşum Türü
+              </th>
+              <td mat-cell *matCellDef="let element">
+                {{ element.typeOfAccident }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="limb">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                Uzuv Türü
+              </th>
+              <td mat-cell *matCellDef="let element">{{ element.limb }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="accidentArea">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                Kaza Yeri
+              </th>
+              <td mat-cell *matCellDef="let element">
+                {{ element.accidentArea }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="accidentDate">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                Kaza Tarihi
+              </th>
+              <td mat-cell *matCellDef="let element">
+                {{ element.accidentDate | date : "dd/MM/yyyy" }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="accidentHour">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                Kaza Saati
+              </th>
+              <td mat-cell *matCellDef="let element">
+                {{ element.accidentHour | timespan }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="lostDayOfWork">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                Raporlu Olduğu Gün Sayısı
+              </th>
+              <td mat-cell *matCellDef="let element">
+                {{ element.lostDayOfWork | integer }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="description">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                Açıklama
+              </th>
+              <td mat-cell *matCellDef="let element">
+                {{ element.description }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="accidentUpdate">
+              <th mat-header-cell *matHeaderCellDef>Kazayı Güncelle</th>
+              <td mat-cell *matCellDef="let element">
+                <button
+                  mat-icon-button
+                  color="primary"
+                  (click)="openUpdateAccidentDialog(element)"
+                >
+                  <img
+                    src="../../../../../../assets/icons/edit.png"
+                    alt="Kaza Güncelle"
+                  />
+                </button>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="delete">
+              <th mat-header-cell *matHeaderCellDef width="30">Sil</th>
+              <td
+                mat-cell
+                *matCellDef="let element"
+                appDelete
+                [id]="element.id"
+                (callback)="loadAccidents()"
+                controller="accidents"
+              ></td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+          </table>
+
+          <div class="row">
+            <div class="col-6">
+              <mat-paginator
+                (page)="pageChanged()"
+                [pageSizeOptions]="[10, 20, 100]"
+                showFirstLastButtons
+                aria-label="Select page of periodic elements"
+              >
+              </mat-paginator>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
-
-  
+</div>

@@ -1,80 +1,157 @@
+<!-- ============================================================== -->
+<!-- Bread Crumb -->
+<!-- ============================================================== -->
+<div class="page-breadcrumb">
+  <div class="row">
+    <div class="col-12 d-flex no-block align-items-center"></div>
+  </div>
+</div>
+<!-- ============================================================== -->
+<!-- End Bread Crumb -->
+<!-- ============================================================== -->
 
-<div class="mat-elevation-z8">
-    <div class="filter-container">
-        <mat-form-field appearance="fill">
-            <mat-label>Filtrele</mat-label>
-            <input matInput (keyup)="applyFilter($event)" placeholder="Aylık İşletme Verisi Ara">
-        </mat-form-field>
+<!-- ============================================================== -->
+<!-- Container Fluid  -->
+<!-- ============================================================== -->
+<div class="container-fluid">
+  <!-- ============================================================== -->
+  <!-- Accident Rates by Month -->
+  <!-- ============================================================== -->
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card bg-danger">
+        <div class="card-body">
+          <div class="d-md-flex align-items-center">
+            <div>
+              <h3 class="card-title box bg-white main-title">
+                Kaza İstatistikleri
+              </h3>
+            </div>
 
-        <!-- Actual Daily Wage Add Button -->
-        <button mat-raised-button class="card-title text-dark actualWageAdd" (click)="openAddAccidentStatisticDialog()">
-            Fiili Yevmiye Sayısı Ekle
-        </button>
-    </div>
+              <!-- Actual Daily Wage Add Button -->
+              <button
+                mat-raised-button
+                class="card-title text-dark actualWageAdd"
+                (click)="openAddAccidentStatisticDialog()"
+              >
+                Fiili Yevmiye Sayısı Ekle
+              </button>
 
-
-
-    <table mat-table [dataSource]="dataSource" matSort>
-
-        <ng-container matColumnDef="year">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header> Yıllar </th>
-            <td mat-cell *matCellDef="let element"> {{element.year}} </td>
-        </ng-container>
-
-        <ng-container matColumnDef="month">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header> Aylar </th>
-            <td mat-cell *matCellDef="let element"> {{element.month}} </td>
-        </ng-container>
-
-        <ng-container matColumnDef="directorate">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header> İşletme </th>
-            <td mat-cell *matCellDef="let element"> {{element.directorate}} </td>
-        </ng-container>
-
-        <ng-container matColumnDef="actualDailyWageSurface">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header> Fiili Yevmiye Sayısı (Yerüstü) </th>
-            <td mat-cell *matCellDef="let element"> {{element.actualDailyWageSurface | integer}} </td>
-        </ng-container>
-
-        <ng-container matColumnDef="actualDailyWageUnderground">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header> Fiili Yevmiye Sayısı (Yeraltı) </th>
-            <td mat-cell *matCellDef="let element"> {{element.actualDailyWageUnderground | integer}} </td>
-        </ng-container>
-
-        <ng-container matColumnDef="employeesNumberSurface">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header> Çalışan Sayısı (Yerüstü) </th>
-            <td mat-cell *matCellDef="let element"> {{element.employeesNumberSurface | integer}} </td>
-        </ng-container>
-
-        <ng-container matColumnDef="employeesNumberUnderground">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header> Çalışan Sayısı (Yeraltı) </th>
-            <td mat-cell *matCellDef="let element"> {{element.employeesNumberUnderground | integer}} </td>
-        </ng-container>
-
-        <ng-container matColumnDef="monthlyDirectorateDataUpdate">
-            <th mat-header-cell *matHeaderCellDef> Aylık İşletme Verisi Güncelle </th>
-            <td mat-cell *matCellDef="let element">
-                <button mat-icon-button color="primary" (click)="openUpdateMonthlyDirectorateData(element)">
-                    <img src="../../../../../../assets/icons/edit.png" alt="Aylık İşletme Verisi Güncelle">
-                </button>
-            </td>
-        </ng-container>
-
-        <ng-container matColumnDef="delete">
-            <th mat-header-cell *matHeaderCellDef width="30"> Sil </th>
-            <td mat-cell *matCellDef="let element" appDelete [id]="element.id" (callback)="loadMonthlyDirectorateData()"
-                controller="accidentStatistics">
-            </td>
-        </ng-container>
-
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-    </table>
-
-    <div class="row">
-        <div class="col-6">
-            <mat-paginator (page)="pageChanged()" [pageSizeOptions]="[10, 20, 100]" showFirstLastButtons
-                aria-label="Select page of periodic elements">
-            </mat-paginator>
+              <div class="filter-container filter">
+                <mat-form-field appearance="fill">
+                  <mat-label>Filtrele</mat-label>
+                  <input
+                    matInput
+                    (keyup)="applyFilter($event)"
+                    placeholder="Aylık İşletme Verisi Ara"
+                  />
+                </mat-form-field>
+            </div>
+          </div>
         </div>
+        
+        <table mat-table [dataSource]="dataSource" matSort>
+          <ng-container matColumnDef="year">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Yıllar</th>
+            <td mat-cell *matCellDef="let element">{{ element.year }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="month">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Aylar</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.month }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="directorate">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>İşletme</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.directorate }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="actualDailyWageSurface">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              Fiili Yevmiye Sayısı (Yerüstü)
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.actualDailyWageSurface | integer }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="actualDailyWageUnderground">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              Fiili Yevmiye Sayısı (Yeraltı)
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.actualDailyWageUnderground | integer }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="employeesNumberSurface">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              Çalışan Sayısı (Yerüstü)
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.employeesNumberSurface | integer }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="employeesNumberUnderground">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              Çalışan Sayısı (Yeraltı)
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.employeesNumberUnderground | integer }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="monthlyDirectorateDataUpdate">
+            <th mat-header-cell *matHeaderCellDef>
+              Aylık İşletme Verisi Güncelle
+            </th>
+            <td mat-cell *matCellDef="let element">
+              <button
+                mat-icon-button
+                color="primary"
+                (click)="openUpdateMonthlyDirectorateData(element)"
+              >
+                <img
+                  src="../../../../../../assets/icons/edit.png"
+                  alt="Aylık İşletme Verisi Güncelle"
+                />
+              </button>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="delete">
+            <th mat-header-cell *matHeaderCellDef width="30">Sil</th>
+            <td
+              mat-cell
+              *matCellDef="let element"
+              appDelete
+              [id]="element.id"
+              (callback)="loadMonthlyDirectorateData()"
+              controller="accidentStatistics"
+            ></td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
+
+        <div class="row">
+          <div class="col-6">
+            <mat-paginator
+              (page)="pageChanged()"
+              [pageSizeOptions]="[10, 20, 100]"
+              showFirstLastButtons
+              aria-label="Select page of periodic elements"
+            >
+            </mat-paginator>
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
+</div>

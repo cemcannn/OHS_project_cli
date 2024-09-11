@@ -4,11 +4,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { BaseComponent, SpinnerType } from 'src/app/base/base.component';
 import { List_Accident_Statistic } from 'src/app/contracts/accident_statistic/list_accident_statistic';
 import { List_Accident } from 'src/app/contracts/accidents/list_accident';
-import {
-  AlertifyService,
-  MessageType,
-  Position,
-} from 'src/app/services/admin/alertify.service';
+import { AlertifyService, MessageType, Position} from 'src/app/services/admin/alertify.service';
 import { AccidentRateService } from 'src/app/services/common/accident-rate.service';
 import { AccidentStatisticService } from 'src/app/services/common/models/accident-statistic.service';
 import { AccidentService } from 'src/app/services/common/models/accident.service';
@@ -19,6 +15,7 @@ import { StatisticService } from 'src/app/services/common/statistic.service';
   templateUrl: './chart.component.html',
   styleUrls: ['./chart.component.scss'],
 })
+
 export class ChartComponent extends BaseComponent implements OnInit {
   @ViewChild('monthlyChart') monthlyChartCanvas: ElementRef;
   @ViewChild('yearlyChart') yearlyChartCanvas: ElementRef;
@@ -120,7 +117,6 @@ export class ChartComponent extends BaseComponent implements OnInit {
 
     // Eğer veri yoksa, grafiği boş gösterebilirsiniz veya varsayılan değerler kullanabilirsiniz
     if (!filteredData.length) {
-      // Örneğin, veri yoksa boş bir grafik oluşturun
       const chartConfig: ChartConfiguration = {
         type: 'line',
         data: {
@@ -162,7 +158,8 @@ export class ChartComponent extends BaseComponent implements OnInit {
     );
     const data = labels.map((label) => {
       const monthData = filteredData.find((d) => d.month === label);
-      return monthData ? monthData[this.selectedMonthlyMetric] : 0;
+      // Sıfır değerleri null ile değiştir
+      return monthData ? monthData[this.selectedMonthlyMetric] || null : null;
     });
 
     const chartConfig: ChartConfiguration = {
@@ -205,7 +202,10 @@ export class ChartComponent extends BaseComponent implements OnInit {
     const filteredData = this.getYearlyFilteredData();
 
     const labels = filteredData.map((d) => d.year);
-    const data = filteredData.map((d) => d[this.selectedYearlyMetric]);
+    const data = filteredData.map((d) => {
+      // Sıfır değerleri null ile değiştir
+      return d[this.selectedYearlyMetric] || null;
+    });
 
     const chartConfig: ChartConfiguration = {
       type: 'line',
@@ -282,7 +282,7 @@ export class ChartComponent extends BaseComponent implements OnInit {
         ? currentYear - 10
         : currentYear - 20;
 
-        return this.yearlyStatisticData.filter(
+    return this.yearlyStatisticData.filter(
       (d) => parseInt(d.year) >= minYear && parseInt(d.year) <= currentYear
     );
   }
