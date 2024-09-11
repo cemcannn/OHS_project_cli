@@ -86,38 +86,6 @@
   <router-outlet></router-outlet>
 
   <!-- ============================================================== -->
-  <!-- Codex Interaction Section -->
-  <!-- ============================================================== -->
-
-  <div class="container mt-4 mb-4 d-flex justify-content-center align-items-center">
-    <div class="col-md-3"></div>
-    <div class="col-md-9">
-      <!-- Prompt alanı -->
-      <div class="form-group">
-        <label for="codex-prompt">Yapay Zeka Desteği: </label>
-        <textarea
-          id="codex-prompt"
-          [(ngModel)]="prompt"
-          class="form-control"
-          rows="4"
-          placeholder="Buraya sorularını yaz..."
-        ></textarea>
-      </div>
-
-      <!-- Gönder butonu -->
-      <button class="btn btn-primary mt-3" (click)="getCodexCompletion()">
-        Yanıt Al
-      </button>
-
-      <!-- Codex yanıtının gösterileceği alan -->
-      <div *ngIf="completion" class="mt-4">
-        <h4>Codex Yanıtı:</h4>
-        <pre>{{ completion }}</pre>
-      </div>
-    </div>
-  </div>
-
-  <!-- ============================================================== -->
   <!-- footer -->
   <!-- ============================================================== -->
   <footer class="footer text-center bg-danger">

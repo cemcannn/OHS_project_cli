@@ -12,7 +12,7 @@ import {
   DynamicLoadComponentService,
 } from './services/common/dynamic-load-component.service';
 import { DynamicLoadComponentDirective } from './directives/common/dynamic-load-component.directive';
-import { OpenAiCodexService } from './services/common/open-ai-codex.service';
+
 
 declare var $: any;
 
@@ -34,7 +34,6 @@ export class AppComponent {
     private toastrService: CustomToastrService,
     private router: Router,
     private dynamicLoadComponentService: DynamicLoadComponentService,
-    private openAiCodexService: OpenAiCodexService
   ) {
     authService.identityCheck();
   }
@@ -53,26 +52,6 @@ export class AppComponent {
     this.dynamicLoadComponentService.loadComponent(
       ComponentType.DefinitionComponent,
       this.dynamicLoadComponentDirective.viewContainerRef
-    );
-  }
-
-  // Codex'ten yanıt almak için method ekliyoruz
-  getCodexCompletion() {
-    this.openAiCodexService.getCodexCompletion(this.prompt).subscribe(
-      (response) => {
-        this.completion = response.choices[0].text; // Dönen yanıtı alıp completion değişkenine kaydediyoruz
-        this.toastrService.message('Codex yanıtı alındı.', 'Codex', {
-          messageType: ToastrMessageType.Success,
-          position: ToastrPosition.TopRight,
-        });
-      },
-      (error) => {
-        console.error('Codex Error:', error);
-        this.toastrService.message('Codex yanıtı alınamadı.', 'Codex Hatası', {
-          messageType: ToastrMessageType.Error,
-          position: ToastrPosition.TopRight,
-        });
-      }
     );
   }
 }
