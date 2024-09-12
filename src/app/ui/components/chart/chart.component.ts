@@ -75,7 +75,6 @@ export class ChartComponent extends BaseComponent implements OnInit {
       this.directorates = [
         ...new Set(this.accidents.map((a) => a.directorate)),
       ];
-      this.directorates.unshift('All');
 
       this.statisticData = this.statisticService.groupByMonth(
         this.accidentStatistics,
@@ -95,7 +94,6 @@ export class ChartComponent extends BaseComponent implements OnInit {
 
       this.years = [...new Set(this.accidentStatistics.map((dw) => dw.year))];
       this.years.sort((a, b) => parseInt(a) - parseInt(b));
-      this.years.unshift('All');
 
       this.updateMonthlyChart();
       this.updateYearlyChart();
@@ -126,7 +124,7 @@ export class ChartComponent extends BaseComponent implements OnInit {
               label: 'Veri Bulunamadı',
               data: [],
               fill: false,
-              borderColor: 'rgb(75, 192, 192)',
+              borderColor: 'rgb(237, 20, 17)',
               tension: 0.1,
             },
           ],
@@ -173,7 +171,7 @@ export class ChartComponent extends BaseComponent implements OnInit {
             ).label,
             data: data,
             fill: false,
-            borderColor: 'rgb(75, 192, 192)',
+            borderColor: 'rgb(237, 20, 17)',
             tension: 0.1,
           },
         ],
@@ -218,7 +216,7 @@ export class ChartComponent extends BaseComponent implements OnInit {
             ).label,
             data: data,
             fill: false,
-            borderColor: 'rgb(75, 192, 192)',
+            borderColor: 'rgb(237, 20, 17)',
             tension: 0.1,
           },
         ],
