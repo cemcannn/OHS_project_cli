@@ -5,7 +5,7 @@ import { List_Accident } from 'src/app/contracts/accidents/list_accident';
   providedIn: 'root',
 })
 export class AccidentFilterService {
-  private monthNames: string[] = [
+  public monthNames: string[] = [
     'Ocak',
     'Şubat',
     'Mart',
