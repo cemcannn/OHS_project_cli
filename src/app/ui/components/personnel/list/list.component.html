@@ -15,7 +15,7 @@
 <!-- ============================================================== -->
 <div class="container-fluid">
   <!-- ============================================================== -->
-  <!-- Accident Rates by Month -->
+  <!-- Personnel Informations -->
   <!-- ============================================================== -->
   <div class="row">
     <div class="col-md-12">
@@ -24,11 +24,25 @@
           <div class="d-md-flex align-items-center">
             <div>
               <h3 class="card-title box bg-white main-title">
-                Kaza İstatistikleri
+                Personel Bilgileri
               </h3>
             </div>
+
+            <!-- Search Container -->
+            <div class="search-container search">
+              <mat-form-field appearance="fill">
+                <mat-label>Personel Ara</mat-label>
+                <input
+                  matInput
+                  (keyup)="applySearch($event)"
+                  placeholder="Personel Ara"
+                />
+              </mat-form-field>
+            </div>
+
+            <!-- Directorate Dropdown -->
             <div class="filter-container">
-              <mat-form-field class="mt-3 ml-3" appearance="fill">
+              <mat-form-field class="header" appearance="fill">
                 <mat-label>İşletme Seç</mat-label>
                 <mat-select
                   [(value)]="selectedDirectorate"
@@ -42,17 +56,9 @@
                   </mat-option>
                 </mat-select>
               </mat-form-field>
-
-              <mat-form-field class="mt-3 ml-3" appearance="fill">
-                <mat-label>Personel Ara</mat-label>
-                <input
-                  matInput
-                  (keyup)="applySearch($event)"
-                  placeholder="Ara"
-                />
-              </mat-form-field>
             </div>
           </div>
+
           <table mat-table [dataSource]="dataSource" matSort>
             <ng-container matColumnDef="tkiId">
               <th mat-header-cell *matHeaderCellDef mat-sort-header>
