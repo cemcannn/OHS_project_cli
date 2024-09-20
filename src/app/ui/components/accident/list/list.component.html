@@ -28,18 +28,63 @@
               </h3>
             </div>
 
-            <div class="filter-container filter">
+            <div class="search-container search">
               <mat-form-field appearance="fill">
-                <mat-label>Filtrele</mat-label>
+                <mat-label>Ara</mat-label>
                 <input
                   matInput
-                  (keyup)="applyFilter($event)"
+                  (keyup)="applySearch($event)"
                   placeholder="Kaza Ara"
                 />
               </mat-form-field>
             </div>
+
+            <!-- Month Dropdown -->
+            <div class="filter-container">
+              <mat-form-field appearance="fill" class="header">
+                <mat-label>Ay Seç</mat-label>
+                <mat-select
+                  [(value)]="selectedMonth"
+                  (selectionChange)="applyFilters()"
+                >
+                  <mat-option
+                    *ngFor="let month of monthNames"
+                    [value]="month"
+                    >{{ month }}</mat-option
+                  >
+                </mat-select>
+              </mat-form-field>
+
+              <!-- Year Dropdown -->
+              <mat-form-field appearance="fill" class="header">
+                <mat-label>Yıl Seç</mat-label>
+                <mat-select
+                  [(value)]="selectedYear"
+                  (selectionChange)="applyFilters()"
+                >
+                  <mat-option *ngFor="let year of years" [value]="year">{{
+                    year
+                  }}</mat-option>
+                </mat-select>
+              </mat-form-field>
+
+              <!-- Directorate Dropdown -->
+              <mat-form-field appearance="fill" class="header">
+                <mat-label>İşletme Seç</mat-label>
+                <mat-select
+                  [(value)]="selectedDirectorate"
+                  (selectionChange)="applyFilters()"
+                >
+                  <mat-option
+                    *ngFor="let directorate of directorates"
+                    [value]="directorate"
+                    >{{ directorate }}</mat-option
+                  >
+                </mat-select>
+              </mat-form-field>
+            </div>
           </div>
-          
+
           <table mat-table [dataSource]="dataSource" matSort>
             <ng-container matColumnDef="tkiId">
               <th mat-header-cell *matHeaderCellDef mat-sort-header>
