@@ -4,6 +4,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { NgxSpinnerService } from 'ngx-spinner';
+import * as XLSX from 'xlsx'; // Import xlsx
 import { BaseComponent, SpinnerType } from 'src/app/base/base.component';
 import { List_Accident } from 'src/app/contracts/accidents/list_accident';
 import { AccidentUpdateDialogComponent } from 'src/app/dialogs/accident/accident-update-dialog/accident-update-dialog.component';
@@ -101,5 +102,23 @@ export class ListComponent extends BaseComponent implements OnInit {
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
+  }
+
+  exportToExcel() {
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.dataSource.data.map(item => ({
+      "TKİ Sicil Numarası": item.tkiId,
+      "İsim": item.name,
+      "Soyisim": item.surname,
+      "Kaza Türü": item.typeOfAccident,
+      "Uzuv": item.limb,
+      "Kaza Yeri": item.accidentArea,
+      "Kaza Tarihi": item.accidentDate,
+      "Kaza Saati": item.accidentHour,
+      "İş Günü Kaybı": item.lostDayOfWork,
+      "Açıklama": item.description
+    })));
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'İş Kazaları');
+    XLSX.writeFile(wb, 'İş Kazaları.xlsx');
   }
 }

@@ -113,19 +113,20 @@ export class ListComponent extends BaseComponent implements OnInit {
 
   exportToExcelStatistics() {
     const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.dataSourceStatistic.data.map(item => ({
-      Month: item.month,
-      ActualDailyWageSurface: item.actualDailyWageSurface,
-      ActualDailyWageUnderground: item.actualDailyWageUnderground,
-      EmployeesSurface: item.employeesSurface,
-      employeesNumberUnderground: item.employeesNumberUnderground,
-      employeesNumberSurface: item.employeesNumberSurface,
-      WorkingHoursSurface: item.workingHoursSurface,
-      WorkingHoursUnderground: item.workingHoursUnderground,
-      WorkingHoursSummary: item.workingHoursSummary,
-      LostDayOfWorkSummary: item.lostDayOfWorkSummary
+      "Ay": item.month,
+      "Yerüstü Fiili Yevmiye Sayısı": item.actualDailyWageSurface,
+      "Yeraltı Fiili Yevmiye Sayısı": item.actualDailyWageUnderground,
+      "Toplam Fiili Yevmiye Sayısı": item.actualDailyWageSummary,
+      "Yerüstü Çalışan Sayısı": item.employeesNumberSurface,
+      "Yeraltı Çalışan Sayısı": item.employeesNumberUnderground,
+      "Toplam Çalışan Sayısı": item.employeesNumberSummary,
+      "Yerüstü Çalışma Saati": item.workingHoursSurface,
+      "Yeraltı Çalışma Saati": item.workingHoursUnderground,
+      "Toplam Çalışma Saati": item.workingHoursSummary,
+      "Toplam İş Günü Kaybı": item.lostDayOfWorkSummary
     })));
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Statistics');
-    XLSX.writeFile(wb, 'statistics.xlsx');
+    XLSX.utils.book_append_sheet(wb, ws, 'Kaza İstatistikleri');
+    XLSX.writeFile(wb, 'Kaza İstatistikleri.xlsx');
   }
 }

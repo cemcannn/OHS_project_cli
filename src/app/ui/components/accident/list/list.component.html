@@ -82,6 +82,15 @@
                 </mat-select>
               </mat-form-field>
             </div>
+
+            <!-- Excel Export Button -->
+            <button
+              mat-raised-button
+              class="card-title text-dark excel"
+              (click)="exportToExcel()"
+            >
+              Excel Olarak Dışa Aktar
+            </button>
           </div>
 
           <table mat-table [dataSource]="dataSource" matSort>
