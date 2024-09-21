@@ -113,7 +113,7 @@ export class ListComponent extends BaseComponent implements OnInit {
 
   exportToExcelStatistics() {
     const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.dataSourceStatistic.data.map(item => ({
-      "Ay": item.month,
+      "Aylar": item.month,
       "Yerüstü Fiili Yevmiye Sayısı": item.actualDailyWageSurface,
       "Yeraltı Fiili Yevmiye Sayısı": item.actualDailyWageUnderground,
       "Toplam Fiili Yevmiye Sayısı": item.actualDailyWageSummary,
