@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { List_Accident_Statistic } from 'src/app/contracts/accident_statistic/list_accident_statistic';
+import { List_Return_Statistic } from 'src/app/contracts/accident_statistic/list_return_statistic';
 
 @Injectable({
   providedIn: 'root',
@@ -12,15 +13,11 @@ export class AccidentStatisticFilterService {
 
   constructor() {}
 
-  private getMonthNames(): string[] {
-    return this.monthNames;
-  }
-
   private initializeStatistic(month: string = ''): List_Accident_Statistic {
     return {    
       month,
-      year: '',
-      directorate: '',
+      year: '0',
+      directorate: '0',
       actualDailyWageSurface: '0',
       actualDailyWageUnderground: '0',
       actualDailyWageSummary: '0',
@@ -41,9 +38,10 @@ export class AccidentStatisticFilterService {
   private updateStatistic(stat: List_Accident_Statistic, statistic: List_Accident_Statistic): void {
     statistic.actualDailyWageSurface = (Number(statistic.actualDailyWageSurface) + Number(stat.actualDailyWageSurface)).toString();
     statistic.actualDailyWageUnderground = (Number(statistic.actualDailyWageUnderground) + Number(stat.actualDailyWageUnderground)).toString();
+    statistic.actualDailyWageSummary = (Number(statistic.actualDailyWageSurface) + Number(statistic.actualDailyWageUnderground)).toString();
+
     statistic.employeesNumberSurface = (Number(statistic.employeesNumberSurface) + Number(stat.employeesNumberSurface)).toString();
     statistic.employeesNumberUnderground = (Number(statistic.employeesNumberUnderground) + Number(stat.employeesNumberUnderground)).toString();
-    statistic.actualDailyWageSummary = (Number(statistic.actualDailyWageSurface) + Number(statistic.actualDailyWageUnderground)).toString();
     statistic.employeesNumberSummary = (Number(statistic.employeesNumberSurface) + Number(statistic.employeesNumberUnderground)).toString();
     
     const workingHours = 8;
@@ -52,6 +50,8 @@ export class AccidentStatisticFilterService {
     statistic.workingHoursSummary = (Number(statistic.workingHoursSurface) + Number(statistic.workingHoursUnderground)).toString();
 
     statistic.lostDayOfWorkSummary = (Number(statistic.lostDayOfWorkSummary) + Number(stat.lostDayOfWorkSummary)).toString();
+
+    statistic.accidentSeverityRate = ((Number(statistic.lostDayOfWorkSummary) / Number(statistic.workingHoursSummary)) * 1000).toString();
   }
 
   calculateTotals(accidentStatistics: List_Accident_Statistic[]): List_Accident_Statistic[] {
@@ -59,13 +59,23 @@ export class AccidentStatisticFilterService {
     this.monthNames.forEach(month => statistics[month] = this.initializeStatistic(month));
 
     accidentStatistics.forEach(stat => {
-      const month = this.monthNames[stat.month];
+      const monthIndex = Number(stat.month) - 1; 
+      const month = this.monthNames[monthIndex];
       this.updateStatistic(stat, statistics[month]);
     });
 
     const totals = this.initializeStatistic('Toplam');
     Object.values(statistics).forEach(stat => {
-      this.updateStatistic(stat, totals);
+      totals.actualDailyWageSurface = (Number(totals.actualDailyWageSurface) + Number(stat.actualDailyWageSurface)).toString();
+      totals.actualDailyWageUnderground = (Number(totals.actualDailyWageUnderground) + Number(stat.actualDailyWageUnderground)).toString();
+      totals.actualDailyWageSummary = (Number(totals.actualDailyWageSummary) + Number(stat.actualDailyWageSummary)).toString();
+      totals.employeesNumberSurface = (Number(totals.employeesNumberSurface) + Number(stat.employeesNumberSurface)).toString();
+      totals.employeesNumberUnderground = (Number(totals.employeesNumberUnderground) + Number(stat.employeesNumberUnderground)).toString();
+      totals.employeesNumberSummary = (Number(totals.employeesNumberSummary) + Number(stat.employeesNumberSummary)).toString();
+      totals.workingHoursSurface = (Number(totals.workingHoursSurface) + Number(stat.workingHoursSurface)).toString();
+      totals.workingHoursUnderground = (Number(totals.workingHoursUnderground) + Number(stat.workingHoursUnderground)).toString();
+      totals.workingHoursSummary = (Number(totals.workingHoursSummary) + Number(stat.workingHoursSummary)).toString();
+      totals.lostDayOfWorkSummary = (Number(totals.lostDayOfWorkSummary) + Number(stat.lostDayOfWorkSummary)).toString();
     });
 
     if (Number(totals.workingHoursSummary) > 0) {

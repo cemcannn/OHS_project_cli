@@ -35,15 +35,12 @@
               >
               <mat-select
                 id="yearSelectStatistic"
-                [(ngModel)]="selectedYearStatistic"
-                (ngModelChange)="onFiltersChanged()"
+                [(ngModel)]="selectedYear"
+                (ngModelChange)="applyFilters()"
               >
-                <mat-option value="All">Tüm Yıllar</mat-option>
-                <mat-option
-                  *ngFor="let year of years"
-                  [value]="year"
-                  >{{ year }}</mat-option
-                >
+                <mat-option *ngFor="let year of years" [value]="year">{{
+                  year
+                }}</mat-option>
               </mat-select>
             </mat-form-field>
 
@@ -55,9 +52,8 @@
               <mat-select
                 id="directorateSelect"
                 [(ngModel)]="selectedDirectorate"
-                (ngModelChange)="onFiltersChanged()"
+                (ngModelChange)="applyFilters()"
               >
-                <mat-option value="All">Tüm İşletmeler</mat-option>
                 <mat-option
                   *ngFor="let directorate of directorates"
                   [value]="directorate"
@@ -78,7 +74,7 @@
 
           <table
             mat-table
-            [dataSource]="dataSourceStatistic"
+            [dataSource]="dataSource"
             matSort
             class="mat-elevation-z8"
           >
@@ -186,14 +182,8 @@
               </td>
             </ng-container>
 
-            <tr
-              mat-header-row
-              *matHeaderRowDef="displayedColumnsStatistic"
-            ></tr>
-            <tr
-              mat-row
-              *matRowDef="let row; columns: displayedColumnsStatistic"
-            ></tr>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
           </table>
         </div>
       </div>
