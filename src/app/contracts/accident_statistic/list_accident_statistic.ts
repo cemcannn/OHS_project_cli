@@ -1,5 +1,4 @@
 export class List_Accident_Statistic {
-  id: string;
   month: string;
   year: string;
   directorate: string;

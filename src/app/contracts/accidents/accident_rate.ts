@@ -5,6 +5,5 @@ export class Accident_Rate {
     fiveAboveDay: number; 
     totalAccidentNumber: number;
     totalLostDayOfWork: number; 
-
   }
   

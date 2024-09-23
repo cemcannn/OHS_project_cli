@@ -22,7 +22,7 @@ import { AccidentStatisticService } from 'src/app/services/common/models/acciden
 })
 export class ListComponent extends BaseComponent implements OnInit {
   displayedColumns: string[] = ['year', 'month', 'directorate', 'actualDailyWageSurface', 'actualDailyWageUnderground', 'employeesNumberSurface', 'employeesNumberUnderground', 'lostDayOfWorkSummary', 'monthlyDirectorateDataUpdate', 'delete'];
-  dataSource: MatTableDataSource<List_Monthly_Directorate_Data> = null;
+  dataSource: MatTableDataSource<List_Accident_Statistic> = null;
 
   monthNames: { [key: string]: string } = {
     '01': 'Ocak',

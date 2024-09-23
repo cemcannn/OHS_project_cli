@@ -20,7 +20,7 @@ export class AccidentRateFilterService {
       oneToFourDay: 0,
       fiveAboveDay: 0,
       totalAccidentNumber: 0,
-      totalLostDayOfWork: 0,
+      totalLostDayOfWork: 0
     };
   }
 
