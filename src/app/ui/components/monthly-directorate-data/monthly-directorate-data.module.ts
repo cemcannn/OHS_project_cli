@@ -13,6 +13,7 @@ import { MatSortModule } from '@angular/material/sort';
 import { DeleteDirectiveModule } from 'src/app/directives/admin/delete.directive.module';
 import { CommonPipesModule } from 'src/app/pipes/common-pipes.module';
 import { RouterModule } from '@angular/router';
+import { MatSelectModule } from '@angular/material/select';
 
 
 
@@ -23,7 +24,7 @@ import { RouterModule } from '@angular/router';
   ],
   imports: [
     CommonModule, MatSidenavModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatTableModule, MatPaginatorModule,
-    DialogModule, MatSortModule, DeleteDirectiveModule, CommonPipesModule,
+    DialogModule, MatSortModule, DeleteDirectiveModule, CommonPipesModule, MatSelectModule,
     RouterModule.forChild([
       { path: "", component: MonthlyDirectorateDataComponent}
     ])

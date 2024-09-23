@@ -13,7 +13,6 @@ import {
 } from './services/common/dynamic-load-component.service';
 import { DynamicLoadComponentDirective } from './directives/common/dynamic-load-component.directive';
 
-
 declare var $: any;
 
 @Component({

@@ -3,14 +3,12 @@ import { MatSort } from '@angular/material/sort';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MatTableDataSource } from '@angular/material/table';
 import { List_Accident } from 'src/app/contracts/accidents/list_accident';
-import { List_Personnel } from 'src/app/contracts/personnels/list_personnel'; 
 import { AccidentService } from 'src/app/services/common/models/accident.service';
-import { PersonnelService } from 'src/app/services/common/models/personnel.service';
 import { Accident_Rate } from 'src/app/contracts/accidents/accident_rate';
-import { AccidentRateService } from 'src/app/services/common/accident-rate.service';
 import * as XLSX from 'xlsx'; // Import xlsx
 import { BaseComponent, SpinnerType } from 'src/app/base/base.component';
 import { AlertifyService, MessageType, Position } from 'src/app/services/admin/alertify.service';
+import { AccidentRateFilterService } from 'src/app/services/common/accident-rate-filter.service';
 
 @Component({
   selector: 'app-list',
@@ -18,96 +16,62 @@ import { AlertifyService, MessageType, Position } from 'src/app/services/admin/a
   styleUrls: ['./list.component.scss']
 })
 export class ListComponent extends BaseComponent implements OnInit {
-  displayedColumnsAccident: string[] = ['month', 'zeroDay', 'oneToFourDay', 'fiveAboveDay', 'totalAccidentNumber', 'totalLostDayOfWork'];
-  dataSourceAccident: MatTableDataSource<Accident_Rate> = new MatTableDataSource<Accident_Rate>();
-  clickedRowsAccident = new Set<Accident_Rate>();
+  displayedColumns: string[] = ['month', 'zeroDay', 'oneToFourDay', 'fiveAboveDay', 'totalAccidentNumber', 'totalLostDayOfWork'];
+  dataSource: MatTableDataSource<Accident_Rate> = null;
+  years: string[] = [];
+  directorates: string[] = [];
+  allAccidents: List_Accident[] = [];
+  monthNames = ['Tüm Aylar', 'Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran', 'Temmuz', 'Ağustos', 'Eylül', 'Ekim', 'Kasım', 'Aralık']; // "Tüm Aylar" eklendi
 
   @ViewChild(MatSort) sort: MatSort;
 
-  totalCountPersonnels: number = 0;
-  personnels: List_Personnel[] = [];
-  totalCountAccidents: number = 0;
-  accidents: List_Accident[] = [];
-  yearsAccident: string[] = [];
-  selectedYearAccident: string = 'All';
-  selectedDirectorate: string = 'All'; // Yeni özellik: seçilen işletme
-  directorates: string[] = []; // İşletmeleri tutacak dizi
+  selectedYear: string = 'Tüm Yıllar';
+  selectedDirectorate: string = 'Tüm İşletmeler';
 
   constructor(
     spinner: NgxSpinnerService,
-    private personnelService: PersonnelService,
     private accidentService: AccidentService,
-    private accidentRateService: AccidentRateService,
+    private accidentRateFilterService: AccidentRateFilterService,
     private alertifyService: AlertifyService,
   ) {super(spinner);}
 
   ngOnInit(): void {
-    this.getPersonnels();
-    this.getAccidents();
+    this.loadAccidents();
   }
 
-  async getPersonnels() {
-    this.showSpinner(SpinnerType.Cog)
-    try{
-      const response = await this.personnelService.getPersonnels();
-      this.totalCountPersonnels = response.totalCount;
-      this.personnels = response.datas;
-      this.populateDirectorates(this.personnels); // İşletmeleri güncelle
-    } catch (errorMessage) {
-      this.alertifyService.message(errorMessage, {
-        dismissOthers: true,
-        messageType: MessageType.Error,
-        position: Position.TopRight
-      });
-    } finally {
-      this.hideSpinner(SpinnerType.Cog);
-    }
+  async loadAccidents(): Promise<void> {
+    // Kazaları yükle
+    this.showSpinner(SpinnerType.Cog);
+    const result = await this.accidentService.getAccidents(() => this.hideSpinner(SpinnerType.Cog), errorMessage => this.alertifyService.message(errorMessage, {
+      dismissOthers: true,
+      messageType: MessageType.Error,
+      position: Position.TopRight
+    }))
+    
+    this.allAccidents = result.datas;
+
+    // Dinamik verileri oluştur
+    this.years = ['Tüm Yıllar', ...new Set(this.allAccidents.map(accident => new Date(accident.accidentDate).getFullYear().toString()))]; // "Tüm Yıllar" eklendi
+    this.directorates = ['Tüm İşletmeler', ...new Set(this.allAccidents.map(accident => accident.directorate))]; // "Tüm İşletmeler" eklendi
+
+    this.applyFilters();
   }
 
-  async getAccidents() {
-    this.showSpinner(SpinnerType.Cog)
-    try{
-      const response = await this.accidentService.getAccidents();
-      this.totalCountAccidents = response.totalCount;
-      this.accidents = response.datas;
-      this.populateYears(this.accidents);
-      this.filterAccidentsByYearAndDirectorate(this.selectedYearAccident, this.selectedDirectorate);
-    } catch (errorMessage) {
-      this.alertifyService.message(errorMessage, {
-        dismissOthers: true,
-        messageType: MessageType.Error,
-        position: Position.TopRight
-      });
-    } finally {
-      this.hideSpinner(SpinnerType.Cog);
-    }
-  }
+  applyFilters(): void {
+    const filters = {
+      year: this.selectedYear === 'Tüm Yıllar' ? null : this.selectedYear,
+      directorate: this.selectedDirectorate === 'Tüm İşletmeler' ? null : this.selectedDirectorate
+    };
 
-  populateYears(accidents: List_Accident[]) {
-    const groupedByYear = this.accidentRateService.groupByYear(accidents);
-    this.yearsAccident = Object.keys(groupedByYear);
-  }
+    const filteredAccidents = this.accidentRateFilterService.applyFilters(this.allAccidents, filters);
+    this.dataSource = new MatTableDataSource<Accident_Rate>(filteredAccidents); // Değişiklik burada
 
-  populateDirectorates(personnels: List_Personnel[]) {
-    const directoratesSet = new Set(personnels.map(p => p.directorate));
-    this.directorates = Array.from(directoratesSet);
-  }
-
-  filterAccidentsByYearAndDirectorate(year: string, directorate: string) {
-    let filteredAccidents = this.accidents;
-    if (year !== 'All') {
-      filteredAccidents = this.accidentRateService.groupByYear(this.accidents)[year];
-    }
-    if (directorate !== 'All') {
-      filteredAccidents = filteredAccidents.filter(a => a.directorate === directorate);
-    }
-    const groupedAccidents = this.accidentRateService.groupByMonth(filteredAccidents); // Accidents'ı aylara göre gruplayın
-    this.dataSourceAccident.data = groupedAccidents;
-    this.dataSourceAccident.sort = this.sort;
+    // Paginator ve Sort'u dataSource'a bağla
+    this.dataSource.sort = this.sort;
   }
 
   exportToExcelAccidents() {
-    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.dataSourceAccident.data.map(item => ({
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.dataSource.data.map(item => ({
       "Aylar": item.month,
       "Kaza Sonrası Çalışır Durumdaki Çalışan Sayısı": item.zeroDay,
       "Kaza Sonrası İş Göremez Raporlu Çalışan Sayısı (1-4 Gün)": item.oneToFourDay,

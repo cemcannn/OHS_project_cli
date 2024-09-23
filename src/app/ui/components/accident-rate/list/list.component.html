@@ -3,8 +3,7 @@
 <!-- ============================================================== -->
 <div class="page-breadcrumb">
   <div class="row">
-    <div class="col-12 d-flex no-block align-items-center">
-    </div>
+    <div class="col-12 d-flex no-block align-items-center"></div>
   </div>
 </div>
 <!-- ============================================================== -->
@@ -28,54 +27,35 @@
                 İş Kazası Geçiren Çalışan Sayıları
               </h3>
             </div>
-
             <!-- Year Dropdown -->
-            <mat-form-field appearance="fill" class="header">
-              <mat-label class="card-title text-dark" for="yearSelectAccident"
-                >Yıl (Kazalar):</mat-label
-              >
-              <mat-select
-                id="yearSelectAccident"
-                [(ngModel)]="selectedYearAccident"
-                (ngModelChange)="
-                  filterAccidentsByYearAndDirectorate(
-                    $event,
-                    selectedDirectorate
-                  )
-                "
-              >
-                <mat-option value="All">Tüm Yıllar</mat-option>
-                <mat-option *ngFor="let year of yearsAccident" [value]="year">{{
-                  year
-                }}</mat-option>
-              </mat-select>
-            </mat-form-field>
-
-            <!-- Directorate Dropdown -->
-            <mat-form-field appearance="fill" class="header">
-              <mat-label
-                class="card-title text-dark"
-                for="directorateSelectAccident"
-                >İşletme:</mat-label
-              >
-              <mat-select
-                id="directorateSelectAccident"
-                [(ngModel)]="selectedDirectorate"
-                (ngModelChange)="
-                  filterAccidentsByYearAndDirectorate(
-                    selectedYearAccident,
-                    $event
-                  )
-                "
-              >
-                <mat-option value="All">Tüm İşletmeler</mat-option>
-                <mat-option
-                  *ngFor="let directorate of directorates"
-                  [value]="directorate"
-                  >{{ directorate }}</mat-option
+            <div class="filter-container">
+              <mat-form-field appearance="fill" class="header">
+                <mat-label>Yıl Seç</mat-label>
+                <mat-select
+                  [(value)]="selectedYear"
+                  (selectionChange)="applyFilters()"
                 >
-              </mat-select>
-            </mat-form-field>
+                  <mat-option *ngFor="let year of years" [value]="year">{{
+                    year
+                  }}</mat-option>
+                </mat-select>
+              </mat-form-field>
+
+              <!-- Directorate Dropdown -->
+              <mat-form-field appearance="fill" class="header">
+                <mat-label>İşletme Seç</mat-label>
+                <mat-select
+                  [(value)]="selectedDirectorate"
+                  (selectionChange)="applyFilters()"
+                >
+                  <mat-option
+                    *ngFor="let directorate of directorates"
+                    [value]="directorate"
+                    >{{ directorate }}</mat-option
+                  >
+                </mat-select>
+              </mat-form-field>
+            </div>
 
             <!-- Excel Export Button -->
             <button
@@ -89,7 +69,7 @@
 
           <table
             mat-table
-            [dataSource]="dataSourceAccident"
+            [dataSource]="dataSource"
             matSort
             class="mat-elevation-z8"
           >
@@ -141,11 +121,8 @@
               </td>
             </ng-container>
 
-            <tr mat-header-row *matHeaderRowDef="displayedColumnsAccident"></tr>
-            <tr
-              mat-row
-              *matRowDef="let row; columns: displayedColumnsAccident"
-            ></tr>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
           </table>
         </div>
       </div>

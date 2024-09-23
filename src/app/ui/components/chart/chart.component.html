@@ -18,112 +18,124 @@
   <div class="col-md-12">
     <div class="card">
       <div class="card-body bg-danger">
-          <!-- ============================================================== -->
-          <!-- Monthly Chart  -->
-          <!-- ============================================================== -->
-          <div>
-            <h3 class="card-title box bg-white main-title">
-              Aylık İstatistik Grafiği
-            </h3>
-          </div>
+        <!-- ============================================================== -->
+        <!-- Monthly Chart  -->
+        <!-- ============================================================== -->
+        <div>
+          <h3 class="card-title box bg-white main-title">
+            Aylık İstatistik Grafiği
+          </h3>
+        </div>
 
-          <!-- Year Dropdown -->
-          <mat-form-field appearance="fill" class="header">
-            <mat-label class="card-title text-dark" for="yearSelect"
-              >Yıl (İstatistikler):</mat-label
-            >
-            <mat-select
-              id="yearSelect"
-              [(ngModel)]="selectedYear"
-              (ngModelChange)="onYearChange()"
-            >
-              <mat-option value="All">Tüm Yıllar</mat-option>
-              <mat-option *ngFor="let year of years" [value]="year">{{
-                year
-              }}</mat-option>
-            </mat-select>
-          </mat-form-field>
+        <!-- Year Dropdown -->
+        <mat-form-field appearance="fill" class="header">
+          <mat-label class="card-title text-dark" for="yearSelect"
+            >Yıl (İstatistikler):</mat-label
+          >
+          <mat-select
+            id="yearSelect"
+            [(ngModel)]="selectedYear"
+            (ngModelChange)="onYearChange()"
+          >
+            <mat-option value="All">Tüm Yıllar</mat-option>
+            <mat-option *ngFor="let year of years" [value]="year">{{
+              year
+            }}</mat-option>
+          </mat-select>
+        </mat-form-field>
 
-          <!-- Directorate Dropdown -->
-          <mat-form-field appearance="fill" class="header">
-            <mat-label class="card-title text-dark" for="directorateSelect"
-              >İşletme:</mat-label
+        <!-- Directorate Dropdown -->
+        <mat-form-field appearance="fill" class="header">
+          <mat-label class="card-title text-dark" for="directorateSelect"
+            >İşletme:</mat-label
+          >
+          <mat-select
+            id="directorateSelect"
+            [(ngModel)]="selectedMonthlyDirectorate"
+            (ngModelChange)="onDirectorateChange()"
+          >
+            <mat-option value="All">Tüm İşletmeler</mat-option>
+            <mat-option
+              *ngFor="let directorate of directorates"
+              [value]="directorate"
+              >{{ directorate }}</mat-option
             >
-            <mat-select
-              id="directorateSelect"
-              [(ngModel)]="selectedMonthlyDirectorate"
-              (ngModelChange)="onDirectorateChange()"
-            >
-              <mat-option value="All">Tüm İşletmeler</mat-option>
-              <mat-option
-                *ngFor="let directorate of directorates"
-                [value]="directorate"
-                >{{ directorate }}</mat-option
-              >
-            </mat-select>
-          </mat-form-field>
+          </mat-select>
+        </mat-form-field>
 
-          <!-- Directorate Drowpdown  -->
-          <mat-form-field appearance="fill" class="header">
-            <mat-label class="card-title text-dark" for="monthlyMetricSelect"
-              >Metrik:</mat-label
-            >
-            <mat-select
-              id="monthlyMetricSelect"
-              [(ngModel)]="selectedMonthlyMetric"
-              (ngModelChange)="onMonthlyMetricChange()"
-            >
-              <mat-option
-                *ngFor="let metric of metrics"
-                [value]="metric.value"
-                >{{ metric.label }}</mat-option
-              >
-            </mat-select>
-          </mat-form-field>
+        <!-- Metric Drowpdown  -->
+        <mat-form-field appearance="fill" class="header">
+          <mat-label class="card-title text-dark" for="monthlyMetricSelect"
+            >Metrik:</mat-label
+          >
+          <mat-select
+            id="monthlyMetricSelect"
+            [(ngModel)]="selectedMonthlyMetric"
+            (ngModelChange)="onMonthlyMetricChange()"
+          >
+            <mat-option *ngFor="let metric of metrics" [value]="metric.value">{{
+              metric.label
+            }}</mat-option>
+          </mat-select>
+        </mat-form-field>
 
         <canvas #monthlyChart class="bg-white mb-3"></canvas>
         <!-- ============================================================== -->
         <!-- Yerly Chart  -->
         <!-- ============================================================== -->
-          <div>
-            <h3 class="card-title box bg-white main-title">
-              Yıllık İstatistik Grafiği
-            </h3>
-          </div>
+        <div>
+          <h3 class="card-title box bg-white main-title">
+            Yıllık İstatistik Grafiği
+          </h3>
+        </div>
 
-          <!-- Yearly Dropdown -->
-          <mat-form-field appearance="fill" class="header">
-            <mat-label class="card-title text-dark" for="timeRangeSelect"
-              >Zaman Aralığı:</mat-label
-            >
-            <mat-select
-              id="timeRangeSelect"
-              [(ngModel)]="selectedTimeRange"
-              (ngModelChange)="onTimeRangeChange()"
-            >
-              <mat-option value="5">Son 5 Yıl</mat-option>
-              <mat-option value="10">Son 10 Yıl</mat-option>
-              <mat-option value="20">Son 20 Yıl</mat-option>
-            </mat-select>
-          </mat-form-field>
+        <!-- Yearly Dropdown -->
+        <mat-form-field appearance="fill" class="header">
+          <mat-label class="card-title text-dark" for="timeRangeSelect"
+            >Zaman Aralığı:</mat-label
+          >
+          <mat-select
+            id="timeRangeSelect"
+            [(ngModel)]="selectedTimeRange"
+            (ngModelChange)="onTimeRangeChange()"
+          >
+            <mat-option value="5">Son 5 Yıl</mat-option>
+            <mat-option value="10">Son 10 Yıl</mat-option>
+            <mat-option value="20">Son 20 Yıl</mat-option>
+          </mat-select>
+        </mat-form-field>
 
-          <!-- Directorate Dropdown -->
-          <mat-form-field appearance="fill" class="header">
-            <mat-label class="card-title text-dark" for="yearlyMetricSelect"
-              >Metrik:</mat-label
-            >
-            <mat-select
-              id="yearlyMetricSelect"
-              [(ngModel)]="selectedYearlyMetric"
-              (ngModelChange)="onYearlyMetricChange()"
-            >
-              <mat-option
-                *ngFor="let metric of metrics"
-                [value]="metric.value"
-                >{{ metric.label }}</mat-option
-              >
-            </mat-select>
-          </mat-form-field>
+        <!-- Metric Dropdown -->
+        <mat-form-field appearance="fill" class="header">
+          <mat-label class="card-title text-dark" for="yearlyMetricSelect"
+            >Metrik:</mat-label
+          >
+          <mat-select
+            id="yearlyMetricSelect"
+            [(ngModel)]="selectedYearlyMetric"
+            (ngModelChange)="onYearlyMetricChange()"
+          >
+            <mat-option *ngFor="let metric of metrics" [value]="metric.value">{{
+              metric.label
+            }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <!-- Directorate Dropdown -->
+        <mat-form-field appearance="fill" class="header">
+          <mat-label class="card-title text-dark" for="yearlyDirectorateSelect"
+            >İşletme:</mat-label
+          >
+          <mat-select
+            id="yearlyMetricSelect"
+            [(ngModel)]="selectedYearlyDirectorate"
+            (ngModelChange)="onYearlyDirectorateChange()"
+          >
+            <mat-option *ngFor="let directorate of directorates" [value]="directorate">{{
+              directorate
+            }}</mat-option>
+          </mat-select>
+        </mat-form-field>
         <canvas #yearlyChart class="bg-white"></canvas>
       </div>
     </div>

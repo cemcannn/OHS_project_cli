@@ -70,7 +70,13 @@ export class ListComponent extends BaseComponent implements OnInit {
 
   async loadAccidents(): Promise<void> {
     // Kazaları yükle
-    const result = await this.accidentService.getAccidents();
+    this.showSpinner(SpinnerType.Cog);
+    const result = await this.accidentService.getAccidents(() => this.hideSpinner(SpinnerType.Cog), errorMessage => this.alertifyService.message(errorMessage, {
+      dismissOthers: true,
+      messageType: MessageType.Error,
+      position: Position.TopRight
+    }))
+    
     this.allAccidents = result.datas;
 
     // Dinamik verileri oluştur

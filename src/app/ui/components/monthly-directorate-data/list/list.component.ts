@@ -5,11 +5,13 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { BaseComponent, SpinnerType } from 'src/app/base/base.component';
+import { List_Accident_Statistic } from 'src/app/contracts/accident_statistic/list_accident_statistic';
 import { List_Monthly_Directorate_Data } from 'src/app/contracts/monthly_directorate_data/list-monthly-directorate-data';
 import { AddAccidentStatisticDialogComponent } from 'src/app/dialogs/accident-statistic/add-accident-statistic-dialog/add-accident-statistic-dialog.component';
 import { UpdateAccidentStatisticDialogComponent } from 'src/app/dialogs/accident-statistic/update-accident-statistic-dialog/update-accident-statistic-dialog.component';
 import { AccidentUpdateDialogComponent } from 'src/app/dialogs/accident/accident-update-dialog/accident-update-dialog.component';
 import { AlertifyService, MessageType, Position } from 'src/app/services/admin/alertify.service';
+import { AccidentStatisticFilterService } from 'src/app/services/common/accident-statistic-filter.service';
 import { AccidentStatisticService } from 'src/app/services/common/models/accident-statistic.service';
 
 
@@ -19,23 +21,31 @@ import { AccidentStatisticService } from 'src/app/services/common/models/acciden
   styleUrls: ['./list.component.scss']
 })
 export class ListComponent extends BaseComponent implements OnInit {
-  displayedColumns: string[] = ['year', 'month', 'directorate', 'actualDailyWageSurface', 'actualDailyWageUnderground', 'employeesNumberSurface', 'employeesNumberUnderground', 'monthlyDirectorateDataUpdate', 'delete'];
+  displayedColumns: string[] = ['year', 'month', 'directorate', 'actualDailyWageSurface', 'actualDailyWageUnderground', 'employeesNumberSurface', 'employeesNumberUnderground', 'lostDayOfWorkSummary', 'monthlyDirectorateDataUpdate', 'delete'];
   dataSource: MatTableDataSource<List_Monthly_Directorate_Data> = null;
 
-  monthNames: { [key: number]: string } = {
-    1: 'Ocak',
-    2: 'Şubat',
-    3: 'Mart',
-    4: 'Nisan',
-    5: 'Mayıs',
-    6: 'Haziran',
-    7: 'Temmuz',
-    8: 'Ağustos',
-    9: 'Eylül',
-    10: 'Ekim',
-    11: 'Kasım',
-    12: 'Aralık'
+  monthNames: { [key: string]: string } = {
+    '01': 'Ocak',
+    '02': 'Şubat',
+    '03': 'Mart',
+    '04': 'Nisan',
+    '05': 'Mayıs',
+    '06': 'Haziran',
+    '07': 'Temmuz',
+    '08': 'Ağustos',
+    '09': 'Eylül',
+    '10': 'Ekim',
+    '11': 'Kasım',
+    '12': 'Aralık'
   };
+
+  allAccidentStatistics: List_Accident_Statistic[] = [];
+
+  years: string[] = [];
+  directorates: string[] = [];
+
+  selectedYear: string = 'Tüm Yıllar';
+  selectedDirectorate: string = 'Tüm İşletmeler';
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -43,6 +53,7 @@ export class ListComponent extends BaseComponent implements OnInit {
   constructor(
     spinner: NgxSpinnerService,
     private accidentStatisticService: AccidentStatisticService,
+    private accidentStatisticFilterService: AccidentStatisticFilterService,
     private alertifyService: AlertifyService,
     private dialog: MatDialog,
   ) {
@@ -75,23 +86,35 @@ export class ListComponent extends BaseComponent implements OnInit {
 
   async loadMonthlyDirectorateData(): Promise<void> {
     this.showSpinner(SpinnerType.Cog);
-    const allMonthlyDirectorateDatas: { datas: List_Monthly_Directorate_Data[], totalCount: number } = await this.accidentStatisticService.getAccidentStatistics(() => this.hideSpinner(SpinnerType.Cog), errorMessage => this.alertifyService.message(errorMessage, {
+    const result: { datas: List_Accident_Statistic[], totalCount: number } = await this.accidentStatisticService.getAccidentStatistics(() => this.hideSpinner(SpinnerType.Cog), errorMessage => this.alertifyService.message(errorMessage, {
       dismissOthers: true,
       messageType: MessageType.Error,
       position: Position.TopRight
     }))
 
-  // Convert month values from string to number and then to month names
-  const convertedData = allMonthlyDirectorateDatas.datas.map(data => {
-    const monthNumber = parseInt(data.month, 10); // Convert month from string to number
-    return {
-      ...data,
-      month: this.monthNames[monthNumber] // Convert month number to month name
-    };
-  });
+    this.allAccidentStatistics = result.datas;
 
-    // Use the correct type for MatTableDataSource
-    this.dataSource = new MatTableDataSource<List_Monthly_Directorate_Data>(convertedData);
+        // Dinamik verileri oluştur
+        this.years = ['Tüm Yıllar', ...new Set(this.allAccidentStatistics.map(accidentStatistic => accidentStatistic.year.toString()))]; // "Tüm Yıllar" eklendi
+        this.directorates = ['Tüm İşletmeler', ...new Set(this.allAccidentStatistics.map(accidentStatistic => accidentStatistic.directorate))]; // "Tüm İşletmeler" eklendi
+    
+        this.applyFilters();
+  }
+
+  applyFilters(): void {
+    const filters = {
+      year: this.selectedYear === 'Tüm Yıllar' ? null : this.selectedYear,
+      directorate: this.selectedDirectorate === 'Tüm İşletmeler' ? null : this.selectedDirectorate
+    };
+
+    const filteredAccidentStatistics = this.accidentStatisticFilterService.applyFilters(this.allAccidentStatistics, filters);
+    const updatedAccidentStatistics = filteredAccidentStatistics.map(statistic => ({
+      ...statistic,
+      month: this.monthNames[statistic.month]
+    }));
+    this.dataSource = new MatTableDataSource<List_Accident_Statistic>(updatedAccidentStatistics);
+
+    // Paginator ve Sort'u dataSource'a bağla
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }
