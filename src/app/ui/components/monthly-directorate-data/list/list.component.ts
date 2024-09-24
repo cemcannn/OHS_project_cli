@@ -6,13 +6,11 @@ import { MatTableDataSource } from '@angular/material/table';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { BaseComponent, SpinnerType } from 'src/app/base/base.component';
 import { List_Accident_Statistic } from 'src/app/contracts/accident_statistic/list_accident_statistic';
-import { List_Monthly_Directorate_Data } from 'src/app/contracts/monthly_directorate_data/list-monthly-directorate-data';
 import { AddAccidentStatisticDialogComponent } from 'src/app/dialogs/accident-statistic/add-accident-statistic-dialog/add-accident-statistic-dialog.component';
 import { UpdateAccidentStatisticDialogComponent } from 'src/app/dialogs/accident-statistic/update-accident-statistic-dialog/update-accident-statistic-dialog.component';
-import { AccidentUpdateDialogComponent } from 'src/app/dialogs/accident/accident-update-dialog/accident-update-dialog.component';
 import { AlertifyService, MessageType, Position } from 'src/app/services/admin/alertify.service';
-import { AccidentStatisticFilterService } from 'src/app/services/common/accident-statistic-filter.service';
 import { AccidentStatisticService } from 'src/app/services/common/models/accident-statistic.service';
+import { MonthlyDirectorateFilterService } from 'src/app/services/common/monthly-directorate-filter.service';
 
 
 @Component({
@@ -53,7 +51,7 @@ export class ListComponent extends BaseComponent implements OnInit {
   constructor(
     spinner: NgxSpinnerService,
     private accidentStatisticService: AccidentStatisticService,
-    private accidentStatisticFilterService: AccidentStatisticFilterService,
+    private monthlyDirectorateFilterService: MonthlyDirectorateFilterService,
     private alertifyService: AlertifyService,
     private dialog: MatDialog,
   ) {
@@ -96,6 +94,7 @@ export class ListComponent extends BaseComponent implements OnInit {
 
         // Dinamik verileri oluştur
         this.years = ['Tüm Yıllar', ...new Set(this.allAccidentStatistics.map(accidentStatistic => accidentStatistic.year.toString()))]; // "Tüm Yıllar" eklendi
+        this.years.sort((a, b) => parseInt(a) - parseInt(b));
         this.directorates = ['Tüm İşletmeler', ...new Set(this.allAccidentStatistics.map(accidentStatistic => accidentStatistic.directorate))]; // "Tüm İşletmeler" eklendi
     
         this.applyFilters();
@@ -107,7 +106,7 @@ export class ListComponent extends BaseComponent implements OnInit {
       directorate: this.selectedDirectorate === 'Tüm İşletmeler' ? null : this.selectedDirectorate
     };
 
-    const filteredAccidentStatistics = this.accidentStatisticFilterService.applyFilters(this.allAccidentStatistics, filters);
+    const filteredAccidentStatistics = this.monthlyDirectorateFilterService.applyFilters(this.allAccidentStatistics, filters);
     const updatedAccidentStatistics = filteredAccidentStatistics.map(statistic => ({
       ...statistic,
       month: this.monthNames[statistic.month]

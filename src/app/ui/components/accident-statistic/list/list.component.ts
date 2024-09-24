@@ -8,7 +8,6 @@ import { BaseComponent, SpinnerType } from 'src/app/base/base.component';
 import { AlertifyService, MessageType, Position } from 'src/app/services/admin/alertify.service';
 import { AccidentStatisticService } from 'src/app/services/common/models/accident-statistic.service';
 import { AccidentStatisticFilterService } from 'src/app/services/common/accident-statistic-filter.service';
-import { List_Return_Statistic } from 'src/app/contracts/accident_statistic/list_return_statistic';
 
 @Component({
   selector: 'app-list',
@@ -54,6 +53,7 @@ export class ListComponent extends BaseComponent implements OnInit {
 
       // Yılları ve işletmeleri filtreleme için hazırlıyoruz
       this.years = ['Tüm Yıllar', ...new Set(this.accidentStatistics.map(stat => stat.year))];
+      this.years.sort((a, b) => parseInt(a) - parseInt(b));
       this.directorates = ['Tüm İşletmeler', ...new Set(this.accidentStatistics.map(stat => stat.directorate))];
 
       // Filtre uygulama işlemi

@@ -52,6 +52,7 @@ export class ListComponent extends BaseComponent implements OnInit {
 
     // Dinamik verileri oluştur
     this.years = ['Tüm Yıllar', ...new Set(this.allAccidents.map(accident => new Date(accident.accidentDate).getFullYear().toString()))]; // "Tüm Yıllar" eklendi
+    this.years.sort((a, b) => parseInt(a) - parseInt(b));
     this.directorates = ['Tüm İşletmeler', ...new Set(this.allAccidents.map(accident => accident.directorate))]; // "Tüm İşletmeler" eklendi
 
     this.applyFilters();

@@ -3,9 +3,9 @@ import { List_Directorate } from 'src/app/contracts/definitions/directorate/list
 import { BaseDialog } from '../../base/base-dialog';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { AccidentStatisticService } from 'src/app/services/common/models/accident-statistic.service';
-import { Update_Monthly_Directorate_Data } from 'src/app/contracts/monthly_directorate_data/update-monthly-directorate-data';
 import { ShowDirectorateDialogComponent } from '../../definition/show-directorate-dialog/show-directorate-dialog.component';
 import { AlertifyService, MessageType, Position } from 'src/app/services/admin/alertify.service';
+import { Update_Accident_Statistic } from 'src/app/contracts/accident_statistic/update-accident-statistic';
 
 @Component({
   selector: 'app-update-accident-statistic-dialog',
@@ -35,7 +35,7 @@ export class UpdateAccidentStatisticDialogComponent extends BaseDialog<UpdateAcc
 
   constructor(
     dialogRef: MatDialogRef<UpdateAccidentStatisticDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: Update_Monthly_Directorate_Data,
+    @Inject(MAT_DIALOG_DATA) public data: Update_Accident_Statistic,
     private accidentStatisticService: AccidentStatisticService,
     private alertifyService: AlertifyService,
     private dialog: MatDialog
@@ -49,7 +49,7 @@ export class UpdateAccidentStatisticDialogComponent extends BaseDialog<UpdateAcc
   }
 
   updateAccidentStatistic(): void {
-    const updateMonthlyDirectorateData: Update_Monthly_Directorate_Data = {
+    const updateMonthlyDirectorateData: Update_Accident_Statistic = {
       id: this.data.id,
       month: this.data.month,
       year: this.data.year,

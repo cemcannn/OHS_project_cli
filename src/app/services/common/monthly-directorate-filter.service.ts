@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { List_Accident_Statistic } from 'src/app/contracts/accident_statistic/list_accident_statistic';
-import { List_Monthly_Directorate_Data } from 'src/app/contracts/monthly_directorate_data/list-monthly-directorate-data';
 
 @Injectable({
   providedIn: 'root',
@@ -9,17 +8,17 @@ export class MonthlyDirectorateFilterService {
   constructor() {}
 
   // Yıllara göre gruplama
-  filterByYear(accidentStatistics: List_Monthly_Directorate_Data[], year: string): List_Monthly_Directorate_Data[] {
+  filterByYear(accidentStatistics: List_Accident_Statistic[], year: string): List_Accident_Statistic[] {
     return accidentStatistics.filter(accidentStatistics => accidentStatistics.year === year);
   }
 
   // İşletmelere (Directorates) göre gruplama
-  filterByDirectorate(accidentStatistics: List_Monthly_Directorate_Data[], directorate: string): List_Monthly_Directorate_Data[] {
+  filterByDirectorate(accidentStatistics: List_Accident_Statistic[], directorate: string): List_Accident_Statistic[] {
     return accidentStatistics.filter(accidentStatistics => accidentStatistics.directorate === directorate);
   }
 
   // Çoklu filtreleme işlemi
-  applyFilters(accidentStatistics: List_Monthly_Directorate_Data[], filters: any): List_Monthly_Directorate_Data[] {
+  applyFilters(accidentStatistics: List_Accident_Statistic[], filters: any): List_Accident_Statistic[] {
     let filteredAccidentStatistics = accidentStatistics;
 
     if (filters.year) {

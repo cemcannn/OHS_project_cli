@@ -1,38 +1,46 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { MatSort } from '@angular/material/sort';
 import { Chart, ChartConfiguration, registerables } from 'chart.js';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { BaseComponent, SpinnerType } from 'src/app/base/base.component';
 import { List_Accident_Statistic } from 'src/app/contracts/accident_statistic/list_accident_statistic';
 import { List_Accident } from 'src/app/contracts/accidents/list_accident';
-import { AlertifyService, MessageType, Position} from 'src/app/services/admin/alertify.service';
-import { AccidentRateService } from 'src/app/services/common/accident-rate.service';
+import {
+  AlertifyService,
+  MessageType,
+  Position,
+} from 'src/app/services/admin/alertify.service';
+import { AccidentStatisticFilterService } from 'src/app/services/common/accident-statistic-filter.service';
 import { AccidentStatisticService } from 'src/app/services/common/models/accident-statistic.service';
-import { AccidentService } from 'src/app/services/common/models/accident.service';
-import { StatisticService } from 'src/app/services/common/statistic.service';
 
 @Component({
   selector: 'app-chart',
   templateUrl: './chart.component.html',
   styleUrls: ['./chart.component.scss'],
 })
-
 export class ChartComponent extends BaseComponent implements OnInit {
   @ViewChild('monthlyChart') monthlyChartCanvas: ElementRef;
   @ViewChild('yearlyChart') yearlyChartCanvas: ElementRef;
+  @ViewChild(MatSort) sort: MatSort;
+
   monthlyChart: Chart;
   yearlyChart: Chart;
+
   statisticData: any[];
-  yearlyStatisticData: any[];
+  
+  selectedYearlyMetric: string = 'actualDailyWageSummary';
+  selectedYearlyDirectorate: string = 'Tüm İşletmeler';
+  selectedTimeRange: string = '5';
+
+  accidents: List_Accident[] = [];
+
   years: string[] = [];
   directorates: string[] = [];
-  selectedYear: string = 'All';
-  selectedMonthlyMetric: string = 'actualDailyWageSummary';
-  selectedYearlyMetric: string = 'actualDailyWageSummary';
-  selectedMonthlyDirectorate: string = 'All';
-  selectedYearlyDirectorate: string = 'All';
-  selectedTimeRange: string = '5';
-  accidents: List_Accident[] = [];
   accidentStatistics: List_Accident_Statistic[] = [];
+
+  selectedYear: string = 'Tüm Yıllar'; // Filtreleme için seçilen yıl
+  selectedMonthlyDirectorate: string = 'Tüm İşletmeler'; // Filtreleme için seçilen işletme
+  selectedMonthlyMetric: string = 'actualDailyWageSummary';
 
   metrics = [
     { value: 'actualDailyWageSummary', label: 'Fiili Yevmiye Sayısı (Toplam)' },
@@ -45,10 +53,8 @@ export class ChartComponent extends BaseComponent implements OnInit {
   constructor(
     spinner: NgxSpinnerService,
     private accidentStatisticService: AccidentStatisticService,
-    private accidentService: AccidentService,
-    private accidentRateService: AccidentRateService,
     private alertifyService: AlertifyService,
-    private statisticService: StatisticService
+    private accidentStatisticFilterService: AccidentStatisticFilterService
   ) {
     super(spinner);
     Chart.register(...registerables);
@@ -61,60 +67,38 @@ export class ChartComponent extends BaseComponent implements OnInit {
   async loadData() {
     this.showSpinner(SpinnerType.Cog);
 
-    try {
-      const [accidentStatisticsResponse, accidentsResponse] = await Promise.all(
-        [
-          this.accidentStatisticService.getAccidentStatistics(),
-          this.accidentService.getAccidents(),
-        ]
-      );
+    // İstatistikleri yükle
+    const result = await this.accidentStatisticService.getAccidentStatistics(
+      () => this.hideSpinner(SpinnerType.Cog),
+      (errorMessage) =>
+        this.alertifyService.message(errorMessage, {
+          dismissOthers: true,
+          messageType: MessageType.Error,
+          position: Position.TopRight,
+        })
+    );
 
-      this.accidentStatistics = accidentStatisticsResponse.datas;
-      this.accidents = accidentsResponse.datas;
+    this.accidentStatistics = result.datas;
 
-      this.directorates = [
-        ...new Set(this.accidents.map((a) => a.directorate)),
-      ];
+    // Yılları ve işletmeleri filtreleme için hazırlıyoruz
+    this.years = [
+      'Tüm Yıllar',
+      ...new Set(this.accidentStatistics.map((stat) => stat.year)),
+    ];
+    this.years.sort((a, b) => parseInt(a) - parseInt(b));
+    this.directorates = [
+      'Tüm İşletmeler',
+      ...new Set(this.accidentStatistics.map((stat) => stat.directorate)),
+    ];
 
-      this.statisticData = this.statisticService.groupByMonth(
-        this.accidentStatistics,
-        this.accidents
-      );
-      this.yearlyStatisticData = Object.values(
-        this.statisticService.groupByYearChart(
-          this.accidentStatistics,
-          this.accidents
-        )
-      );
-
-      // "Toplam" değerini filtrele
-      this.statisticData = this.statisticData.filter(
-        (d) => d.month !== 'Toplam'
-      );
-
-      this.years = [...new Set(this.accidentStatistics.map((dw) => dw.year))];
-      this.years.sort((a, b) => parseInt(a) - parseInt(b));
-
-      this.updateMonthlyChart();
-      this.updateYearlyChart();
-
-      // İşlemler başarılı olursa buraya eklenebilir
-    } catch (errorMessage) {
-      this.alertifyService.message(errorMessage, {
-        dismissOthers: true,
-        messageType: MessageType.Error,
-        position: Position.TopRight,
-      });
-    } finally {
-      this.hideSpinner(SpinnerType.Cog);
-    }
+    this.updateMonthlyChart();
+    this.updateYearlyChart();
   }
 
   updateMonthlyChart() {
-    const filteredData = this.getMonthlyFilteredData();
+    const filteredData = this.applyMonthlyFilters();
 
-    // Eğer veri yoksa, grafiği boş gösterebilirsiniz veya varsayılan değerler kullanabilirsiniz
-    if (!filteredData.length) {
+    if (!filteredData || filteredData.length === 0) {
       const chartConfig: ChartConfiguration = {
         type: 'line',
         data: {
@@ -150,13 +134,12 @@ export class ChartComponent extends BaseComponent implements OnInit {
       return;
     }
 
-    const months = this.statisticService.getMonthNames();
+    const months = this.accidentStatisticFilterService.getMonthNames();
     const labels = months.filter((month) =>
-      filteredData.some((d) => d.month === month)
+      filteredData.some((d: any) => d.month === month)
     );
     const data = labels.map((label) => {
-      const monthData = filteredData.find((d) => d.month === label);
-      // Sıfır değerleri null ile değiştir
+      const monthData = filteredData.find((d: any) => d.month === label);
       return monthData ? monthData[this.selectedMonthlyMetric] || null : null;
     });
 
@@ -197,10 +180,10 @@ export class ChartComponent extends BaseComponent implements OnInit {
   }
 
   updateYearlyChart() {
-    const filteredData = this.getYearlyFilteredData();
+    const filteredData = this.applyYearlyFilters();
 
-    const labels = filteredData.map((d) => d.year);
-    const data = filteredData.map((d) => {
+    const labels = filteredData.map((d: any) => d.year);
+    const data = filteredData.map((d: any) => {
       // Sıfır değerleri null ile değiştir
       return d[this.selectedYearlyMetric] || null;
     });
@@ -241,37 +224,33 @@ export class ChartComponent extends BaseComponent implements OnInit {
     );
   }
 
-  getMonthlyFilteredData() {
-    let filteredStatistics = this.accidentStatistics;
-    let filteredAccidents = this.accidents;
+  applyMonthlyFilters(): List_Accident_Statistic[] {
+    const filters = {
+      year: this.selectedYear === 'Tüm Yıllar' ? null : this.selectedYear,
+      directorate:
+        this.selectedMonthlyDirectorate === 'Tüm İşletmeler'
+          ? null
+          : this.selectedMonthlyDirectorate,
+    };
 
-    if (this.selectedYear !== 'All') {
-      filteredStatistics = this.statisticService.groupByYearList(
-        this.accidentStatistics
-      )[this.selectedYear];
-      filteredAccidents = this.accidentRateService.groupByYear(this.accidents)[
-        this.selectedYear
-      ];
-    }
+    const filteredAccidentStatistics =
+      this.accidentStatisticFilterService.applyFilters(
+        this.accidentStatistics,
+        filters
+      ) || [];
 
-    if (this.selectedMonthlyDirectorate !== 'All') {
-      filteredStatistics = filteredStatistics.filter(
-        (s) => s.directorate === this.selectedMonthlyDirectorate
-      );
-      filteredAccidents = filteredAccidents.filter(
-        (a) => a.directorate === this.selectedMonthlyDirectorate
-      );
-    }
-
-    const groupedStatistics = this.statisticService.groupByMonth(
-      filteredStatistics,
-      filteredAccidents
-    );
-
-    return groupedStatistics;
+    return filteredAccidentStatistics;
   }
 
-  getYearlyFilteredData() {
+  applyYearlyFilters(): any[] {
+
+    const filters = {
+      directorate:
+        this.selectedYearlyDirectorate === 'Tüm İşletmeler'
+          ? null
+          : this.selectedYearlyDirectorate,
+    };
+
     const currentYear = new Date().getFullYear();
     const minYear =
       this.selectedTimeRange === '5'
@@ -280,32 +259,16 @@ export class ChartComponent extends BaseComponent implements OnInit {
         ? currentYear - 10
         : currentYear - 20;
 
-    return this.yearlyStatisticData.filter(
-      (d) => parseInt(d.year) >= minYear && parseInt(d.year) <= currentYear
+    // Yıllık istatistik verilerini al
+    const yearlyStatisticData =
+      this.accidentStatisticFilterService.groupByYearChart(
+        this.accidentStatistics,
+        filters
+      ) || [];
+
+    // Yıl aralığına göre filtrele
+    return yearlyStatisticData.filter(
+      (d: any) => parseInt(d.year) >= minYear && parseInt(d.year) <= currentYear
     );
-  }
-
-  onYearChange() {
-    this.updateMonthlyChart();
-  }
-
-  onDirectorateChange() {
-    this.updateMonthlyChart();
-  }
-
-  onMonthlyMetricChange() {
-    this.updateMonthlyChart();
-  }
-
-  onTimeRangeChange() {
-    this.updateYearlyChart();
-  }
-
-  onYearlyMetricChange() {
-    this.updateYearlyChart();
-  }
-
-  onYearlyDirectorateChange() {
-    this.updateYearlyChart();
   }
 }

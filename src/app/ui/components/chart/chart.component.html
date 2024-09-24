@@ -1,4 +1,4 @@
-==============================================================
+<!-- ============================================================== -->
 <!-- Bread Crumb -->
 <!-- ============================================================== -->
 <div class="page-breadcrumb">
@@ -35,9 +35,8 @@
           <mat-select
             id="yearSelect"
             [(ngModel)]="selectedYear"
-            (ngModelChange)="onYearChange()"
+            (ngModelChange)="updateMonthlyChart()"
           >
-            <mat-option value="All">Tüm Yıllar</mat-option>
             <mat-option *ngFor="let year of years" [value]="year">{{
               year
             }}</mat-option>
@@ -52,9 +51,8 @@
           <mat-select
             id="directorateSelect"
             [(ngModel)]="selectedMonthlyDirectorate"
-            (ngModelChange)="onDirectorateChange()"
+            (ngModelChange)="updateMonthlyChart()"
           >
-            <mat-option value="All">Tüm İşletmeler</mat-option>
             <mat-option
               *ngFor="let directorate of directorates"
               [value]="directorate"
@@ -71,7 +69,7 @@
           <mat-select
             id="monthlyMetricSelect"
             [(ngModel)]="selectedMonthlyMetric"
-            (ngModelChange)="onMonthlyMetricChange()"
+            (ngModelChange)="updateMonthlyChart()"
           >
             <mat-option *ngFor="let metric of metrics" [value]="metric.value">{{
               metric.label
@@ -97,7 +95,7 @@
           <mat-select
             id="timeRangeSelect"
             [(ngModel)]="selectedTimeRange"
-            (ngModelChange)="onTimeRangeChange()"
+            (ngModelChange)="updateYearlyChart()"
           >
             <mat-option value="5">Son 5 Yıl</mat-option>
             <mat-option value="10">Son 10 Yıl</mat-option>
@@ -113,7 +111,7 @@
           <mat-select
             id="yearlyMetricSelect"
             [(ngModel)]="selectedYearlyMetric"
-            (ngModelChange)="onYearlyMetricChange()"
+            (ngModelChange)="updateYearlyChart()"
           >
             <mat-option *ngFor="let metric of metrics" [value]="metric.value">{{
               metric.label
@@ -129,7 +127,7 @@
           <mat-select
             id="yearlyMetricSelect"
             [(ngModel)]="selectedYearlyDirectorate"
-            (ngModelChange)="onYearlyDirectorateChange()"
+            (ngModelChange)="updateYearlyChart()"
           >
             <mat-option *ngFor="let directorate of directorates" [value]="directorate">{{
               directorate
