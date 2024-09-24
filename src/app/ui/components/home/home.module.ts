@@ -7,7 +7,7 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-
+import {MatCardModule} from '@angular/material/card';
 
 
 
@@ -17,7 +17,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
   ],
   imports: [
     CommonModule, MatFormFieldModule, MatSelectModule, FormsModule, ReactiveFormsModule,
-    MatTableModule,
+    MatTableModule, MatCardModule,
     MatSortModule,
     RouterModule.forChild([
       { path: "", component: HomeComponent}

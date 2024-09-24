@@ -27,7 +27,7 @@ export class ChartComponent extends BaseComponent implements OnInit {
   yearlyChart: Chart;
 
   statisticData: any[];
-  
+
   selectedYearlyMetric: string = 'actualDailyWageSummary';
   selectedYearlyDirectorate: string = 'Tüm İşletmeler';
   selectedTimeRange: string = '5';
@@ -91,6 +91,7 @@ export class ChartComponent extends BaseComponent implements OnInit {
       ...new Set(this.accidentStatistics.map((stat) => stat.directorate)),
     ];
 
+    
     this.updateMonthlyChart();
     this.updateYearlyChart();
   }
