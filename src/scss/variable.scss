@@ -207,7 +207,7 @@ $h4-font-size: 18px !default;
 $h5-font-size: 16px !default;
 $h6-font-size: 14px !default;
 
-$headings-margin-bottom: (1rem / 2) !default;
+$headings-margin-bottom: calc(1rem / 2) !default;
 $headings-font-weight: 700 !default;
 $headings-color: inherit !default;
 

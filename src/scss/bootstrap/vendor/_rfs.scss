@@ -221,8 +221,8 @@ $rfs-mq-property-height: if(
         $val: $val + " " + $value;
       } @else {
         // Remove unit from $value for calculations
-        $value: $value / ($value * 0 + if($unit == px, 1, 1 / $rfs-rem-value));
-
+        $value: $value / ($value * 0 + if($unit == px, 1, calc(1 / $rfs-rem-value)));
+        
         // Only add the media query if the value is greater than the minimum value
         @if abs($value) <= $rfs-base-value or not $enable-rfs {
           $val: $val +

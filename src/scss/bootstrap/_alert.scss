@@ -48,7 +48,7 @@
   @if (contrast-ratio($background, $color) < $min-contrast-ratio) {
     $color: mix($value, color-contrast($background), abs($alert-color-scale));
   }
-  .alert-#{$state} {
+    .alert-#{$state} {
     @include alert-variant($background, $border, $color);
   }
 }

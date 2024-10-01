@@ -10,6 +10,7 @@
   },
   "private": true,
   "dependencies": {
+    "@angular-devkit/build-angular": "^18.2.6",
     "@angular/animations": "^18.2.6",
     "@angular/cdk": "^16.1.7",
     "@angular/common": "^18.2.6",
@@ -34,12 +35,13 @@
     "ngx-toastr": "^17.0.2",
     "openai": "^4.58.1",
     "rxjs": "~7.8.0",
+    "sass": "~1.32.0",
+    "sass-loader": "^16.0.2",
     "stream-browserify": "^3.0.0",
     "xlsx": "^0.18.5",
     "zone.js": "~0.14.10"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^18.2.6",
     "@angular/cli": "~18.2.6",
     "@angular/compiler-cli": "^18.2.6",
     "@angular/localize": "^18.2.6",
