@@ -84,10 +84,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "OHS_program_cli:build:production"
+              "buildTarget": "OHS_program_cli:build:production"
             },
             "development": {
-              "browserTarget": "OHS_program_cli:build:development"
+              "buildTarget": "OHS_program_cli:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -95,7 +95,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "OHS_program_cli:build"
+            "buildTarget": "OHS_program_cli:build"
           }
         },
         "test": {
