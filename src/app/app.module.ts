@@ -7,7 +7,7 @@ import { UiModule } from './ui/ui.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 import { NgxSpinnerModule } from 'ngx-spinner';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { LoginComponent } from './ui/components/login/login.component';
 import { JwtModule } from '@auth0/angular-jwt';
 import { HttpErrorHandlerInterceptorService } from './services/common/http-error-handler-interceptor.service';
@@ -32,39 +32,34 @@ export const MY_FORMATS = {
   },
 };
 
-@NgModule({
-  declarations: [
-    AppComponent,
-    LoginComponent,
-    DynamicLoadComponentDirective
-  ],
-  imports: [
-    BrowserModule,
-    BrowserAnimationsModule,
-    AppRoutingModule, 
-    FormsModule,
-    AdminModule, UiModule,  
-    ToastrModule.forRoot(),
-    NgxSpinnerModule,
-    HttpClientModule,
-    JwtModule.forRoot({
-      config: {
-        tokenGetter: () => localStorage.getItem("accessToken"),
-        allowedDomains: ["https://localhost:7170/"]
-      }
-    })
-  ],
-  providers: [ 
-    { provide: "baseUrl", useValue: "https://localhost:7170/api",  multi: true},
-    { provide: LOCALE_ID, useValue: 'tr-TR' },
-    { provide: MAT_DATE_LOCALE, useValue: 'tr-TR' },
-    { provide: HTTP_INTERCEPTORS, useClass: HttpErrorHandlerInterceptorService, multi: true },
-    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
-    { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
-    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
-  ],
-  bootstrap: [AppComponent],
-  schemas: [
-    CUSTOM_ELEMENTS_SCHEMA]
-})
+@NgModule({ declarations: [
+        AppComponent,
+        LoginComponent,
+        DynamicLoadComponentDirective
+    ],
+    bootstrap: [AppComponent],
+    schemas: [
+        CUSTOM_ELEMENTS_SCHEMA
+    ], imports: [BrowserModule,
+        BrowserAnimationsModule,
+        AppRoutingModule,
+        FormsModule,
+        AdminModule, UiModule,
+        ToastrModule.forRoot(),
+        NgxSpinnerModule,
+        JwtModule.forRoot({
+            config: {
+                tokenGetter: () => localStorage.getItem("accessToken"),
+                allowedDomains: ["https://localhost:7170/"]
+            }
+        })], providers: [
+        { provide: "baseUrl", useValue: "https://localhost:7170/api", multi: true },
+        { provide: LOCALE_ID, useValue: 'tr-TR' },
+        { provide: MAT_DATE_LOCALE, useValue: 'tr-TR' },
+        { provide: HTTP_INTERCEPTORS, useClass: HttpErrorHandlerInterceptorService, multi: true },
+        { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+        { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
+        { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
+        provideHttpClient(withInterceptorsFromDi()),
+    ] })
 export class AppModule { }
