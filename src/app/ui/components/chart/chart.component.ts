@@ -26,6 +26,8 @@ export class ChartComponent extends BaseComponent implements OnInit {
   monthlyChart: Chart;
   yearlyChart: Chart;
 
+  selectedChartType: string = 'monthly'; // Default olarak Aylık İstatistik Grafiği
+
   statisticData: any[];
 
   selectedYearlyMetric: string = 'actualDailyWageSummary';
@@ -92,8 +94,13 @@ export class ChartComponent extends BaseComponent implements OnInit {
     ];
 
     
-    this.updateMonthlyChart();
-    this.updateYearlyChart();
+
+      if (this.selectedChartType === 'monthly') {
+        this.updateMonthlyChart();
+      } else {
+        this.updateYearlyChart();
+      }
+    
   }
 
   updateMonthlyChart() {
@@ -272,4 +279,7 @@ export class ChartComponent extends BaseComponent implements OnInit {
       (d: any) => parseInt(d.year) >= minYear && parseInt(d.year) <= currentYear
     );
   }
+
+
+
 }

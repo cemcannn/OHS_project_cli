@@ -108,43 +108,43 @@
                 Fiili Yevmiye Sayısı (Yerüstü)
               </th>
               <td mat-cell *matCellDef="let element">
-                {{ element.actualDailyWageSurface | integer }}
+                {{ element.actualDailyWageSurface != null ? (element.actualDailyWageSurface | integer) : 0 }}
               </td>
             </ng-container>
-
+            
             <ng-container matColumnDef="actualDailyWageUnderground">
               <th mat-header-cell *matHeaderCellDef mat-sort-header>
                 Fiili Yevmiye Sayısı (Yeraltı)
               </th>
               <td mat-cell *matCellDef="let element">
-                {{ element.actualDailyWageUnderground | integer }}
+                {{ element.actualDailyWageUnderground != null ? (element.actualDailyWageUnderground | integer) : 0 }}
               </td>
             </ng-container>
-
+            
             <ng-container matColumnDef="employeesNumberSurface">
               <th mat-header-cell *matHeaderCellDef mat-sort-header>
                 Çalışan Sayısı (Yerüstü)
               </th>
               <td mat-cell *matCellDef="let element">
-                {{ element.employeesNumberSurface | integer }}
+                {{ element.employeesNumberSurface != null ? (element.employeesNumberSurface | integer) : 0 }}
               </td>
             </ng-container>
-
+            
             <ng-container matColumnDef="lostDayOfWorkSummary">
               <th mat-header-cell *matHeaderCellDef mat-sort-header>
                 İş Günü Kaybı (Toplam)
               </th>
               <td mat-cell *matCellDef="let element">
-                {{ element.lostDayOfWorkSummary | integer }}
+                {{ element.lostDayOfWorkSummary != null ? (element.lostDayOfWorkSummary | integer) : 0 }}
               </td>
             </ng-container>
-
+            
             <ng-container matColumnDef="employeesNumberUnderground">
               <th mat-header-cell *matHeaderCellDef mat-sort-header>
                 Çalışan Sayısı (Yeraltı)
               </th>
               <td mat-cell *matCellDef="let element">
-                {{ element.employeesNumberUnderground | integer }}
+                {{ element.employeesNumberUnderground != null ? (element.employeesNumberUnderground | integer) : 0 }}
               </td>
             </ng-container>
 

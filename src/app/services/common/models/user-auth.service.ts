@@ -1,4 +1,3 @@
-import { SocialUser } from '@abacritt/angularx-social-login';
 import { Injectable } from '@angular/core';
 
 import { firstValueFrom, Observable } from 'rxjs';

@@ -93,13 +93,20 @@ export class ListComponent extends BaseComponent implements OnInit, AfterViewIni
   }
 
   applySearch(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
+    const filterValue = (event.target as HTMLInputElement).value.toLowerCase();
+  
+    // İsim ve soyisim kolonlarını birleştirerek arama
+    this.dataSource.filterPredicate = (data: any, filter: string) => {
+      const combinedName = `${data.name} ${data.surname}`.toLowerCase();
+      return combinedName.includes(filter);
+    };
+  
     this.dataSource.filter = filterValue.trim().toLowerCase();
 
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
-  }
+  }  
 
   async openPersonnelAddDialog(): Promise<void> {
     const dialogRef = this.dialog.open(PersonnelAddDialogComponent, {
