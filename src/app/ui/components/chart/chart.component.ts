@@ -103,89 +103,57 @@ export class ChartComponent extends BaseComponent implements OnInit {
     
   }
 
-  updateMonthlyChart() {
-    const filteredData = this.applyMonthlyFilters();
+updateMonthlyChart() {
+  const months = this.accidentStatisticFilterService.getMonthNames(); // Tüm ayları al
+  const filteredData = this.applyMonthlyFilters();
 
-    if (!filteredData || filteredData.length === 0) {
-      const chartConfig: ChartConfiguration = {
-        type: 'line',
-        data: {
-          labels: [],
-          datasets: [
-            {
-              label: 'Veri Bulunamadı',
-              data: [],
-              fill: false,
-              borderColor: 'rgb(237, 20, 17)',
-              tension: 0.1,
-            },
-          ],
+  // Etiketler ve veri dizilerini oluştur
+  const labels = months; // Tüm aylar etiket olarak ekleniyor
+  const data = labels.map((label) => {
+    const monthData = filteredData.find((d: any) => d.month === label);
+    // Verinin bulunmadığı aylar için null atanıyor
+    return monthData ? monthData[this.selectedMonthlyMetric] || null : null;
+  });
+
+  // Grafik yapılandırması
+  const chartConfig: ChartConfiguration = {
+    type: 'line',
+    data: {
+      labels: labels,
+      datasets: [
+        {
+          label: this.metrics.find(
+            (m) => m.value === this.selectedMonthlyMetric
+          ).label,
+          data: data,
+          fill: false,
+          borderColor: 'rgb(237, 20, 17)',
+          tension: 0.1,
         },
-        options: {
-          responsive: true,
-          scales: {
-            y: {
-              beginAtZero: true,
-            },
-          },
-        },
-      };
-
-      if (this.monthlyChart) {
-        this.monthlyChart.destroy();
-      }
-
-      this.monthlyChart = new Chart(
-        this.monthlyChartCanvas.nativeElement,
-        chartConfig
-      );
-      return;
-    }
-
-    const months = this.accidentStatisticFilterService.getMonthNames();
-    const labels = months.filter((month) =>
-      filteredData.some((d: any) => d.month === month)
-    );
-    const data = labels.map((label) => {
-      const monthData = filteredData.find((d: any) => d.month === label);
-      return monthData ? monthData[this.selectedMonthlyMetric] || null : null;
-    });
-
-    const chartConfig: ChartConfiguration = {
-      type: 'line',
-      data: {
-        labels: labels,
-        datasets: [
-          {
-            label: this.metrics.find(
-              (m) => m.value === this.selectedMonthlyMetric
-            ).label,
-            data: data,
-            fill: false,
-            borderColor: 'rgb(237, 20, 17)',
-            tension: 0.1,
-          },
-        ],
-      },
-      options: {
-        responsive: true,
-        scales: {
-          y: {
-            beginAtZero: true,
-          },
+      ],
+    },
+    options: {
+      responsive: true,
+      scales: {
+        y: {
+          beginAtZero: true,
         },
       },
-    };
+    },
+  };
 
-    if (this.monthlyChart) {
-      this.monthlyChart.destroy();
-    }
-
-    this.monthlyChart = new Chart(
-      this.monthlyChartCanvas.nativeElement,
-      chartConfig
-    );
+  // Eski grafik varsa yok et
+  if (this.monthlyChart) {
+    this.monthlyChart.destroy();
   }
+
+  // Yeni grafik oluştur
+  this.monthlyChart = new Chart(
+    this.monthlyChartCanvas.nativeElement,
+    chartConfig
+  );
+}
+
 
   updateYearlyChart() {
     const filteredData = this.applyYearlyFilters();

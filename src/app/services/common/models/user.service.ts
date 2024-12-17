@@ -10,12 +10,23 @@ import { User } from '../../../entities/user';
 import { CustomToastrService, ToastrMessageType, ToastrPosition } from '../../ui/custom-toastr.service';
 import { HttpClientService } from '../http-client.service';
 import { Update_User } from 'src/app/contracts/users/update_user';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
   constructor(private httpClientService: HttpClientService, private toastrService: CustomToastrService) { }
+
+  private async handleRequest<T>(observable: Observable<T>, successCallBack?: () => void, errorCallBack?: (errorMessage: string) => void): Promise<T> {
+    const promiseData = firstValueFrom(observable);
+    promiseData.then(value => {
+      if (successCallBack) successCallBack();
+    }).catch((error: HttpErrorResponse) => {
+      if (errorCallBack) errorCallBack(error.message);
+    });
+    return await promiseData;
+  }
 
   async create(user: User): Promise<Create_User> {
     const observable: Observable<Create_User | User> = this.httpClientService.post<Create_User | User>({
@@ -61,7 +72,14 @@ export class UserService {
     promiseData.then(value => successCallBack())
       .catch(error => errorCallBack(error));
 
-    return await promiseData;
+      return this.handleRequest(observable, successCallBack, errorCallBack);
+  }
+
+  async getUserById(id: string, successCallBack?: () => void, errorCallBack?: (errorMessage: string) => void): Promise<List_User> {
+    const observable: Observable<List_User> = this.httpClientService.get<List_User>({
+      controller: "Users"
+    }, id);
+    return this.handleRequest(observable, successCallBack, errorCallBack);
   }
 
   async assignRoleToUser(id: string, roles: string[], successCallBack?: () => void, errorCallBack?: (error) => void) {

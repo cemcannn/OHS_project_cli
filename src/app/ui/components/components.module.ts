@@ -15,6 +15,7 @@ import { PersonnelModule } from './personnel/personnel.module';
 import { AccidentModule } from './accident/accident.module';
 import { AccidentStatisticModule } from './accident-statistic/accident-statistic.module';
 import { AccidentRateModule } from './accident-rate/accident-rate.module';
+import { UserModule } from './user/user.module';
 
 
 
@@ -33,6 +34,7 @@ import { AccidentRateModule } from './accident-rate/accident-rate.module';
     PersonnelModule,
     AccidentModule,
     AccidentStatisticModule,
+    UserModule,
     AccidentRateModule
   ],
   exports: [

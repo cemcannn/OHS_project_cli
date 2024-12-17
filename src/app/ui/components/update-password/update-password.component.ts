@@ -23,7 +23,7 @@ export class UpdatePasswordComponent extends BaseComponent implements OnInit {
 
   ngOnInit(): void {
     this.showSpinner(SpinnerType.BallAtom)
-    this.activatedRoute.params.subscribe({
+    this.activatedRoute.paramMap.subscribe({
       next: async params => {
         const userId: string = params["userId"];
         const resetToken: string = params["resetToken"];
