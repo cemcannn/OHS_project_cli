@@ -10,9 +10,9 @@
           <small class="form-text text-muted invalid-feedback" *ngIf="submitted && (component.name.errors?.maxlength || component.name.errors?.minlength)">Lütfen ad soyadı 3 ile 50 karakter arasında yazınız.</small>
         </div>
         <div class="form-group">
-          <label for="username">Kullanıcı Adı</label>
-          <input type="text" formControlName="username" class="form-control" id="username" [ngClass]="{'is-invalid': submitted && component.username.errors}" placeholder="Kullanıcı Adı">
-          <small class="form-text text-muted invalid-feedback" *ngIf="submitted && component.username.errors?.required">Lütfen kullanıcı adını boş geçmeyiniz.</small>
+          <label for="userName">Kullanıcı Adı</label>
+          <input type="text" formControlName="userName" class="form-control" id="userName" [ngClass]="{'is-invalid': submitted && component.userName.errors}" placeholder="Kullanıcı Adı">
+          <small class="form-text text-muted invalid-feedback" *ngIf="submitted && component.userName.errors?.required">Lütfen kullanıcı adını boş geçmeyiniz.</small>
         </div>
         <div class="form-group">
           <label for="email">Email</label>

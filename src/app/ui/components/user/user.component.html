@@ -1,70 +1,47 @@
-<div class="container mt-5">
-    <h2>Kullanıcı Bilgileri</h2>
-    <div class="card">
-      <div class="card-body">
-        <form #userForm="ngForm">
-          <div class="mb-3">
-            <label for="userName" class="form-label">Ad Soyad</label>
-            <input 
-              type="text" 
-              id="userName" 
-              class="form-control" 
-              [(ngModel)]="user.name" 
-              name="name" 
-              required 
-              placeholder="Adınızı ve soyadınızı girin">
-          </div>
-          <div class="mb-3">
-            <label for="userName" class="form-label">Kullanıcı Adı</label>
-            <input 
-              type="text" 
-              id="userName" 
-              class="form-control" 
-              [(ngModel)]="user.name" 
-              name="name" 
-              required 
-              placeholder="Adınızı ve soyadınızı girin">
-          </div>
-          <div class="mb-3">
-            <label for="userEmail" class="form-label">E-posta</label>
-            <input 
-              type="email" 
-              id="userEmail" 
-              class="form-control" 
-              [(ngModel)]="user.email" 
-              name="email" 
-              required 
-              placeholder="E-posta adresinizi girin">
-          </div>
-          <div class="mb-3">
-            <label for="userPhone" class="form-label">Telefon</label>
-            <input 
-              type="tel" 
-              id="userPhone" 
-              class="form-control" 
-              [(ngModel)]="user.phone" 
-              name="phone" 
-              placeholder="Telefon numaranızı girin">
-          </div>
-          <div class="mb-3">
-            <label for="userAddress" class="form-label">Adres</label>
-            <textarea 
-              id="userAddress" 
-              class="form-control" 
-              [(ngModel)]="user.address" 
-              name="address" 
-              rows="3" 
-              placeholder="Adresinizi girin"></textarea>
-          </div>
-          <button 
-            type="button" 
-            class="btn btn-primary" 
-            [disabled]="userForm.invalid" 
-            (click)="updateUser()">
-            Güncelle
-          </button>
-        </form>
+<div class="user-profile-container">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>
+        <h1>Hesap Bilgilerim</h1>
+      </mat-card-title>
+      <mat-card-subtitle>
+        Kullanıcı Bilgilerinizi görüntüleyebilir ve güncelleyebilirsiniz.
+      </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="user-info">
+        <div class="info-item">
+          <mat-icon>person</mat-icon>
+          <span><strong>Ad Soyad:</strong> {{ user?.name }}</span>
+        </div>
+        <div class="info-item">
+          <mat-icon>account_circle</mat-icon>
+          <span><strong>Kullanıcı Adı:</strong> {{ user?.userName }}</span>
+        </div>
+        <div class="info-item">
+          <mat-icon>email</mat-icon>
+          <span><strong>Email Adresi:</strong> {{ user?.email }}</span>
+        </div>
+        <div class="info-item">
+          <mat-icon>verified_user</mat-icon>
+          <span>
+            <strong>İki Aşamalı Doğrulama:</strong>
+            <mat-chip [color]="user?.twoFactorEnabled ? 'primary' : 'warn'" selected>
+              {{ user?.twoFactorEnabled ? 'Aktif' : 'Pasif' }}
+            </mat-chip>
+          </span>
+        </div>
       </div>
-    </div>
-  </div>
-  
+    </mat-card-content>
+
+    <mat-card-actions class="actions">
+      <button mat-raised-button color="primary" (click)="openUpdateUserDialog(user, userId)">
+        Bilgilerimi Güncelle
+      </button>
+
+      <button mat-raised-button color="primary" (click)="openUpdatePasswordDialog(userId)">
+        Şifremi Güncelle
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</div>

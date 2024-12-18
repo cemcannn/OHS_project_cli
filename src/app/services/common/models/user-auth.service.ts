@@ -11,11 +11,11 @@ import { HttpClientService } from '../http-client.service';
 export class UserAuthService {
   constructor(private httpClientService: HttpClientService, private toastrService: CustomToastrService) { }
 
-  async login(userNameOrEmail: string, password: string, callBackFunction?: () => void): Promise<any> {
+  async login(usernameOrEmail: string, password: string, callBackFunction?: () => void): Promise<any> {
     const observable: Observable<any | TokenResponse> = this.httpClientService.post<any | TokenResponse>({
       controller: "auth",
       action: "login"
-    }, { userNameOrEmail, password })
+    }, { usernameOrEmail, password })
 
     const tokenResponse: TokenResponse = await firstValueFrom(observable) as TokenResponse;
 
@@ -52,27 +52,12 @@ export class UserAuthService {
     }
   }
 
-  async passwordReset(email: string, callBackFunction?: () => void) {
-    const observable: Observable<any> = this.httpClientService.post({
-      controller: "auth",
-      action: "password-reset"
-    }, { email: email });
-
-    await firstValueFrom(observable);
-    callBackFunction();
-  }
-
-  async verifyResetToken(resetToken: string, userId: string, callBackFunction?: () => void): Promise<boolean> {
-    const observable: Observable<any> = this.httpClientService.post({
-      controller: "auth",
-      action: "verify-reset-token"
-    }, {
-      resetToken: resetToken,
-      userId: userId
-    });
-
-    const state: boolean = await firstValueFrom(observable);
-    callBackFunction();
-    return state;
-  }
+  // async getUserId(successCallBack?: () => void, errorCallBack?: (errorMessage: string) => void): Promise<any> {
+  //   const token = localStorage.getItem("accessToken");
+  //   const decodedToken = JSON.parse(atob(token.split('.')[1]));
+  //   if (decodedToken) {
+  //     return decodedToken["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"];
+  //   }
+  //   return null;
+  // }
 }

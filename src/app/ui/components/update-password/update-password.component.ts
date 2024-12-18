@@ -19,20 +19,21 @@ export class UpdatePasswordComponent extends BaseComponent implements OnInit {
     super(spinner)
   }
 
-  state: any;
+private decodeToken(token: string): any {
+  return JSON.parse(atob(token.split('.')[1]));
+}
 
   ngOnInit(): void {
     this.showSpinner(SpinnerType.BallAtom)
-    this.activatedRoute.paramMap.subscribe({
-      next: async params => {
-        const userId: string = params["userId"];
-        const resetToken: string = params["resetToken"];
-        this.state = await this.userAuthService.verifyResetToken(resetToken, userId, () => {
-          this.hideSpinner(SpinnerType.BallAtom);
-        })
-      }
-    });
+const token = localStorage.getItem("accessToken");
+if(token) {
+  const decoded = this.decodeToken(token);
+  console.log(decoded);
+  return decoded?.userId || null;
+}
+return null;
   }
+
 
   updatePassword(password: string, passwordConfirm: string) {
     this.showSpinner(SpinnerType.BallAtom);
@@ -48,8 +49,7 @@ export class UpdatePasswordComponent extends BaseComponent implements OnInit {
     this.activatedRoute.params.subscribe({
       next: async params => {
         const userId: string = params["userId"];
-        const resetToken: string = params["resetToken"];
-        await this.userService.updatePassword(userId, resetToken, password, passwordConfirm,
+        await this.userService.updatePassword(userId, password, passwordConfirm,
           () => {
             this.alertifyService.message("Şifre başarıyla güncellenmiştir.", {
               messageType: MessageType.Success,

@@ -46,13 +46,12 @@ export class UserService {
     await promiseData;
   }
 
-  async updatePassword(userId: string, resetToken: string, password: string, passwordConfirm: string, successCallBack?: () => void, errorCallBack?: (error) => void) {
-    const observable: Observable<any> = this.httpClientService.post({
+  async updatePassword(userId: string, password: string, passwordConfirm: string, successCallBack?: () => void, errorCallBack?: (error) => void) {
+    const observable: Observable<any> = this.httpClientService.put({
       action: "update-password",
       controller: "users"
     }, {
       userId: userId,
-      resetToken: resetToken,
       password: password,
       passwordConfirm: passwordConfirm
     });
@@ -79,8 +78,10 @@ export class UserService {
     const observable: Observable<List_User> = this.httpClientService.get<List_User>({
       controller: "Users"
     }, id);
+  
     return this.handleRequest(observable, successCallBack, errorCallBack);
   }
+  
 
   async assignRoleToUser(id: string, roles: string[], successCallBack?: () => void, errorCallBack?: (error) => void) {
     const observable: Observable<any> = this.httpClientService.post({

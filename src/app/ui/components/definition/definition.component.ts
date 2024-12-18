@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { ActivatedRoute } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { BaseComponent, SpinnerType } from 'src/app/base/base.component';
 import { ShowAccidentAreaDialogComponent } from 'src/app/dialogs/definition/show-accident-area-dialog/show-accident-area-dialog.component';
@@ -17,7 +18,8 @@ import { AlertifyService } from 'src/app/services/admin/alertify.service';
 export class DefinitionComponent implements OnInit {
   constructor(
     private alertify: AlertifyService,
-    private dialog: MatDialog) {}
+    private dialog: MatDialog,
+  private activatedRoute: ActivatedRoute) {}
 
   ngOnInit(): void {
   }

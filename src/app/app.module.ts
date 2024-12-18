@@ -50,10 +50,11 @@ export const MY_FORMATS = {
         JwtModule.forRoot({
             config: {
                 tokenGetter: () => localStorage.getItem("accessToken"),
-                allowedDomains: ["https://localhost:7170/"]
+                allowedDomains: ["https://localhost:7170"]
             }
         })], providers: [
         { provide: "baseUrl", useValue: "https://localhost:7170/api", multi: true },
+        { provide: "baseSignalRUrl", useValue: "https://localhost:7170/", multi: true },
         { provide: LOCALE_ID, useValue: 'tr-TR' },
         { provide: MAT_DATE_LOCALE, useValue: 'tr-TR' },
         { provide: HTTP_INTERCEPTORS, useClass: HttpErrorHandlerInterceptorService, multi: true },

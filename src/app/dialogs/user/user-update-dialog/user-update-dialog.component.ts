@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { BaseDialog } from '../../base/base-dialog';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { AlertifyService, MessageType, Position } from 'src/app/services/admin/alertify.service';
 import { Update_User } from 'src/app/contracts/users/update_user';
 import { UserService } from 'src/app/services/common/models/user.service';
@@ -13,17 +13,23 @@ import { UserService } from 'src/app/services/common/models/user.service';
 export class UserUpdateDialogComponent extends BaseDialog<UserUpdateDialogComponent> implements OnInit {
 
   constructor(dialogRef: MatDialogRef<UserUpdateDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: Update_User,
+    @Inject(MAT_DIALOG_DATA) public data: {
+      userId: string,
+      email: string,
+      name: string,
+      userName: string
+    },
     private userService: UserService,
     private alertifyService: AlertifyService,
-    private dialog: MatDialog
   ) {super(dialogRef)}
 
-  ngOnInit(): void {}
+  ngOnInit(
+
+  ): void {    console.log(this.data);}
 
   updateUser(): void {
     const updateUser: Update_User = {
-      id: this.data.id,
+      id: this.data.userId,
       email: this.data.email,
       name: this.data.name,
       userName: this.data.userName,

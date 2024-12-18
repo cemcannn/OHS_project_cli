@@ -5,9 +5,7 @@ import { RegisterComponent } from './register/register.component';
 import { RegisterModule } from './register/register.module';
 import { LoginComponent } from './login/login.component';
 import { LoginModule } from './login/login.module';
-import { PasswordResetComponent } from './password-reset/password-reset.component';
 import { UpdatePasswordComponent } from './update-password/update-password.component';
-import { PasswordResetModule } from './password-reset/password-reset.module';
 import { UpdatePasswordModule } from './update-password/update-password.module';
 import { RouterModule } from '@angular/router';
 import { DefinitionModule } from './definition/definition.module';
@@ -28,7 +26,6 @@ import { UserModule } from './user/user.module';
     RegisterModule,
     LoginModule,
     RouterModule,
-    PasswordResetModule,
     UpdatePasswordModule,
     DefinitionModule,
     PersonnelModule,

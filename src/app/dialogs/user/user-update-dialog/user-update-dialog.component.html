@@ -5,7 +5,7 @@
         <mat-label>E-mail Adresi</mat-label>
         <input matInput type="text" name="email" [(ngModel)]="data.email">
         <mat-error *ngIf="userForm.controls['email'].invalid && (userForm.controls['email'].dirty || userForm.controls['email'].touched)">
-          <span *ngIf="userForm.controls['userName'].errors?.required">E-mail adresi gereklidir.</span>
+          <span *ngIf="userForm.controls['email'].errors?.required">E-mail adresi gereklidir.</span>
         </mat-error>
       </mat-form-field>
 
