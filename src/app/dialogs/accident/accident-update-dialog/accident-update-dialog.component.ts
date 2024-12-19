@@ -69,9 +69,9 @@ export class AccidentUpdateDialogComponent extends BaseDialog<AccidentUpdateDial
   updateAccident(): void {
     const updateAccident: Update_Accident = {
       id: this.data.id,
-      typeOfAccident: this.data.typeOfAccident,
-      limb: this.data.limb,
-      accidentArea : this.data.accidentArea,
+      typeOfAccident: this.typeOfAccident.name,
+      limb: this.limb.name,
+      accidentArea : this.accidentArea.name,
       accidentDate: new Date(this.data.accidentDate),
       accidentHour: this.data.accidentHour,
       lostDayOfWork: this.data.lostDayOfWork,

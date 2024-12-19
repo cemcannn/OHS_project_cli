@@ -60,6 +60,7 @@
             </a>
             <div class="dropdown-menu">
               <a class="dropdown-item" routerLink="user"
+              *ngIf="authService.isAuthenticated"
                 ><i class="mdi mdi-account me-1 ms-1">Profilim</i></a
               >
               <a

@@ -18,6 +18,7 @@ import { List_Directorate } from 'src/app/contracts/definitions/directorate/list
 export class PersonnelUpdateDialogComponent extends BaseDialog<PersonnelUpdateDialogComponent> implements OnInit {
   profession: List_Profession; // Kaza türünü tutmak için
   directorate: List_Directorate;
+  
 
   constructor(dialogRef: MatDialogRef<PersonnelUpdateDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: Update_Personnel,
@@ -26,7 +27,7 @@ export class PersonnelUpdateDialogComponent extends BaseDialog<PersonnelUpdateDi
     private dialog: MatDialog
   ) {super(dialogRef)}
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   updatePersonnel(): void {
     const updatePersonnel: Update_Personnel = {
@@ -35,8 +36,8 @@ export class PersonnelUpdateDialogComponent extends BaseDialog<PersonnelUpdateDi
       tkiId: this.data.tkiId,
       name: this.data.name,
       surname: this.data.surname,
-      profession: this.data.profession,
-      directorate: this.data.directorate,
+      profession: this.profession.name, // Seçilen yeni profession veya mevcut profession
+      directorate: this.directorate.name, // Seçilen yeni directorate veya mevcut directorate
       bornDate: new Date(this.data.bornDate)
     };
 

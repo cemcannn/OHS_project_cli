@@ -9,6 +9,7 @@ import { AlertifyService, MessageType, Position } from '../../../../services/adm
 import { DialogService } from '../../../../services/common/dialog.service';
 import { UserService } from '../../../../services/common/models/user.service';
 import { UserUpdateDialogComponent } from 'src/app/dialogs/user/user-update-dialog/user-update-dialog.component';
+import { UserPasswordUpdateComponent } from 'src/app/dialogs/user/user-password-update/user-password-update.component';
 
 @Component({
   selector: 'app-list',
@@ -26,7 +27,7 @@ export class ListComponent extends BaseComponent implements OnInit {
   }
 
 
-  displayedColumns: string[] = ['userName', 'name', 'email', 'role', 'userUpdate', 'delete'];
+  displayedColumns: string[] = ['userName', 'name', 'email', 'role', 'userUpdate', 'passwordUpdate', 'delete'];
   dataSource: MatTableDataSource<List_User> = null;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
@@ -79,6 +80,22 @@ export class ListComponent extends BaseComponent implements OnInit {
           position: Position.TopRight
         })
       }
+    });
+  }
+
+  openUpdatePasswordDialog(id: any) {
+    this.dialogService.openDialog({
+      componentType: UserPasswordUpdateComponent,
+      data: { userId: id }, // userId'yi gönderiyoruz
+      options: {
+        width: '400px',
+      },
+      afterClosed: () => {
+        this.alertifyService.message('Şifre güncelleme işlemi tamamlandı.', {
+          messageType: MessageType.Success,
+          position: Position.TopRight,
+        });
+      },
     });
   }
 }

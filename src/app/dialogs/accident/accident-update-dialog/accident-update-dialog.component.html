@@ -3,7 +3,7 @@
   <form #accidentForm="ngForm">
     <mat-form-field appearance="fill" class="field">
       <mat-label>Kaza Oluşum Tipi</mat-label>
-      <input matInput [value]="typeOfAccident?.name" readonly (click)="openTypeOfAccidentPicker()">
+      <input matInput [value]="typeOfAccident?.name" name="typeOfAccident" [(ngModel)]="data.typeOfAccident" readonly (click)="openTypeOfAccidentPicker()">
       <button mat-icon-button matSuffix (click)="openTypeOfAccidentPicker()">
         <mat-icon>arrow_drop_down</mat-icon>
       </button>
@@ -11,7 +11,7 @@
 
     <mat-form-field appearance="fill" class="field">
       <mat-label>Uzuv</mat-label>
-      <input matInput [value]="limb?.name" readonly (click)="openLimbPicker()">
+      <input matInput [value]="limb?.name" name="limb" [(ngModel)]="data.limb" readonly (click)="openLimbPicker()">
       <button mat-icon-button matSuffix (click)="openLimbPicker()">
         <mat-icon>arrow_drop_down</mat-icon>
       </button>
@@ -19,7 +19,7 @@
 
     <mat-form-field appearance="fill" class="field">
       <mat-label>Kaza Yeri</mat-label>
-      <input matInput [value]="accidentArea?.name" readonly (click)="openAccidentAreaPicker()">
+      <input matInput [value]="accidentArea?.name" name="accidentArea" [(ngModel)]="data.accidentArea" readonly (click)="openAccidentAreaPicker()">
       <button mat-icon-button matSuffix (click)="openAccidentAreaPicker()">
         <mat-icon>arrow_drop_down</mat-icon>
       </button>
@@ -27,7 +27,7 @@
 
     <mat-form-field appearance="fill" class="field">
       <mat-label>Kaza Tarihi</mat-label>
-      <input matInput [matDatepicker]="picker1" name="accidentDate" [(ngModel)]="data.accidentDate" required>
+      <input matInput [matDatepicker]="picker1" name="accidentDate" [(ngModel)]="data.accidentDate">
       <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
       <mat-datepicker #picker1></mat-datepicker>
       <mat-error *ngIf="accidentForm.controls['accidentDate'].invalid && (accidentForm.controls['accidentDate'].dirty || accidentForm.controls['accidentDate'].touched)">
@@ -37,7 +37,7 @@
 
     <mat-form-field appearance="fill" class="field">
       <mat-label>Kaza Saati</mat-label>
-      <input matInput type="time" name="accidentHour" [(ngModel)]="data.accidentHour" required>
+      <input matInput type="time" name="accidentHour" [(ngModel)]="data.accidentHour">
       <mat-error *ngIf="accidentForm.controls['accidentHour'].invalid && (accidentForm.controls['accidentHour'].dirty || accidentForm.controls['accidentHour'].touched)">
         <span *ngIf="accidentForm.controls['accidentHour'].errors?.required">Kaza saati gereklidir.</span>
       </mat-error>
@@ -45,12 +45,12 @@
 
     <mat-form-field appearance="fill" class="field">
       <mat-label>Raporlu Olduğu Gün Sayısı</mat-label>
-      <input matInput type="text" [(ngModel)]="data.lostDayOfWork">
+      <input matInput type="text" name="lostDayOfWork" [(ngModel)]="data.lostDayOfWork">
     </mat-form-field>
 
     <mat-form-field appearance="fill" class="field">
       <mat-label>Açıklama</mat-label>
-      <textarea matInput [(ngModel)]="data.description"></textarea>
+      <textarea matInput name="description" [(ngModel)]="data.description"></textarea>
     </mat-form-field>
   </form>
 </div>
