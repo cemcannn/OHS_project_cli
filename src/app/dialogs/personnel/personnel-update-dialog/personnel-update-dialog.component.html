@@ -39,7 +39,7 @@
 
     <mat-form-field appearance="fill" class="field">
       <mat-label>Mesleği</mat-label>
-      <input matInput [value]="profession?.name" name="profession" [(ngModel)]="data.profession" readonly (click)="openProfessionPicker()">
+      <input matInput [value]="profession" name="profession?" [(ngModel)]="data.profession" readonly (click)="openProfessionPicker()">
       <button mat-icon-button matSuffix (click)="openProfessionPicker()">
         <mat-icon>arrow_drop_down</mat-icon>
       </button>
@@ -47,7 +47,7 @@
     
     <mat-form-field appearance="fill" class="field">
       <mat-label>İşletme</mat-label>
-      <input matInput [value]="directorate?.name" name="directorate" [(ngModel)]="data.directorate" readonly (click)="openDirectoratePicker()">
+      <input matInput [value]="directorate" name="directorate?" [(ngModel)]="data.directorate" readonly (click)="openDirectoratePicker()">
       <button mat-icon-button matSuffix (click)="openDirectoratePicker()">
         <mat-icon>arrow_drop_down</mat-icon>
       </button>

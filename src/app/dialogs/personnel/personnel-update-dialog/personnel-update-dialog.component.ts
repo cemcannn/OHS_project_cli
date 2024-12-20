@@ -16,11 +16,12 @@ import { List_Directorate } from 'src/app/contracts/definitions/directorate/list
   styleUrls: ['./personnel-update-dialog.component.scss']
 })
 export class PersonnelUpdateDialogComponent extends BaseDialog<PersonnelUpdateDialogComponent> implements OnInit {
-  profession: List_Profession; // Kaza türünü tutmak için
-  directorate: List_Directorate;
+  profession: string; // Kaza türünü tutmak için
+  directorate: string;
   
 
-  constructor(dialogRef: MatDialogRef<PersonnelUpdateDialogComponent>,
+  constructor(
+    dialogRef: MatDialogRef<PersonnelUpdateDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: Update_Personnel,
     private personnelService: PersonnelService,
     private alertifyService: AlertifyService,
@@ -36,8 +37,8 @@ export class PersonnelUpdateDialogComponent extends BaseDialog<PersonnelUpdateDi
       tkiId: this.data.tkiId,
       name: this.data.name,
       surname: this.data.surname,
-      profession: this.profession.name, // Seçilen yeni profession veya mevcut profession
-      directorate: this.directorate.name, // Seçilen yeni directorate veya mevcut directorate
+      profession: this.profession || this.data.profession, // Yeni seçim yoksa mevcut değeri kullan
+      directorate: this.directorate || this.data.directorate, // Yeni seçim yoksa mevcut değeri kullan
       bornDate: new Date(this.data.bornDate)
     };
 
@@ -69,7 +70,7 @@ export class PersonnelUpdateDialogComponent extends BaseDialog<PersonnelUpdateDi
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.profession = result; // Seçilen kaza türünü al
+        this.profession = result.name; // Seçilen kaza türünü al
       }
     });
   }
@@ -82,7 +83,7 @@ export class PersonnelUpdateDialogComponent extends BaseDialog<PersonnelUpdateDi
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.directorate = result; // Seçilen kaza türünü al
+        this.directorate = result.name; // Seçilen kaza türünü al
       }
     });
   }

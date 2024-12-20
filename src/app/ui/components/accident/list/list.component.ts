@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -18,9 +18,9 @@ import { AccidentService } from 'src/app/services/common/models/accident.service
   templateUrl: './list.component.html',
   styleUrls: ['./list.component.scss']
 })
-export class ListComponent extends BaseComponent implements OnInit {
+export class ListComponent extends BaseComponent implements OnInit, AfterViewInit {
   displayedColumns: string[] = ['tkiId', 'name', 'surname', 'typeOfAccident', 'limb', 'accidentArea', 'accidentDate', 'accidentHour', 'lostDayOfWork', 'description', 'accidentUpdate', 'delete'];
-  dataSource: MatTableDataSource<List_Accident> = null;
+  dataSource: MatTableDataSource<List_Accident> = new MatTableDataSource<List_Accident>();
   allAccidents: List_Accident[] = [];
   monthNames = ['Tüm Aylar', 'Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran', 'Temmuz', 'Ağustos', 'Eylül', 'Ekim', 'Kasım', 'Aralık']; // "Tüm Aylar" eklendi
   years: string[] = [];
@@ -51,33 +51,20 @@ export class ListComponent extends BaseComponent implements OnInit {
     await this.loadAccidents();
   }
 
-  async openUpdateAccidentDialog(accidentData: any): Promise<void> {
-    const dialogRef = await this.dialog.open(AccidentUpdateDialogComponent, {
-      width: '500px',
-      data: accidentData
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result && result.success) {
-        console.log('Accident updated successfully!');
-        this.loadAccidents(); // Refresh the list after update
-      } else if (result && result.error) {
-        console.error('Failed to update accident:', result.error);
-      }
-    });
+  ngAfterViewInit(): void {
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
   }
 
-
   async loadAccidents(): Promise<void> {
-    // Kazaları yükle
     this.showSpinner(SpinnerType.Cog);
-    const result = await this.accidentService.getAccidents(() => this.hideSpinner(SpinnerType.Cog), errorMessage => this.alertifyService.message(errorMessage, {
+    const allAccidents : { datas: List_Accident[]; totalCount: number }= await this.accidentService.getAccidents(() => this.hideSpinner(SpinnerType.Cog), errorMessage => this.alertifyService.message(errorMessage, {
       dismissOthers: true,
       messageType: MessageType.Error,
       position: Position.TopRight
     }))
     
-    this.allAccidents = result.datas;
+    this.allAccidents = allAccidents.datas;
 
     // Dinamik verileri oluştur
     this.years = ['Tüm Yıllar', ...new Set(this.allAccidents.map(accident => new Date(accident.accidentDate).getFullYear().toString()))]; // "Tüm Yıllar" eklendi
@@ -87,6 +74,7 @@ export class ListComponent extends BaseComponent implements OnInit {
     this.applyFilters();
   }
 
+  
   applyFilters(): void {
     const filters = {
       month: this.selectedMonth === 'Tüm Aylar' ? null : this.selectedMonth,
@@ -117,6 +105,23 @@ export class ListComponent extends BaseComponent implements OnInit {
       this.dataSource.paginator.firstPage();
     }
   } 
+  
+  async openUpdateAccidentDialog(accidentData: any): Promise<void> {
+    const dialogRef = await this.dialog.open(AccidentUpdateDialogComponent, {
+      width: '500px',
+      data: accidentData
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result && result.success) {
+        console.log('Accident updated successfully!');
+        this.loadAccidents(); // Refresh the list after update
+      } else if (result && result.error) {
+        console.error('Failed to update accident:', result.error);
+      }
+    });
+  }
+
 
   exportToExcel() {
     const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.dataSource.data.map(item => ({

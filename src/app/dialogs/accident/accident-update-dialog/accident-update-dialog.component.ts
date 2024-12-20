@@ -17,9 +17,9 @@ import { ShowAccidentAreaDialogComponent } from '../../definition/show-accident-
   styleUrls: ['./accident-update-dialog.component.scss']
 })
 export class AccidentUpdateDialogComponent extends BaseDialog<AccidentUpdateDialogComponent>  {
-  typeOfAccident: List_Type_Of_Accident; // Kaza türünü tutmak için
-  limb: List_Limb;
-  accidentArea: List_Accident_Area;
+  typeOfAccident: string; // Kaza türünü tutmak için
+  limb: string;
+  accidentArea: string;
 
   constructor(
     dialogRef: MatDialogRef<AccidentUpdateDialogComponent>,
@@ -29,49 +29,14 @@ export class AccidentUpdateDialogComponent extends BaseDialog<AccidentUpdateDial
     private dialog: MatDialog
   ) {super(dialogRef)}
 
-  openTypeOfAccidentPicker(): void {
-    const dialogRef = this.dialog.open(ShowTypeOfAccidentDialogComponent, {
-      data: { isPicker: true } // Picker modunda açmak için
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.typeOfAccident = result; // Seçilen kaza türünü al
-      }
-    });
-  }
-
-  openLimbPicker(): void {
-    const dialogRef = this.dialog.open(ShowLimbDialogComponent, {
-      data: { isPicker: true } // Picker modunda açmak için
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.limb = result; // Seçilen kaza türünü al
-      }
-    });
-  }
-
-  openAccidentAreaPicker(): void {
-    const dialogRef = this.dialog.open(ShowAccidentAreaDialogComponent, {
-      width: '600px',
-      data: { isPicker: true } // Picker modunda açmak için
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.accidentArea = result; // Seçilen kaza alanı türünü al
-      }
-    });
-  }
-
+  ngOnInit(): void { }
+  
   updateAccident(): void {
     const updateAccident: Update_Accident = {
       id: this.data.id,
-      typeOfAccident: this.typeOfAccident.name,
-      limb: this.limb.name,
-      accidentArea : this.accidentArea.name,
+      typeOfAccident: this.typeOfAccident || this.data.typeOfAccident,
+      limb: this.limb || this.data.limb,
+      accidentArea : this.accidentArea || this.data.accidentArea,
       accidentDate: new Date(this.data.accidentDate),
       accidentHour: this.data.accidentHour,
       lostDayOfWork: this.data.lostDayOfWork,
@@ -96,5 +61,42 @@ export class AccidentUpdateDialogComponent extends BaseDialog<AccidentUpdateDial
         this.dialogRef.close({ success: false });
       }
     );
+  }
+
+  openTypeOfAccidentPicker(): void {
+    const dialogRef = this.dialog.open(ShowTypeOfAccidentDialogComponent, {
+      data: { isPicker: true } // Picker modunda açmak için
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.typeOfAccident = result.name; // Seçilen kaza türünü al
+      }
+    });
+  }
+
+  openLimbPicker(): void {
+    const dialogRef = this.dialog.open(ShowLimbDialogComponent, {
+      data: { isPicker: true } // Picker modunda açmak için
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.limb = result.name; // Seçilen kaza türünü al
+      }
+    });
+  }
+
+  openAccidentAreaPicker(): void {
+    const dialogRef = this.dialog.open(ShowAccidentAreaDialogComponent, {
+      width: '600px',
+      data: { isPicker: true } // Picker modunda açmak için
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.accidentArea = result.name; // Seçilen kaza alanı türünü al
+      }
+    });
   }
 }

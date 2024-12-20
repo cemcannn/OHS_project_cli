@@ -1,5 +1,3 @@
-// src/app/components/personnel/list/list.component.ts
-
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
@@ -15,6 +13,7 @@ import { AccidentListComponent } from 'src/app/dialogs/accident/accident-list/ac
 import { PersonnelUpdateDialogComponent } from 'src/app/dialogs/personnel/personnel-update-dialog/personnel-update-dialog.component';
 import { AccidentAddComponent } from 'src/app/dialogs/accident/accident-add-dialog/accident-add.component';
 import { PersonnelAddDialogComponent } from 'src/app/dialogs/personnel/personnel-add-dialog/personnel-add-dialog.component';
+
 
 @Component({
   selector: 'app-list',
@@ -141,6 +140,7 @@ export class ListComponent extends BaseComponent implements OnInit, AfterViewIni
 
     dialogRef.afterClosed().subscribe(result => {
       if (result && result.success) {
+        this.loadPersonnels();
         console.log('Personnel updated successfully!');
       } else if (result && result.error) {
         console.error('Failed to update personnel:', result.error);
