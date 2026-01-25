@@ -66,6 +66,24 @@ export class ChartComponent extends BaseComponent implements OnInit {
     this.loadData();
   }
 
+  private getMaxMonthForMonthlySelection(): number | null {
+    const year = this.selectedYear === 'Tüm Yıllar' ? null : this.selectedYear;
+    const directorate =
+      this.selectedMonthlyDirectorate === 'Tüm İşletmeler'
+        ? null
+        : this.selectedMonthlyDirectorate;
+
+    let stats = this.accidentStatistics || [];
+    if (year) stats = stats.filter((s) => s.year === year);
+    if (directorate) stats = stats.filter((s) => s.directorate === directorate);
+
+    const months = stats
+      .map((s) => Number(s.month))
+      .filter((m) => Number.isFinite(m) && m >= 1 && m <= 12);
+
+    return months.length ? Math.max(...months) : null;
+  }
+
   async loadData() {
     this.showSpinner(SpinnerType.Cog);
 
@@ -104,15 +122,25 @@ export class ChartComponent extends BaseComponent implements OnInit {
   }
 
 updateMonthlyChart() {
-  const months = this.accidentStatisticFilterService.getMonthNames(); // Tüm ayları al
+  const allMonths = this.accidentStatisticFilterService.getMonthNames(); // 12 ay
   const filteredData = this.applyMonthlyFilters();
 
   // Etiketler ve veri dizilerini oluştur
-  const labels = months; // Tüm aylar etiket olarak ekleniyor
-  const data = labels.map((label) => {
+  const maxMonth =
+    this.selectedYear === 'Tüm Yıllar' ? null : this.getMaxMonthForMonthlySelection();
+  // Etiketler hep görünsün (Aralık da dahil). Çizginin bitmesi için maxMonth sonrası değerleri null yapacağız.
+  const labels = allMonths;
+
+  const data = labels.map((label, idx) => {
     const monthData = filteredData.find((d: any) => d.month === label);
-    // Verinin bulunmadığı aylar için null atanıyor
-    return monthData ? monthData[this.selectedMonthlyMetric] || null : null;
+
+    // Seçili yılda "son veri ayı" sonrası çizgi bitmeli: label görünsün ama değer null olsun.
+    // Aradaki eksik aylar 0 olarak kalsın.
+    if (this.selectedYear !== 'Tüm Yıllar' && maxMonth && idx + 1 > maxMonth) {
+      return null;
+    }
+
+    return monthData ? Number(monthData[this.selectedMonthlyMetric] ?? 0) : 0;
   });
 
   // Grafik yapılandırması
