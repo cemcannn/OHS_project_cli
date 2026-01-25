@@ -1,7 +1,6 @@
 import { ComponentType } from '@angular/cdk/portal';
 import { Injectable } from '@angular/core';
 import { DialogPosition, MatDialog } from '@angular/material/dialog';
-import { Create_Accident } from 'src/app/contracts/accidents/create_accident';
 
 @Injectable({
   providedIn: 'root'
@@ -19,8 +18,7 @@ export class DialogService {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      if (result === dialogParameters.data)
-        dialogParameters.afterClosed(result);
+      dialogParameters.afterClosed?.(result);
     });
   }
 
@@ -29,7 +27,7 @@ export class DialogService {
 export class DialogParameters {
   componentType: ComponentType<any>;
   data: any;
-  afterClosed?: (result: Create_Accident | undefined) => void;
+  afterClosed?: (result: any) => void;
   options?: Partial<DialogOptions> = new DialogOptions();
 }
 

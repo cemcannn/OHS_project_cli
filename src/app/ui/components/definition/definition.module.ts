@@ -8,7 +8,7 @@ import { DeleteDirectiveModule } from 'src/app/directives/admin/delete.directive
 
 @NgModule({
   declarations: [
-
+    DefinitionComponent
   ],
   imports: [
     CommonModule,DialogModule,DeleteDirectiveModule,

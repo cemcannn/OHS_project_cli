@@ -16,6 +16,7 @@ import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { JwtInterceptor } from './interceptors/jwt-interceptor';
 import { DynamicLoadComponentDirective } from './directives/common/dynamic-load-component.directive';
 import { FormsModule } from '@angular/forms';
+import { environment } from 'src/environments/environment';
 
 
 
@@ -31,6 +32,8 @@ export const MY_FORMATS = {
     monthYearA11yLabel: 'MMMM YYYY',
   },
 };
+
+const apiOrigin = new URL(environment.baseUrl).origin;
 
 @NgModule({ declarations: [
         AppComponent,
@@ -50,11 +53,11 @@ export const MY_FORMATS = {
         JwtModule.forRoot({
             config: {
                 tokenGetter: () => localStorage.getItem("accessToken"),
-                allowedDomains: ["https://localhost:7170"]
+                allowedDomains: [new URL(environment.baseUrl).host]
             }
         })], providers: [
-        { provide: "baseUrl", useValue: "https://localhost:7170/api", multi: true },
-        { provide: "baseSignalRUrl", useValue: "https://localhost:7170/", multi: true },
+        { provide: "baseUrl", useValue: environment.baseUrl },
+        { provide: "baseSignalRUrl", useValue: `${apiOrigin}/` },
         { provide: LOCALE_ID, useValue: 'tr-TR' },
         { provide: MAT_DATE_LOCALE, useValue: 'tr-TR' },
         { provide: HTTP_INTERCEPTORS, useClass: HttpErrorHandlerInterceptorService, multi: true },

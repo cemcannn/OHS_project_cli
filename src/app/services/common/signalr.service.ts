@@ -67,8 +67,8 @@ export class SignalRService {
 
   async on(hubUrlOrPath: string, procedureName: string, callBack: (...message: any) => void) {
     const connection = await this.start(hubUrlOrPath);
-    // aynı handler birden fazla kez register edilmesin diye önce kaldırıp tekrar ekliyoruz
-    connection.off(procedureName);
+    // aynı callback birden fazla kez register edilmesin diye sadece o callback'i kaldır
+    connection.off(procedureName, callBack);
     connection.on(procedureName, callBack);
   }
 }
