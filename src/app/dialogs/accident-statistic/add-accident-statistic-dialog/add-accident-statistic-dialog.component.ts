@@ -1,10 +1,12 @@
 import { Component, Inject, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BaseDialog } from '../../base/base-dialog';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ShowDirectorateDialogComponent } from '../../definition/show-directorate-dialog/show-directorate-dialog.component';
 import { List_Directorate } from 'src/app/contracts/definitions/directorate/list_directorate';
 import { AccidentStatisticService } from 'src/app/services/common/models/accident-statistic.service';
 import { Create_Accident_Statistic } from 'src/app/contracts/accident_statistic/create-accident-statistic';
+import { monthValidator, yearFormatValidator, positiveNumberValidator } from 'src/app/validators/custom-validators';
 
 
 @Component({
@@ -13,13 +15,27 @@ import { Create_Accident_Statistic } from 'src/app/contracts/accident_statistic/
   styleUrls: ['./add-accident-statistic-dialog.component.scss']
 })
 export class AddAccidentStatisticDialogComponent extends BaseDialog<AddAccidentStatisticDialogComponent> implements OnInit {
-  month: string;
-  year: string;
-  actualDailyWageSurface: string;
-  actualDailyWageUnderground: string;
-  employeesNumberSurface: string;
-  employeesNumberUnderground: string;
   directorate: List_Directorate;
+  statisticForm: FormGroup;
+  
+  // Template binding için getter'lar
+  get month() { return this.statisticForm.get('month')?.value; }
+  set month(value: string) { this.statisticForm.patchValue({ month: value }); }
+  
+  get year() { return this.statisticForm.get('year')?.value; }
+  set year(value: string) { this.statisticForm.patchValue({ year: value }); }
+  
+  get actualDailyWageSurface() { return this.statisticForm.get('actualDailyWageSurface')?.value; }
+  set actualDailyWageSurface(value: string) { this.statisticForm.patchValue({ actualDailyWageSurface: value }); }
+  
+  get actualDailyWageUnderground() { return this.statisticForm.get('actualDailyWageUnderground')?.value; }
+  set actualDailyWageUnderground(value: string) { this.statisticForm.patchValue({ actualDailyWageUnderground: value }); }
+  
+  get employeesNumberSurface() { return this.statisticForm.get('employeesNumberSurface')?.value; }
+  set employeesNumberSurface(value: string) { this.statisticForm.patchValue({ employeesNumberSurface: value }); }
+  
+  get employeesNumberUnderground() { return this.statisticForm.get('employeesNumberUnderground')?.value; }
+  set employeesNumberUnderground(value: string) { this.statisticForm.patchValue({ employeesNumberUnderground: value }); }
 
   months = [
     { value: '01', viewValue: 'Ocak' },
@@ -42,8 +58,20 @@ export class AddAccidentStatisticDialogComponent extends BaseDialog<AddAccidentS
     dialogRef: MatDialogRef<AddAccidentStatisticDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private accidentStatisticService: AccidentStatisticService,
-    private dialog: MatDialog
-  ) { super(dialogRef); }
+    private dialog: MatDialog,
+    private fb: FormBuilder
+  ) { 
+    super(dialogRef);
+    this.statisticForm = this.fb.group({
+      month: ['', [Validators.required, monthValidator()]],
+      year: ['', [Validators.required, yearFormatValidator()]],
+      actualDailyWageSurface: ['', [Validators.required, positiveNumberValidator()]],
+      actualDailyWageUnderground: ['', [Validators.required, positiveNumberValidator()]],
+      employeesNumberSurface: ['', [Validators.required, positiveNumberValidator()]],
+      employeesNumberUnderground: ['', [Validators.required, positiveNumberValidator()]],
+      directorate: ['', [Validators.required]]
+    });
+  }
 
   ngOnInit(): void {
     const currentYear = new Date().getFullYear();
@@ -53,14 +81,22 @@ export class AddAccidentStatisticDialogComponent extends BaseDialog<AddAccidentS
   }
 
   createAccidentStatistic(): void {
+    if (this.statisticForm.invalid) {
+      Object.keys(this.statisticForm.controls).forEach(key => {
+        this.statisticForm.get(key)?.markAsTouched();
+      });
+      return;
+    }
+
+    const formValue = this.statisticForm.value;
     const createActualDailyWage: Create_Accident_Statistic = {
-      month: this.month,
-      year: this.year,
-      actualDailyWageSurface: this.actualDailyWageSurface,
-      actualDailyWageUnderground: this.actualDailyWageUnderground,
-      employeesNumberSurface: this.employeesNumberSurface,
-      employeesNumberUnderground: this.employeesNumberUnderground,
-      directorate: this.directorate.name
+      month: formValue.month,
+      year: formValue.year,
+      actualDailyWageSurface: formValue.actualDailyWageSurface,
+      actualDailyWageUnderground: formValue.actualDailyWageUnderground,
+      employeesNumberSurface: formValue.employeesNumberSurface,
+      employeesNumberUnderground: formValue.employeesNumberUnderground,
+      directorate: this.directorate?.name || formValue.directorate
     };
 
     this.accidentStatisticService.createAccidentStatistic(
@@ -69,7 +105,6 @@ export class AddAccidentStatisticDialogComponent extends BaseDialog<AddAccidentS
         this.dialogRef.close({ success: true });
       },
       (errorMessage: string) => {
-        console.error(errorMessage);
         this.dialogRef.close({ success: false, error: errorMessage });
       }
     );
@@ -84,6 +119,7 @@ export class AddAccidentStatisticDialogComponent extends BaseDialog<AddAccidentS
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.directorate = result; // Seçilen kaza türünü al
+        this.statisticForm.patchValue({ directorate: result.name });
       }
     });
   }

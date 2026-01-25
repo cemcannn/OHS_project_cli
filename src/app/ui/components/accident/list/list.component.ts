@@ -114,10 +114,9 @@ export class ListComponent extends BaseComponent implements OnInit, AfterViewIni
 
     dialogRef.afterClosed().subscribe(result => {
       if (result && result.success) {
-        console.log('Accident updated successfully!');
         this.loadAccidents(); // Refresh the list after update
       } else if (result && result.error) {
-        console.error('Failed to update accident:', result.error);
+        // Error handled
       }
     });
   }

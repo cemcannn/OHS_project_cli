@@ -1,4 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BaseDialog } from '../../base/base-dialog';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { PersonnelService } from 'src/app/services/common/models/personnel.service';
@@ -7,6 +8,8 @@ import { ShowProfessionDialogComponent } from '../../definition/show-profession-
 import { List_Profession } from 'src/app/contracts/definitions/profession/list_profession';
 import { ShowDirectorateDialogComponent } from '../../definition/show-directorate-dialog/show-directorate-dialog.component';
 import { List_Directorate } from 'src/app/contracts/definitions/directorate/list_directorate';
+import { tcIdValidator } from 'src/app/validators/custom-validators';
+import { nameValidator, surnameValidator, tkiIdValidator, workingAgeValidator } from 'src/app/validators/personnel-validators';
 
 
 @Component({
@@ -15,40 +18,50 @@ import { List_Directorate } from 'src/app/contracts/definitions/directorate/list
   styleUrls: ['./personnel-add-dialog.component.scss']
 })
 export class PersonnelAddDialogComponent extends BaseDialog<PersonnelAddDialogComponent> implements OnInit {
-  profession: List_Profession; // Kaza türünü tutmak için
+  personnelForm: FormGroup;
+  profession: List_Profession;
   directorate: List_Directorate;
 
   constructor(
     dialogRef: MatDialogRef<PersonnelAddDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private personnelService: PersonnelService,
-    private dialog: MatDialog
-  ) { super(dialogRef) }
+    private dialog: MatDialog,
+    private fb: FormBuilder
+  ) { 
+    super(dialogRef);
+    this.personnelForm = this.fb.group({
+      trIdNumber: ['', [Validators.required, tcIdValidator()]],
+      tkiId: ['', [tkiIdValidator()]],
+      name: ['', [Validators.required, nameValidator()]],
+      surname: ['', [Validators.required, surnameValidator()]],
+      bornDate: ['', [Validators.required, workingAgeValidator()]],
+      profession: ['', [Validators.required]],
+      directorate: ['', [Validators.required]]
+    });
+  }
 
   ngOnInit(): void {}
 
-  createPersonnel(
-    trIdNumber: string,
-    tkiId: string,
-    name: string,
-    surname: string,
-    profession: string,
-    directorate: string,
-    bornDate: string
-  ): void {
-  // Convert necessary values to the expected types
-  const bornDateValue: Date = new Date(bornDate);
-  
-  // Tarihi UTC olarak ayarlayın
-  bornDateValue.setMinutes(bornDateValue.getMinutes() - bornDateValue.getTimezoneOffset());
+  createPersonnel(): void {
+    if (this.personnelForm.invalid) {
+      Object.keys(this.personnelForm.controls).forEach(key => {
+        this.personnelForm.get(key)?.markAsTouched();
+      });
+      return;
+    }
+
+    const formValue = this.personnelForm.value;
+    const bornDateValue: Date = new Date(formValue.bornDate);
+    bornDateValue.setMinutes(bornDateValue.getMinutes() - bornDateValue.getTimezoneOffset());
 
     const createPersonnel: Create_Personnel = {
-      trIdNumber: trIdNumber,
-      tkiId: tkiId,
-      name: name,
-      surname: surname,
-      profession: profession,
-      directorate: directorate,
+      trIdNumber: formValue.trIdNumber,
+      tkiId: formValue.tkiId,
+      name: formValue.name,
+      surname: formValue.surname,
+      profession: this.profession ? this.profession.id : formValue.profession,
+      directorate: this.directorate ? this.directorate.id : formValue.directorate,
       bornDate: bornDateValue
     };
 
@@ -58,8 +71,6 @@ export class PersonnelAddDialogComponent extends BaseDialog<PersonnelAddDialogCo
         this.dialogRef.close({ success: true });
       },
       (errorMessage: string) => {
-        console.error(errorMessage);
-
         this.dialogRef.close({ success: false, error: errorMessage });
       }
     );
@@ -68,12 +79,13 @@ export class PersonnelAddDialogComponent extends BaseDialog<PersonnelAddDialogCo
   openProfessionPicker(): void {
     const dialogRef = this.dialog.open(ShowProfessionDialogComponent, {
       width: '600px',
-      data: { isPicker: true } // Picker modunda açmak için
+      data: { isPicker: true }
     });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.profession = result; // Seçilen kaza türünü al
+        this.profession = result;
+        this.personnelForm.patchValue({ profession: result.id });
       }
     });
   }
@@ -81,12 +93,13 @@ export class PersonnelAddDialogComponent extends BaseDialog<PersonnelAddDialogCo
   openDirectoratePicker(): void {
     const dialogRef = this.dialog.open(ShowDirectorateDialogComponent, {
       width: '600px',
-      data: { isPicker: true } // Picker modunda açmak için
+      data: { isPicker: true }
     });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.directorate = result; // Seçilen kaza türünü al
+        this.directorate = result;
+        this.personnelForm.patchValue({ directorate: result.id });
       }
     });
   }

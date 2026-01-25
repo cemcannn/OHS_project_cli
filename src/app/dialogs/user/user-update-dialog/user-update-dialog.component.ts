@@ -1,9 +1,11 @@
 import { Component, Inject, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BaseDialog } from '../../base/base-dialog';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { AlertifyService, MessageType, Position } from 'src/app/services/admin/alertify.service';
 import { Update_User } from 'src/app/contracts/users/update_user';
 import { UserService } from 'src/app/services/common/models/user.service';
+import { usernameValidator, emailValidator } from 'src/app/validators/user-validators';
 
 @Component({
   selector: 'app-user-update-dialog',
@@ -11,6 +13,7 @@ import { UserService } from 'src/app/services/common/models/user.service';
   styleUrls: ['./user-update-dialog.component.scss']
 })
 export class UserUpdateDialogComponent extends BaseDialog<UserUpdateDialogComponent> implements OnInit {
+  userForm: FormGroup;
 
   constructor(dialogRef: MatDialogRef<UserUpdateDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: {
@@ -21,18 +24,32 @@ export class UserUpdateDialogComponent extends BaseDialog<UserUpdateDialogCompon
     },
     private userService: UserService,
     private alertifyService: AlertifyService,
-  ) {super(dialogRef)}
+    private fb: FormBuilder
+  ) {
+    super(dialogRef);
+    this.userForm = this.fb.group({
+      email: [data.email, [Validators.required, emailValidator()]],
+      name: [data.name, [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],
+      userName: [data.userName, [Validators.required, usernameValidator()]]
+    });
+  }
 
-  ngOnInit(
-
-  ): void {    console.log(this.data);}
+  ngOnInit(): void {}
 
   updateUser(): void {
+    if (this.userForm.invalid) {
+      Object.keys(this.userForm.controls).forEach(key => {
+        this.userForm.get(key)?.markAsTouched();
+      });
+      return;
+    }
+
+    const formValue = this.userForm.value;
     const updateUser: Update_User = {
       id: this.data.userId,
-      email: this.data.email,
-      name: this.data.name,
-      userName: this.data.userName,
+      email: formValue.email,
+      name: formValue.name,
+      userName: formValue.userName,
     };
 
     this.userService.updateUser(updateUser).then(

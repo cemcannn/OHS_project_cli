@@ -28,7 +28,6 @@ private decodeToken(token: string): any {
 const token = localStorage.getItem("accessToken");
 if(token) {
   const decoded = this.decodeToken(token);
-  console.log(decoded);
   return decoded?.userId || null;
 }
 return null;
@@ -58,7 +57,7 @@ return null;
             this.router.navigate(["/login"])
           },
           error => {
-            console.log(error)
+            // Error handled by interceptor
           });
         this.hideSpinner(SpinnerType.BallAtom)
       }

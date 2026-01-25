@@ -52,7 +52,7 @@
 <div mat-dialog-actions>
   <button mat-button (click)="close()">İptal</button>
   <button mat-raised-button class="btn" color="primary" [disabled]="personnelForm.invalid"
-    (click)="createAccident(typeOfAccident?.name, limb?.name,accidentArea?.name, txtAccidentDate.value, txtAccidentHour.value, txtReportDay.value, txtDescription.value)">
+    (click)="createAccident()">
     Kaza Ekle
   </button>
 </div>

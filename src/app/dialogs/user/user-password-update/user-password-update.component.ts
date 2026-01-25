@@ -1,8 +1,10 @@
 import { Component, Inject, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { AlertifyService, MessageType, Position } from 'src/app/services/admin/alertify.service';
 import { UserService } from 'src/app/services/common/models/user.service';
 import { BaseDialog } from '../../base/base-dialog';
+import { strongPasswordValidator, passwordMatchValidator } from 'src/app/validators/user-validators';
 
 @Component({
   selector: 'app-user-password-update-component',
@@ -10,6 +12,7 @@ import { BaseDialog } from '../../base/base-dialog';
   styleUrl: './user-password-update.component.scss'
 })
 export class UserPasswordUpdateComponent extends BaseDialog<UserPasswordUpdateComponent> implements OnInit {
+  passwordForm: FormGroup;
 
   constructor(dialogRef: MatDialogRef<UserPasswordUpdateComponent>,
     @Inject(MAT_DIALOG_DATA) public data: {
@@ -18,30 +21,36 @@ export class UserPasswordUpdateComponent extends BaseDialog<UserPasswordUpdateCo
       passwordConfirm?: string;
     },
     private alertifyService: AlertifyService,
-    private userService: UserService) 
-    {super(dialogRef)}
-
+    private userService: UserService,
+    private fb: FormBuilder) 
+    {
+      super(dialogRef);
+      this.passwordForm = this.fb.group({
+        password: ['', [Validators.required, strongPasswordValidator()]],
+        passwordConfirm: ['', [Validators.required, passwordMatchValidator('password')]]
+      });
+    }
 
   ngOnInit(): void {}
 
   async updatePassword() {
-    const password = (this.data.password ?? "").trim();
-    const passwordConfirm = (this.data.passwordConfirm ?? "").trim();
+    if (this.passwordForm.invalid) {
+      Object.keys(this.passwordForm.controls).forEach(key => {
+        this.passwordForm.get(key)?.markAsTouched();
+      });
+      
+      if (this.passwordForm.hasError('passwordMatch', 'passwordConfirm')) {
+        this.alertifyService.message("Şifreler eşleşmiyor!", {
+          messageType: MessageType.Error,
+          position: Position.TopRight
+        });
+      }
+      return;
+    }
 
-    if (!password || !passwordConfirm) {
-      this.alertifyService.message("Şifre alanlarını doldurunuz!", {
-        messageType: MessageType.Error,
-        position: Position.TopRight
-      });
-      return;
-    }
-    if (password !== passwordConfirm) {
-      this.alertifyService.message("Şifreleri doğrulayınız!", {
-        messageType: MessageType.Error,
-        position: Position.TopRight
-      });
-      return;
-    }
+    const formValue = this.passwordForm.value;
+    const password = formValue.password.trim();
+    const passwordConfirm = formValue.passwordConfirm.trim();
 
     await this.userService.updatePassword(this.data.userId, password, passwordConfirm,
       () => {
@@ -49,11 +58,10 @@ export class UserPasswordUpdateComponent extends BaseDialog<UserPasswordUpdateCo
           messageType: MessageType.Success,
           position: Position.TopRight
         });
-        // DialogService.afterClosed tetiklensin diye aynı data referansını döndürüyoruz
         this.dialogRef.close(this.data);
       },
       error => {
-        console.log(error)
+        // Error handled by interceptor
       });
   }
 }

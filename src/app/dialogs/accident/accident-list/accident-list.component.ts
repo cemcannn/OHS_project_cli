@@ -51,9 +51,9 @@ export class AccidentListComponent extends BaseDialog<AccidentListComponent> imp
 
     dialogRef.afterClosed().subscribe(result => {
       if (result && result.success) {
-        console.log('Kaza bilgileri başarıyla güncellendi!');
+        // Update successful
       } else if (result && result.error) {
-        console.error('Kaza bilgileri güncellenirken bir hata oluştu:', result.error);
+        // Update error
       }
     });
   }

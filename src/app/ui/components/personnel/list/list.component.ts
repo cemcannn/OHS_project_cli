@@ -141,9 +141,8 @@ export class ListComponent extends BaseComponent implements OnInit, AfterViewIni
     dialogRef.afterClosed().subscribe(result => {
       if (result && result.success) {
         this.loadPersonnels();
-        console.log('Personnel updated successfully!');
       } else if (result && result.error) {
-        console.error('Failed to update personnel:', result.error);
+        // Error handled
       }
     });
   }

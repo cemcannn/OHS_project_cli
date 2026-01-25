@@ -74,10 +74,9 @@ export class ListComponent extends BaseComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result && result.success) {
-        console.log('Accident updated successfully!');
         this.loadMonthlyDirectorateData(); // Refresh the list after update
       } else if (result && result.error) {
-        console.error('Failed to update accident:', result.error);
+        // Error handled
       }
     });
   }

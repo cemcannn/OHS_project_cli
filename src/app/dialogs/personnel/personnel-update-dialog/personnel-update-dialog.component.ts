@@ -1,4 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BaseDialog } from '../../base/base-dialog';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Update_Personnel } from 'src/app/contracts/personnels/update_personnel';
@@ -8,6 +9,8 @@ import { List_Profession } from 'src/app/contracts/definitions/profession/list_p
 import { ShowProfessionDialogComponent } from '../../definition/show-profession-dialog/show-profession-dialog.component';
 import { ShowDirectorateDialogComponent } from '../../definition/show-directorate-dialog/show-directorate-dialog.component';
 import { List_Directorate } from 'src/app/contracts/definitions/directorate/list_directorate';
+import { tcIdValidator } from 'src/app/validators/custom-validators';
+import { nameValidator, surnameValidator, tkiIdValidator, workingAgeValidator } from 'src/app/validators/personnel-validators';
 
 
 @Component({
@@ -16,7 +19,8 @@ import { List_Directorate } from 'src/app/contracts/definitions/directorate/list
   styleUrls: ['./personnel-update-dialog.component.scss']
 })
 export class PersonnelUpdateDialogComponent extends BaseDialog<PersonnelUpdateDialogComponent> implements OnInit {
-  profession: string; // Kaza türünü tutmak için
+  personnelForm: FormGroup;
+  profession: string;
   directorate: string;
   
 
@@ -25,21 +29,41 @@ export class PersonnelUpdateDialogComponent extends BaseDialog<PersonnelUpdateDi
     @Inject(MAT_DIALOG_DATA) public data: Update_Personnel,
     private personnelService: PersonnelService,
     private alertifyService: AlertifyService,
-    private dialog: MatDialog
-  ) {super(dialogRef)}
+    private dialog: MatDialog,
+    private fb: FormBuilder
+  ) {
+    super(dialogRef);
+    this.personnelForm = this.fb.group({
+      trIdNumber: [data.trIdNumber, [tcIdValidator()]],
+      tkiId: [data.tkiId, [tkiIdValidator()]],
+      name: [data.name, [nameValidator()]],
+      surname: [data.surname, [surnameValidator()]],
+      bornDate: [data.bornDate, [workingAgeValidator()]],
+      profession: [data.profession],
+      directorate: [data.directorate]
+    });
+  }
 
   ngOnInit(): void { }
 
   updatePersonnel(): void {
+    if (this.personnelForm.invalid) {
+      Object.keys(this.personnelForm.controls).forEach(key => {
+        this.personnelForm.get(key)?.markAsTouched();
+      });
+      return;
+    }
+
+    const formValue = this.personnelForm.value;
     const updatePersonnel: Update_Personnel = {
       id: this.data.id,
-      trIdNumber: this.data.trIdNumber,
-      tkiId: this.data.tkiId,
-      name: this.data.name,
-      surname: this.data.surname,
-      profession: this.profession || this.data.profession, // Yeni seçim yoksa mevcut değeri kullan
-      directorate: this.directorate || this.data.directorate, // Yeni seçim yoksa mevcut değeri kullan
-      bornDate: new Date(this.data.bornDate)
+      trIdNumber: formValue.trIdNumber,
+      tkiId: formValue.tkiId,
+      name: formValue.name,
+      surname: formValue.surname,
+      profession: this.profession || formValue.profession,
+      directorate: this.directorate || formValue.directorate,
+      bornDate: new Date(formValue.bornDate)
     };
 
     this.personnelService.updatePersonnel(updatePersonnel).then(
@@ -65,12 +89,13 @@ export class PersonnelUpdateDialogComponent extends BaseDialog<PersonnelUpdateDi
   openProfessionPicker(): void {
     const dialogRef = this.dialog.open(ShowProfessionDialogComponent, {
       width: '600px',
-      data: { isPicker: true } // Picker modunda açmak için
+      data: { isPicker: true }
     });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.profession = result.name; // Seçilen kaza türünü al
+        this.profession = result.name;
+        this.personnelForm.patchValue({ profession: result.name });
       }
     });
   }
@@ -78,12 +103,13 @@ export class PersonnelUpdateDialogComponent extends BaseDialog<PersonnelUpdateDi
   openDirectoratePicker(): void {
     const dialogRef = this.dialog.open(ShowDirectorateDialogComponent, {
       width: '600px',
-      data: { isPicker: true } // Picker modunda açmak için
+      data: { isPicker: true }
     });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.directorate = result.name; // Seçilen kaza türünü al
+        this.directorate = result.name;
+        this.personnelForm.patchValue({ directorate: result.name });
       }
     });
   }

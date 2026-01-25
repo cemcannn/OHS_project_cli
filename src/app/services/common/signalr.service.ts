@@ -38,12 +38,11 @@ export class SignalRService {
         .withAutomaticReconnect()
         .build();
 
-      hubConnection.onreconnected(() => console.log("Reconnected"));
-      hubConnection.onreconnecting(() => console.log("Reconnecting"));
-      hubConnection.onclose(() => console.log("Closed"));
+      hubConnection.onreconnected(() => {});
+      hubConnection.onreconnecting(() => {});
+      hubConnection.onclose(() => {});
 
       await hubConnection.start();
-      console.log("Connected");
       return hubConnection;
     })().catch(err => {
       // bağlantı kurulamazsa cache'i temizle ki tekrar deneyebilelim

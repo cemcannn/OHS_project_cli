@@ -1,4 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { List_Directorate } from 'src/app/contracts/definitions/directorate/list_directorate';
 import { BaseDialog } from '../../base/base-dialog';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
@@ -6,6 +7,7 @@ import { AccidentStatisticService } from 'src/app/services/common/models/acciden
 import { ShowDirectorateDialogComponent } from '../../definition/show-directorate-dialog/show-directorate-dialog.component';
 import { AlertifyService, MessageType, Position } from 'src/app/services/admin/alertify.service';
 import { Update_Accident_Statistic } from 'src/app/contracts/accident_statistic/update-accident-statistic';
+import { monthValidator, yearFormatValidator, positiveNumberValidator } from 'src/app/validators/custom-validators';
 
 @Component({
   selector: 'app-update-accident-statistic-dialog',
@@ -14,7 +16,7 @@ import { Update_Accident_Statistic } from 'src/app/contracts/accident_statistic/
 })
 export class UpdateAccidentStatisticDialogComponent extends BaseDialog<UpdateAccidentStatisticDialogComponent> {
   directorate: List_Directorate;
-  year: string;
+  statisticForm: FormGroup;
   
   months = [
     { value: '01', viewValue: 'Ocak' },
@@ -38,8 +40,20 @@ export class UpdateAccidentStatisticDialogComponent extends BaseDialog<UpdateAcc
     @Inject(MAT_DIALOG_DATA) public data: Update_Accident_Statistic,
     private accidentStatisticService: AccidentStatisticService,
     private alertifyService: AlertifyService,
-    private dialog: MatDialog
-  ) { super(dialogRef); }
+    private dialog: MatDialog,
+    private fb: FormBuilder
+  ) { 
+    super(dialogRef);
+    this.statisticForm = this.fb.group({
+      month: [data.month, [Validators.required, monthValidator()]],
+      year: [data.year, [Validators.required, yearFormatValidator()]],
+      actualDailyWageSurface: [data.actualDailyWageSurface, [Validators.required, positiveNumberValidator()]],
+      actualDailyWageUnderground: [data.actualDailyWageUnderground, [Validators.required, positiveNumberValidator()]],
+      employeesNumberSurface: [data.employeesNumberSurface, [Validators.required, positiveNumberValidator()]],
+      employeesNumberUnderground: [data.employeesNumberUnderground, [Validators.required, positiveNumberValidator()]],
+      directorate: [data.directorate, [Validators.required]]
+    });
+  }
 
   ngOnInit(): void {
     const currentYear = new Date().getFullYear();
@@ -49,15 +63,23 @@ export class UpdateAccidentStatisticDialogComponent extends BaseDialog<UpdateAcc
   }
 
   updateAccidentStatistic(): void {
+    if (this.statisticForm.invalid) {
+      Object.keys(this.statisticForm.controls).forEach(key => {
+        this.statisticForm.get(key)?.markAsTouched();
+      });
+      return;
+    }
+
+    const formValue = this.statisticForm.value;
     const updateMonthlyDirectorateData: Update_Accident_Statistic = {
       id: this.data.id,
-      month: this.data.month,
-      year: this.data.year,
-      actualDailyWageSurface: this.data.actualDailyWageSurface,
-      actualDailyWageUnderground: this.data.actualDailyWageUnderground,
-      employeesNumberSurface: this.data.employeesNumberSurface,
-      employeesNumberUnderground: this.data.employeesNumberUnderground,
-      directorate: this.data.directorate
+      month: formValue.month,
+      year: formValue.year,
+      actualDailyWageSurface: formValue.actualDailyWageSurface,
+      actualDailyWageUnderground: formValue.actualDailyWageUnderground,
+      employeesNumberSurface: formValue.employeesNumberSurface,
+      employeesNumberUnderground: formValue.employeesNumberUnderground,
+      directorate: this.directorate?.name || formValue.directorate
     };
 
     this.accidentStatisticService.updateAccidentStatistic(updateMonthlyDirectorateData).then(
@@ -89,6 +111,7 @@ export class UpdateAccidentStatisticDialogComponent extends BaseDialog<UpdateAcc
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.directorate = result; // Seçilen kaza türünü al
+        this.statisticForm.patchValue({ directorate: result.name });
       }
     });
   }

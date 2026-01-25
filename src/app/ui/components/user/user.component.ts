@@ -70,9 +70,9 @@ export class UserComponent extends BaseComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result && result.success) {
-        console.log('Kullanıcı başarıyla güncellenmiştir!');
+        // Update successful
       } else if (result && result.error) {
-        console.error('Kullanıcı güncellenirken hata oluştu:', result.error);
+        // Update error
       }
     });
   }
