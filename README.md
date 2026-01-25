@@ -1,27 +1,61 @@
-# OHSProgramCli
+## OHS Program CLI (Angular)
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.1.3.
+Bu repo bir **Angular** uygulamasıdır (bağımlılıklar `package.json` içinde). Projeyi yeniden indirdiğinizde/klonladığınızda hızlıca çalıştırmak için aşağıdaki adımlar yeterlidir.
 
-## Development server
+### Gereksinimler
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+- **Node.js**: Tercihen **Node 22 (LTS)** (npm ile birlikte gelir)
+- **npm**: Node ile gelir
 
-## Code scaffolding
+> macOS + Homebrew kullanıyorsanız:
+>
+> - **Node 22 kur**: `brew install node@22`
+> - **Node 22’yi PATH’e al**: `brew link --force --overwrite node@22`
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+### Kurulum
 
-## Build
+Proje klasöründe:
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+```bash
+npm install
+```
 
-## Running unit tests
+### Uygulamayı çalıştırma (dev server)
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+```bash
+npm start
+```
 
-## Running end-to-end tests
+- **Uygulama adresi**: `http://localhost:4200/`
+- Durdurmak için: **Ctrl + C**
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+### Backend / API adresi
 
-## Further help
+Uygulamanın API base URL’i şu dosyada tanımlıdır:
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+- `src/enviroments/enviroment.prod.ts`
+
+Varsayılan değer:
+
+- `https://localhost:7170/api`
+
+Backend farklı bir adreste çalışıyorsa bu dosyadaki `baseUrl` değerini güncelleyin.
+
+### Build (prod çıktısı)
+
+```bash
+npm run build
+```
+
+- Çıktı dizini: `dist/ohs-program-cli`
+
+### Test
+
+```bash
+npm test
+```
+
+### Sık karşılaşılan sorunlar
+
+- **4200 portu doluysa**: Çalışan başka bir Angular/Node sürecini durdurun veya farklı portla başlatın: `npx ng serve --port 4300`
+- **Node sürümü uyumsuzsa**: `node -v` ile sürümü kontrol edin; mümkünse Node 22 kullanın.
