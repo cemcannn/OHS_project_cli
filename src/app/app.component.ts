@@ -1,5 +1,4 @@
-import { AfterViewInit, Component, ViewChild } from '@angular/core';
-import { ToastrService } from 'ngx-toastr';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from './services/common/auth.service';
 import {
@@ -12,6 +11,9 @@ import {
   DynamicLoadComponentService,
 } from './services/common/dynamic-load-component.service';
 import { DynamicLoadComponentDirective } from './directives/common/dynamic-load-component.directive';
+import { SignalRService } from './services/common/signalr.service';
+import { HubUrls } from './constants/hub-urls';
+import { ReceiveFunctions } from './constants/receive-functions';
 
 declare var $: any;
 
@@ -20,7 +22,7 @@ declare var $: any;
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   @ViewChild(DynamicLoadComponentDirective, { static: true })
   dynamicLoadComponentDirective: DynamicLoadComponentDirective;
 
@@ -33,8 +35,30 @@ export class AppComponent {
     private toastrService: CustomToastrService,
     private router: Router,
     private dynamicLoadComponentService: DynamicLoadComponentService,
+    private signalRService: SignalRService,
   ) {
     authService.identityCheck();
+  }
+
+  ngOnInit(): void {
+    // Global SignalR dinleme (uygulama açık olduğu sürece)
+    this.signalRService
+      .on(HubUrls.AccidentHub, ReceiveFunctions.AccidentAddedMessageReceiveFunction, (message: any) => {
+        this.toastrService.message(message, 'Yeni Kaza', {
+          messageType: ToastrMessageType.Info,
+          position: ToastrPosition.TopRight,
+        });
+      })
+      .catch(err => console.error('SignalR accidents-hub error', err));
+
+    this.signalRService
+      .on(HubUrls.PersonnelHub, ReceiveFunctions.PersonnelAddedMessageReceiveFunction, (message: any) => {
+        this.toastrService.message(message, 'Yeni Personel', {
+          messageType: ToastrMessageType.Info,
+          position: ToastrPosition.TopRight,
+        });
+      })
+      .catch(err => console.error('SignalR personnels-hub error', err));
   }
 
   signOut() {
