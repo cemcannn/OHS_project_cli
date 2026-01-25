@@ -13,9 +13,9 @@ export class UserPasswordUpdateComponent extends BaseDialog<UserPasswordUpdateCo
 
   constructor(dialogRef: MatDialogRef<UserPasswordUpdateComponent>,
     @Inject(MAT_DIALOG_DATA) public data: {
-      userId: string,
-      password: string,
-      passwordConfirm: string
+      userId: string;
+      password?: string;
+      passwordConfirm?: string;
     },
     private alertifyService: AlertifyService,
     private userService: UserService) 
@@ -25,8 +25,16 @@ export class UserPasswordUpdateComponent extends BaseDialog<UserPasswordUpdateCo
   ngOnInit(): void {}
 
   async updatePassword() {
-    const password = this.data.password;
-    const passwordConfirm = this.data.passwordConfirm;
+    const password = (this.data.password ?? "").trim();
+    const passwordConfirm = (this.data.passwordConfirm ?? "").trim();
+
+    if (!password || !passwordConfirm) {
+      this.alertifyService.message("Şifre alanlarını doldurunuz!", {
+        messageType: MessageType.Error,
+        position: Position.TopRight
+      });
+      return;
+    }
     if (password !== passwordConfirm) {
       this.alertifyService.message("Şifreleri doğrulayınız!", {
         messageType: MessageType.Error,
@@ -35,13 +43,14 @@ export class UserPasswordUpdateComponent extends BaseDialog<UserPasswordUpdateCo
       return;
     }
 
-    await this.userService.updatePassword(this.data.userId, this.data.password, this.data.passwordConfirm,
+    await this.userService.updatePassword(this.data.userId, password, passwordConfirm,
       () => {
         this.alertifyService.message("Şifre başarıyla güncellenmiştir.", {
           messageType: MessageType.Success,
           position: Position.TopRight
         });
-        this.dialogRef.close();
+        // DialogService.afterClosed tetiklensin diye aynı data referansını döndürüyoruz
+        this.dialogRef.close(this.data);
       },
       error => {
         console.log(error)
