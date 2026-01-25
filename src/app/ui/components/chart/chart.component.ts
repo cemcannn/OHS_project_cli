@@ -255,25 +255,34 @@ updateMonthlyChart() {
           : this.selectedYearlyDirectorate,
     };
 
-    const currentYear = new Date().getFullYear();
-    const minYear =
-      this.selectedTimeRange === '5'
-        ? currentYear - 5
-        : this.selectedTimeRange === '10'
-        ? currentYear - 10
-        : currentYear - 20;
+    const range = Number(this.selectedTimeRange) || 5;
 
-    // Yıllık istatistik verilerini al
+    // Yıllık istatistik verilerini al ve yıllara göre sırala
     const yearlyStatisticData =
       this.accidentStatisticFilterService.groupByYearChart(
         this.accidentStatistics,
         filters
       ) || [];
 
-    // Yıl aralığına göre filtrele
-    return yearlyStatisticData.filter(
-      (d: any) => parseInt(d.year) >= minYear && parseInt(d.year) <= currentYear
+    const sortedByYear = yearlyStatisticData.sort(
+      (a: any, b: any) => parseInt(a.year) - parseInt(b.year)
     );
+
+    if (!sortedByYear.length) {
+      return [];
+    }
+
+    // Grafikte kullanılacak aralık: verideki en güncel yıl üzerinden hesapla
+    const maxYear = Math.max(
+      ...sortedByYear.map((d: any) => parseInt(d.year) || 0)
+    );
+    const minYear = maxYear - (range - 1);
+
+    // Yıl aralığına göre filtrele (veri yetersizse tümünü gösterir)
+    return sortedByYear.filter((d: any) => {
+      const year = parseInt(d.year);
+      return !Number.isNaN(year) && year >= minYear;
+    });
   }
 
 
