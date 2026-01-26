@@ -1,0 +1,59 @@
+{
+  "common": {
+    "welcome": "Hoş Geldiniz",
+    "login": "Giriş Yap",
+    "logout": "Çıkış Yap",
+    "save": "Kaydet",
+    "cancel": "İptal",
+    "delete": "Sil",
+    "edit": "Düzenle",
+    "add": "Ekle",
+    "search": "Ara",
+    "filter": "Filtrele",
+    "export": "Dışa Aktar",
+    "import": "İçe Aktar",
+    "loading": "Yükleniyor...",
+    "noData": "Veri bulunamadı",
+    "error": "Hata",
+    "success": "Başarılı"
+  },
+  "menu": {
+    "home": "Ana Sayfa",
+    "dashboard": "Kontrol Paneli",
+    "accidents": "Kazalar",
+    "personnel": "Personel",
+    "reports": "Raporlar",
+    "settings": "Ayarlar"
+  },
+  "accidents": {
+    "title": "İş Kazaları",
+    "create": "Yeni Kaza Kaydı",
+    "edit": "Kaza Kaydını Düzenle",
+    "delete": "Kaza Kaydını Sil",
+    "date": "Kaza Tarihi",
+    "description": "Açıklama",
+    "personnel": "Personel",
+    "type": "Kaza Türü",
+    "area": "Kaza Alanı",
+    "lostDays": "Kayıp İş Günü"
+  },
+  "personnel": {
+    "title": "Personel Yönetimi",
+    "create": "Yeni Personel",
+    "edit": "Personeli Düzenle",
+    "delete": "Personeli Sil",
+    "name": "Ad",
+    "surname": "Soyad",
+    "idNumber": "TC Kimlik No",
+    "profession": "Meslek",
+    "directorate": "Müdürlük",
+    "hireDate": "İşe Giriş Tarihi"
+  },
+  "validation": {
+    "required": "Bu alan zorunludur",
+    "email": "Geçerli bir e-posta adresi giriniz",
+    "minLength": "En az {{min}} karakter olmalıdır",
+    "maxLength": "En fazla {{max}} karakter olmalıdır",
+    "pattern": "Geçersiz format"
+  }
+}
