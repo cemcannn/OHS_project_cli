@@ -39,6 +39,9 @@ const routes: Routes = [
       {
         path: "chart", loadChildren: () => import("./ui/components/chart/chart.module").then(module => module.ChartModule), canActivate: [AuthGuard]
       },
+      {
+        path: "accident-analysis", loadChildren: () => import("./ui/components/accident-analysis/accident-analysis.module").then(module => module.AccidentAnalysisModule), canActivate: [AuthGuard]
+      },
       { path: "register", loadChildren: () => import("./ui/components/register/register.module").then(module => module.RegisterModule) },
       { path: "login", loadChildren: () => import("./ui/components/login/login.module").then(module => module.LoginModule) },
       { path: 'update-password/:userId', loadChildren: () => import("./ui/components/update-password/update-password.module").then(module => module.UpdatePasswordModule) },

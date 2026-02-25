@@ -1,0 +1,228 @@
+<div class="analysis-page">
+
+  <!-- ═══════════════════════════════════════════
+       FİLTRE ÇUBUĞU
+  ════════════════════════════════════════════ -->
+  <div class="filter-bar">
+
+    <div class="filter-left">
+      <i class="mdi mdi-filter-variant filter-icon"></i>
+      <span class="filter-title">Kaza Analizi</span>
+    </div>
+
+    <div class="filter-controls">
+      <mat-form-field appearance="outline" class="filter-field">
+        <mat-label>Yıl</mat-label>
+        <mat-select [(ngModel)]="selectedYear" (ngModelChange)="onFilterChange()">
+          <mat-option *ngFor="let y of years" [value]="y">{{ y }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="filter-field">
+        <mat-label>Ay</mat-label>
+        <mat-select [(ngModel)]="selectedMonth" (ngModelChange)="onFilterChange()"
+                    [disabled]="selectedYear === 'Tüm Yıllar'">
+          <mat-option *ngFor="let m of months" [value]="m">{{ m }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <div class="total-badge">
+        <span class="badge-num">{{ getTotalCount() }}</span>
+        <span class="badge-lbl">Kaza</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       SEKMELER
+  ════════════════════════════════════════════ -->
+  <mat-tab-group class="analysis-tabs" (selectedTabChange)="onTabChange()" animationDuration="150ms">
+
+    <!-- ──────────── KAZA TÜRÜ ──────────── -->
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <i class="mdi mdi-alert-circle-outline me-1"></i> Kaza Türü
+      </ng-template>
+      <div class="tab-body">
+        <div class="analysis-grid">
+          <div class="chart-card">
+            <div class="chart-title">En Fazla Kaza Türü (İlk 20)</div>
+            <div class="chart-wrap tall">
+              <canvas id="chartKazaTuru"></canvas>
+            </div>
+          </div>
+          <div class="table-card">
+            <ng-container *ngTemplateOutlet="freqTable; context: { data: kazaTuruData }"></ng-container>
+          </div>
+        </div>
+      </div>
+    </mat-tab>
+
+    <!-- ──────────── KAZA YERİ ──────────── -->
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <i class="mdi mdi-map-marker-outline me-1"></i> Kaza Yeri
+      </ng-template>
+      <div class="tab-body">
+        <div class="analysis-grid">
+          <div class="chart-card">
+            <div class="chart-title">Kaza Yeri Dağılımı</div>
+            <div class="chart-wrap medium">
+              <canvas id="chartKazaYeri"></canvas>
+            </div>
+          </div>
+          <div class="table-card">
+            <ng-container *ngTemplateOutlet="freqTable; context: { data: kazaYeriData }"></ng-container>
+          </div>
+        </div>
+      </div>
+    </mat-tab>
+
+    <!-- ──────────── SANAT / MESLEK ──────────── -->
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <i class="mdi mdi-hard-hat me-1"></i> Meslek
+      </ng-template>
+      <div class="tab-body">
+        <div class="analysis-grid">
+          <div class="chart-card">
+            <div class="chart-title">Mesleklere Göre Kaza (İlk 20)</div>
+            <div class="chart-wrap tall">
+              <canvas id="chartSanat"></canvas>
+            </div>
+          </div>
+          <div class="table-card">
+            <ng-container *ngTemplateOutlet="freqTable; context: { data: sanatData }"></ng-container>
+          </div>
+        </div>
+      </div>
+    </mat-tab>
+
+    <!-- ──────────── UZUV ──────────── -->
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <i class="mdi mdi-human me-1"></i> Uzuv
+      </ng-template>
+      <div class="tab-body">
+        <div class="analysis-grid">
+          <div class="chart-card">
+            <div class="chart-title">Etkilenen Uzuv Dağılımı</div>
+            <div class="chart-wrap medium">
+              <canvas id="chartUzuv"></canvas>
+            </div>
+          </div>
+          <div class="table-card">
+            <ng-container *ngTemplateOutlet="freqTable; context: { data: uzuvData }"></ng-container>
+          </div>
+        </div>
+      </div>
+    </mat-tab>
+
+    <!-- ──────────── TARİH ──────────── -->
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <i class="mdi mdi-calendar-clock me-1"></i> Tarih & Saat
+      </ng-template>
+      <div class="tab-body">
+
+        <!-- Aylık -->
+        <div class="section-header">Aylık Dağılım</div>
+        <div class="analysis-grid">
+          <div class="chart-card">
+            <div class="chart-wrap medium">
+              <canvas id="chartMonthly"></canvas>
+            </div>
+          </div>
+          <div class="table-card">
+            <ng-container *ngTemplateOutlet="freqTable; context: { data: monthlyData }"></ng-container>
+          </div>
+        </div>
+
+        <!-- Haftalık -->
+        <div class="section-header" style="margin-top:24px;">Haftanın Günlerine Göre</div>
+        <div class="analysis-grid">
+          <div class="chart-card">
+            <div class="chart-wrap small">
+              <canvas id="chartWeekday"></canvas>
+            </div>
+          </div>
+          <div class="table-card">
+            <ng-container *ngTemplateOutlet="freqTable; context: { data: weekdayData }"></ng-container>
+          </div>
+        </div>
+
+        <!-- Saatler -->
+        <div class="section-header" style="margin-top:24px;">Saat Aralıklarına Göre</div>
+        <div class="analysis-grid">
+          <div class="chart-card">
+            <div class="chart-wrap small">
+              <canvas id="chartHour"></canvas>
+            </div>
+          </div>
+          <div class="table-card">
+            <ng-container *ngTemplateOutlet="freqTable; context: { data: hourData }"></ng-container>
+          </div>
+        </div>
+
+      </div>
+    </mat-tab>
+
+    <!-- ──────────── YAŞ ──────────── -->
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <i class="mdi mdi-account-clock-outline me-1"></i> Yaş
+      </ng-template>
+      <div class="tab-body">
+        <div class="analysis-grid">
+          <div class="chart-card">
+            <div class="chart-title">Yaş Grubu Dağılımı</div>
+            <div class="chart-wrap medium">
+              <canvas id="chartAge"></canvas>
+            </div>
+          </div>
+          <div class="table-card">
+            <ng-container *ngTemplateOutlet="freqTable; context: { data: ageData }"></ng-container>
+          </div>
+        </div>
+      </div>
+    </mat-tab>
+
+  </mat-tab-group>
+
+</div>
+
+<!-- ═══════════════════════════════════════════
+     ORTAK TABLO ŞABLONU
+════════════════════════════════════════════ -->
+<ng-template #freqTable let-data="data">
+  <div class="freq-table-wrapper">
+    <table class="freq-table">
+      <thead>
+        <tr>
+          <th class="col-rank">#</th>
+          <th class="col-label">Açıklama</th>
+          <th class="col-count">Adet</th>
+          <th class="col-pct">%</th>
+          <th class="col-bar"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let row of data" [class.top-row]="row.rank <= 3">
+          <td class="col-rank">{{ row.rank }}</td>
+          <td class="col-label" [title]="row.label">{{ row.label }}</td>
+          <td class="col-count"><strong>{{ row.count }}</strong></td>
+          <td class="col-pct">{{ row.percentage | number:'1.1-1' }}%</td>
+          <td class="col-bar">
+            <div class="bar-bg">
+              <div class="bar-fill" [style.width.%]="row.percentage"></div>
+            </div>
+          </td>
+        </tr>
+        <tr *ngIf="!data || data.length === 0">
+          <td colspan="5" class="empty-row">Veri bulunamadı</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</ng-template>

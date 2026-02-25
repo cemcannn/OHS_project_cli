@@ -12,5 +12,7 @@ export class List_Accident {
   accidentHour: string;
   lostDayOfWork: string;
   description: string;
-  directorate: string; 
+  directorate: string;
+  profession: string;
+  bornDate: Date;
 }
