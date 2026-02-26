@@ -42,6 +42,9 @@ const routes: Routes = [
       {
         path: "accident-analysis", loadChildren: () => import("./ui/components/accident-analysis/accident-analysis.module").then(module => module.AccidentAnalysisModule), canActivate: [AuthGuard]
       },
+      {
+        path: "data-import", loadChildren: () => import("./ui/components/data-import/data-import.module").then(module => module.DataImportModule), canActivate: [AuthGuard]
+      },
       { path: "register", loadChildren: () => import("./ui/components/register/register.module").then(module => module.RegisterModule) },
       { path: "login", loadChildren: () => import("./ui/components/login/login.module").then(module => module.LoginModule) },
       { path: 'update-password/:userId', loadChildren: () => import("./ui/components/update-password/update-password.module").then(module => module.UpdatePasswordModule) },

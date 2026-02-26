@@ -1,0 +1,224 @@
+$red: #c0392b;
+$border: #e0e0e0;
+$bg: #f4f6f8;
+$card-bg: #fff;
+$text: #2c3e50;
+$muted: #7f8c8d;
+$green: #27ae60;
+
+.import-page {
+  padding: 24px;
+  background: $bg;
+  min-height: calc(100vh - 80px);
+}
+
+/* ── Başlık ── */
+.page-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 28px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid $red;
+
+  .header-icon {
+    font-size: 28px;
+    color: $red;
+  }
+  .header-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: $text;
+  }
+  .header-sub {
+    font-size: 13px;
+    color: $muted;
+    margin-left: 4px;
+  }
+}
+
+/* ── Kartlar ── */
+.cards-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+
+  @media (max-width: 860px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.import-card {
+  background: $card-bg;
+  border: 1px solid $border;
+  border-radius: 10px;
+  padding: 24px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* ── Kart başlığı ── */
+.card-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+
+  > .mdi {
+    font-size: 28px;
+    color: $red;
+    margin-top: 2px;
+  }
+
+  .card-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: $text;
+  }
+  .card-sub {
+    font-size: 12px;
+    color: $muted;
+    margin-top: 2px;
+  }
+}
+
+/* ── Dosya seçim alanı ── */
+.file-zone {
+  border: 2px dashed $border;
+  border-radius: 8px;
+  padding: 20px 16px;
+  text-align: center;
+  position: relative;
+  transition: border-color 0.2s, background 0.2s;
+  background: #fafafa;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+
+  &.has-file {
+    border-color: $red;
+    background: rgba(192, 57, 43, 0.04);
+
+    .file-icon { color: $red; }
+    .file-name { color: $red; font-weight: 600; }
+  }
+
+  .file-icon {
+    font-size: 32px;
+    color: #bdc3c7;
+  }
+  .file-name {
+    font-size: 13px;
+    color: $text;
+    font-weight: 500;
+    word-break: break-all;
+  }
+  .file-hint {
+    font-size: 11px;
+    color: $muted;
+  }
+  .file-input {
+    display: none;
+  }
+  .choose-btn {
+    margin-top: 6px;
+    font-size: 12px;
+    border-color: $border;
+    color: $text;
+
+    .mdi { margin-right: 4px; }
+  }
+}
+
+/* ── Upload butonu ── */
+.upload-btn {
+  width: 100%;
+  background: $red !important;
+  color: #fff !important;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  padding: 10px 0;
+
+  &:disabled {
+    background: #bdc3c7 !important;
+    color: #fff !important;
+    cursor: not-allowed;
+  }
+
+  .mdi { margin-right: 6px; }
+  .mdi-spin { animation: spin 1s linear infinite; }
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* ── Sonuç ── */
+.result-box {
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid $border;
+}
+
+.result-banner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  font-size: 13px;
+  font-weight: 600;
+
+  &.banner-ok {
+    background: rgba(39, 174, 96, 0.1);
+    color: $green;
+    .mdi { color: $green; }
+  }
+  &.banner-err {
+    background: rgba(192, 57, 43, 0.1);
+    color: $red;
+    .mdi { color: $red; }
+  }
+}
+
+.log-area {
+  background: #1e1e1e;
+  max-height: 260px;
+  overflow-y: auto;
+  padding: 10px 12px;
+  font-family: 'Courier New', monospace;
+  font-size: 11.5px;
+}
+
+.log-line {
+  line-height: 1.6;
+  color: #d4d4d4;
+  white-space: pre-wrap;
+  word-break: break-word;
+
+  &.line-success  { color: #6abf69; }
+  &.line-error    { color: #f48771; }
+  &.line-warn     { color: #e5c07b; }
+  &.line-info     { color: #61afef; }
+  &.line-progress { color: #abb2bf; font-style: italic; }
+  &.line-divider  { color: #4b5263; }
+}
+
+/* ── Bilgi notu ── */
+.info-note {
+  margin-top: 24px;
+  background: rgba(52, 152, 219, 0.08);
+  border: 1px solid rgba(52, 152, 219, 0.25);
+  border-radius: 6px;
+  padding: 10px 14px;
+  font-size: 12.5px;
+  color: #2980b9;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  .mdi { font-size: 16px; }
+}
