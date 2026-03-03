@@ -22,8 +22,9 @@ export class ShowAccidentAreaDialogComponent extends BaseDialog<ShowAccidentArea
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  editIndex: number | null = null; // Düzenleme modunda olan satırın indeksi
-  newAccidentArea: string = ''; // Yeni kaza türü eklemek için
+  editIndex: number | null = null;
+  newAccidentArea: string = '';
+  newAccidentAreaDescription: string = '';
 
   constructor(
     dialogRef: MatDialogRef<ShowAccidentAreaDialogComponent>,
@@ -34,9 +35,7 @@ export class ShowAccidentAreaDialogComponent extends BaseDialog<ShowAccidentArea
     super(dialogRef);
   }
 
-  async ngOnInit(): Promise<void> {
-    await this.showAccidentAreas();
-  }
+  async ngOnInit(): Promise<void> { await this.showAccidentAreas(); }
 
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
@@ -50,71 +49,56 @@ export class ShowAccidentAreaDialogComponent extends BaseDialog<ShowAccidentArea
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
     } catch (error) {
-      this.alertifyService.message('Kaza türü bilgilerini yüklerken bir hata oluştu.', {
-        dismissOthers: true,
-        messageType: MessageType.Error,
-        position: Position.TopRight
+      this.alertifyService.message('Kaza yeri bilgilerini yüklerken bir hata oluştu.', {
+        dismissOthers: true, messageType: MessageType.Error, position: Position.TopRight
       });
     }
   }
 
   selectAccidentArea(accident: List_Accident_Area): void {
-    if (this.data.isPicker) {
-      this.dialogRef.close(accident);
-    }
+    if (this.data.isPicker) this.dialogRef.close(accident);
   }
 
-  startEdit(index: number): void {
-    this.editIndex = index;
-  }
+  startEdit(index: number): void { this.editIndex = index; }
 
   async saveEdit(element: List_Accident_Area): Promise<void> {
     const updatedAccidentArea: Update_Accident_Area = {
       id: element.id,
-      name: element.name // Güncellenen kaza türü adı
+      name: element.name,
+      description: element.description
     };
-
     try {
       await this.accidentAreaService.updateAccidentArea(updatedAccidentArea);
-      this.alertifyService.message('Kaza türü başarıyla güncellendi.', {
-        dismissOthers: true,
-        messageType: MessageType.Success,
-        position: Position.TopRight
+      this.alertifyService.message('Kaza yeri başarıyla güncellendi.', {
+        dismissOthers: true, messageType: MessageType.Success, position: Position.TopRight
       });
-      this.editIndex = null; // Düzenleme modunu kapat
-      await this.showAccidentAreas(); // Güncellenen kaza türünü yükleme
+      this.editIndex = null;
+      await this.showAccidentAreas();
     } catch (error) {
-      this.alertifyService.message('Kaza türü güncellenirken bir hata oluştu.', {
-        dismissOthers: true,
-        messageType: MessageType.Error,
-        position: Position.TopRight
+      this.alertifyService.message('Kaza yeri güncellenirken bir hata oluştu.', {
+        dismissOthers: true, messageType: MessageType.Error, position: Position.TopRight
       });
     }
   }
 
-  cancelEdit(): void {
-    this.editIndex = null;
-  }
+  cancelEdit(): void { this.editIndex = null; }
 
   async createAccidentArea(): Promise<void> {
     const newAccidentArea: Create_Accident_Area = {
-      name: this.newAccidentArea // Yeni kaza türü adı
+      name: this.newAccidentArea,
+      description: this.newAccidentAreaDescription
     };
-
     try {
       await this.accidentAreaService.createAccidentArea(newAccidentArea);
-      this.alertifyService.message('Kaza türü başarıyla oluşturuldu.', {
-        dismissOthers: true,
-        messageType: MessageType.Success,
-        position: Position.TopRight
+      this.alertifyService.message('Kaza yeri başarıyla oluşturuldu.', {
+        dismissOthers: true, messageType: MessageType.Success, position: Position.TopRight
       });
-      this.newAccidentArea = ''; // Giriş alanını temizleme
-      await this.showAccidentAreas(); // Yeni kaza türünü yükleme
+      this.newAccidentArea = '';
+      this.newAccidentAreaDescription = '';
+      await this.showAccidentAreas();
     } catch (error) {
-      this.alertifyService.message('Kaza türü oluşturulurken bir hata oluştu.', {
-        dismissOthers: true,
-        messageType: MessageType.Error,
-        position: Position.TopRight
+      this.alertifyService.message('Kaza yeri oluşturulurken bir hata oluştu.', {
+        dismissOthers: true, messageType: MessageType.Error, position: Position.TopRight
       });
     }
   }
@@ -122,9 +106,6 @@ export class ShowAccidentAreaDialogComponent extends BaseDialog<ShowAccidentArea
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
-
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
-    }
+    if (this.dataSource.paginator) this.dataSource.paginator.firstPage();
   }
 }

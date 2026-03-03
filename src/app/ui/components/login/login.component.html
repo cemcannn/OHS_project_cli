@@ -1,21 +1,45 @@
-<div class="row">
-    <div class="col-md-3"></div>
-    <div class="col-md-6 mb-4">
-      <h2 class="page-title mt-3">Kullanıcı Girişi</h2>
-      <div class="form-group">
-        <label for="userName">Kullanıcı Adı</label>
-        <input #txtUsernameOrEmail type="text" class="form-control" id="userName" placeholder="Kullanıcı Adı & Email">
-        <small class="form-text text-muted invalid-feedback">***</small>
-      </div>
-      <div class="form-group">
-        <label for="password">Şifre</label>
-        <input #txtPassword type="password" class="form-control" id="password" placeholder="Şifre">
-      </div>
-  
-      <br />
-      <button style="margin-top:5px;" type="submit" class="btn btn-primary" (click)="login(txtUsernameOrEmail.value, txtPassword.value)">Giriş Yap</button>
-      <ngx-spinner size="default" name="s1" type="cog"></ngx-spinner>
-  
+<div class="auth-page">
+  <div class="auth-container">
+
+    <div class="auth-logo">
+      <i class="mdi mdi-hard-hat"></i>
+      <h1>OHS Program</h1>
+      <p>İş Güvenliği Yönetim Sistemi</p>
     </div>
-    <div class="col-md-3"></div>
+
+    <div class="auth-card">
+      <div class="auth-card-header">
+        <i class="mdi mdi-login-variant"></i>
+        <h2>Kullanıcı Girişi</h2>
+      </div>
+
+      <div class="auth-card-body">
+
+        <div class="auth-form-field">
+          <label>Kullanıcı Adı veya Email</label>
+          <div class="auth-input-wrapper">
+            <i class="mdi mdi-account auth-input-icon"></i>
+            <input #txtUsernameOrEmail type="text" class="auth-input" placeholder="Kullanıcı adı veya e-posta giriniz">
+          </div>
+        </div>
+
+        <div class="auth-form-field">
+          <label>Şifre</label>
+          <div class="auth-input-wrapper">
+            <i class="mdi mdi-lock auth-input-icon"></i>
+            <input #txtPassword type="password" class="auth-input" placeholder="Şifrenizi giriniz">
+          </div>
+        </div>
+
+        <button class="auth-btn" (click)="login(txtUsernameOrEmail.value, txtPassword.value)">
+          <i class="mdi mdi-login"></i>
+          Giriş Yap
+        </button>
+
+        <ngx-spinner size="default" name="s1" type="cog"></ngx-spinner>
+
+      </div>
+    </div>
+
   </div>
+</div>

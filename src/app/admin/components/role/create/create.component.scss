@@ -1,13 +1,56 @@
+@import '../../../../ui/components/shared-styles.scss';
+
 :host {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
+  display: block;
+  padding: 20px;
+}
+
+.create-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.role-field {
+  width: 100%;
+
+  ::ng-deep {
+    .mat-mdc-text-field-wrapper {
+      background: #fff;
+      border-radius: 6px;
+    }
+    .mdc-notched-outline__leading,
+    .mdc-notched-outline__notch,
+    .mdc-notched-outline__trailing {
+      border-color: #ddd !important;
+    }
+    &.mat-focused .mdc-notched-outline__leading,
+    &.mat-focused .mdc-notched-outline__notch,
+    &.mat-focused .mdc-notched-outline__trailing {
+      border-color: $red !important;
+      border-width: 2px !important;
+    }
   }
-  
-  .role-create {
-    margin: 5px 5px 5px
+}
+
+.create-btn {
+  background: linear-gradient(135deg, $red 0%, $red-dark 100%) !important;
+  color: #fff !important;
+  font-weight: 600;
+  height: 40px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0 2px 6px rgba(192,57,43,0.3);
+  transition: all 0.3s ease;
+  width: 100%;
+  justify-content: center;
+
+  i { font-size: 18px; }
+
+  &:hover {
+    background: linear-gradient(135deg, $red-dark 0%, $red-darker 100%) !important;
+    box-shadow: 0 4px 12px rgba(192,57,43,0.4);
   }
-  
-  .btn {
-    margin: 5px 5px 5px
-  }
+}

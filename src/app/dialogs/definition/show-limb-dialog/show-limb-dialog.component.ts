@@ -22,8 +22,9 @@ export class ShowLimbDialogComponent extends BaseDialog<ShowLimbDialogComponent>
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  editIndex: number | null = null; // Düzenleme modunda olan satırın indeksi
-  newLimb: string = ''; // Yeni kaza türü eklemek için
+  editIndex: number | null = null;
+  newLimb: string = '';
+  newLimbDescription: string = '';
 
   constructor(
     dialogRef: MatDialogRef<ShowLimbDialogComponent>,
@@ -34,9 +35,7 @@ export class ShowLimbDialogComponent extends BaseDialog<ShowLimbDialogComponent>
     super(dialogRef);
   }
 
-  async ngOnInit(){
-    await this.showLimbs();
-  }
+  async ngOnInit() { await this.showLimbs(); }
 
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
@@ -51,70 +50,55 @@ export class ShowLimbDialogComponent extends BaseDialog<ShowLimbDialogComponent>
       this.dataSource.sort = this.sort;
     } catch (error) {
       this.alertifyService.message('Uzuv bilgilerini yüklerken bir hata oluştu.', {
-        dismissOthers: true,
-        messageType: MessageType.Error,
-        position: Position.TopRight
+        dismissOthers: true, messageType: MessageType.Error, position: Position.TopRight
       });
     }
   }
 
-  selectLimb(accident: List_Limb): void {
-    if (this.data.isPicker) {
-      this.dialogRef.close(accident);
-    }
+  selectLimb(limb: List_Limb): void {
+    if (this.data.isPicker) this.dialogRef.close(limb);
   }
 
-  startEdit(index: number): void {
-    this.editIndex = index;
-  }
+  startEdit(index: number): void { this.editIndex = index; }
 
   async saveEdit(element: List_Limb): Promise<void> {
     const updatedLimb: Update_Limb = {
       id: element.id,
-      name: element.name // Güncellenen kaza türü adı
+      name: element.name,
+      description: element.description
     };
-
     try {
       await this.limbService.updateLimb(updatedLimb);
-      this.alertifyService.message('Uzuv türü başarıyla güncellendi.', {
-        dismissOthers: true,
-        messageType: MessageType.Success,
-        position: Position.TopRight
+      this.alertifyService.message('Uzuv başarıyla güncellendi.', {
+        dismissOthers: true, messageType: MessageType.Success, position: Position.TopRight
       });
-      this.editIndex = null; // Düzenleme modunu kapat
-      await this.showLimbs(); // Güncellenen kaza türünü yükleme
+      this.editIndex = null;
+      await this.showLimbs();
     } catch (error) {
-      this.alertifyService.message('Uzuv türü güncellenirken bir hata oluştu.', {
-        dismissOthers: true,
-        messageType: MessageType.Error,
-        position: Position.TopRight
+      this.alertifyService.message('Uzuv güncellenirken bir hata oluştu.', {
+        dismissOthers: true, messageType: MessageType.Error, position: Position.TopRight
       });
     }
   }
 
-  cancelEdit(): void {
-    this.editIndex = null;
-  }
+  cancelEdit(): void { this.editIndex = null; }
 
   async createLimb(): Promise<void> {
     const newLimb: Create_Limb = {
-      name: this.newLimb // Yeni kaza türü adı
+      name: this.newLimb,
+      description: this.newLimbDescription
     };
-
     try {
       await this.limbService.createLimb(newLimb);
-      this.alertifyService.message('Kaza türü başarıyla oluşturuldu.', {
-        dismissOthers: true,
-        messageType: MessageType.Success,
-        position: Position.TopRight
+      this.alertifyService.message('Uzuv başarıyla oluşturuldu.', {
+        dismissOthers: true, messageType: MessageType.Success, position: Position.TopRight
       });
-      this.newLimb = ''; // Giriş alanını temizleme
-      await this.showLimbs(); // Yeni kaza türünü yükleme
+      this.newLimb = '';
+      this.newLimbDescription = '';
+      await this.showLimbs();
     } catch (error) {
-      this.alertifyService.message('Kaza türü oluşturulurken bir hata oluştu.', {
-        dismissOthers: true,
-        messageType: MessageType.Error,
-        position: Position.TopRight
+      this.alertifyService.message('Uzuv oluşturulurken bir hata oluştu.', {
+        dismissOthers: true, messageType: MessageType.Error, position: Position.TopRight
       });
     }
   }
@@ -122,9 +106,6 @@ export class ShowLimbDialogComponent extends BaseDialog<ShowLimbDialogComponent>
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
-
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
-    }
+    if (this.dataSource.paginator) this.dataSource.paginator.firstPage();
   }
 }

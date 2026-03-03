@@ -1,50 +1,67 @@
+<div class="sidebar-wrapper">
+  <aside class="left-sidebar">
 
-<nav class="sidebar-nav">
-    <ul id="sidebarnav" class="pt-4">
-      <li class="sidebar-item">
-        <a
-          class="sidebar-link waves-effect waves-dark sidebar-link"
-          routerLink="/admin"
-          aria-expanded="false" 
-          ><i class="mdi mdi-view-dashboard"></i
-          ><span class="hide-menu">Ana Sayfa</span></a
-        >
-      </li>
-      <li class="sidebar-item">
-        <a
-          class="sidebar-link waves-effect waves-dark sidebar-link"
-          routerLink="authorize-menu"
-          aria-expanded="false"
-          ><i class="mdi mdi-fingerprint"></i
-          ><span class="hide-menu">Yetkilendirme Sayfası</span></a
-        >
-      </li>
-      <li class="sidebar-item">
-        <a
-          class="sidebar-link waves-effect waves-dark sidebar-link"
-          routerLink="roles"
-          aria-expanded="false"
-          ><i class="mdi mdi-account-check"></i
-          ><span class="hide-menu">Rol Sayfası</span></a
-        >
-      </li>
-      <li class="sidebar-item">
-        <a
-          class="sidebar-link waves-effect waves-dark sidebar-link"
-          routerLink="users"
-          aria-expanded="false"
-          ><i class="mdi mdi-account"></i
-          ><span class="hide-menu">Kullanıcılar Sayfası</span></a
-        >
-      </li>
-      <li class="sidebar-item">
-        <a
-          class="sidebar-link waves-effect waves-dark sidebar-link"
-          routerLink=""
-          aria-expanded="false"
-          ><i class="mdi mdi-account"></i
-          ><span class="hide-menu">Siteyi Gör</span></a
-        >
-      </li>
-    </ul>
-  </nav>
+    <!-- Sidebar Header -->
+    <div class="sidebar-header">
+      <div class="sidebar-brand">
+        <i class="mdi mdi-shield-account sidebar-brand-icon"></i>
+        <div class="sidebar-brand-text">
+          <span class="brand-title">Admin Panel</span>
+          <span class="brand-subtitle">OHS Program</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sidebar Navigation -->
+    <div class="scroll-sidebar">
+      <nav class="sidebar-nav">
+        <ul class="sidebar-menu">
+
+          <li class="sidebar-item">
+            <a class="sidebar-link" routerLink="/admin" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+              <i class="mdi mdi-view-dashboard"></i>
+              <span>Ana Sayfa</span>
+            </a>
+          </li>
+
+          <li class="sidebar-item">
+            <a class="sidebar-link" routerLink="definition" routerLinkActive="active">
+              <i class="mdi mdi-book-open-variant"></i>
+              <span>Tanımlamalar</span>
+            </a>
+          </li>
+
+          <li class="sidebar-item">
+            <a class="sidebar-link" routerLink="authorize-menu" routerLinkActive="active">
+              <i class="mdi mdi-fingerprint"></i>
+              <span>Yetkilendirme</span>
+            </a>
+          </li>
+
+          <li class="sidebar-item">
+            <a class="sidebar-link" routerLink="roles" routerLinkActive="active">
+              <i class="mdi mdi-account-check"></i>
+              <span>Rol Sayfası</span>
+            </a>
+          </li>
+
+          <li class="sidebar-item">
+            <a class="sidebar-link" routerLink="users" routerLinkActive="active">
+              <i class="mdi mdi-account-group"></i>
+              <span>Kullanıcılar</span>
+            </a>
+          </li>
+
+          <li class="sidebar-item">
+            <a class="sidebar-link" routerLink="/">
+              <i class="mdi mdi-exit-to-app"></i>
+              <span>Siteye Dön</span>
+            </a>
+          </li>
+
+        </ul>
+      </nav>
+    </div>
+
+  </aside>
+</div>

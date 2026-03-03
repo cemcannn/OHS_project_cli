@@ -1,6 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Chart, registerables } from 'chart.js';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { MatTableDataSource } from '@angular/material/table';
+import * as XLSX from 'xlsx';
 import { BaseComponent, SpinnerType } from 'src/app/base/base.component';
 import { AlertifyService, MessageType, Position } from 'src/app/services/admin/alertify.service';
 import { AccidentService } from 'src/app/services/common/models/accident.service';
@@ -33,10 +35,10 @@ export class AccidentAnalysisComponent extends BaseComponent implements OnInit, 
   selectedMonth = 'Tüm Aylar';
 
   // Analiz verileri
-  kazaTuruData: FrequencyItem[] = [];
-  kazaYeriData: FrequencyItem[] = [];
-  sanatData: FrequencyItem[] = [];
-  uzuvData: FrequencyItem[] = [];
+  accidentTypeData: FrequencyItem[] = [];
+  accidentAreaData: FrequencyItem[] = [];
+  professionData: FrequencyItem[] = [];
+  limbData: FrequencyItem[] = [];
   monthlyData: FrequencyItem[] = [];
   weekdayData: FrequencyItem[] = [];
   hourData: FrequencyItem[] = [];
@@ -118,10 +120,10 @@ export class AccidentAnalysisComponent extends BaseComponent implements OnInit, 
   // ─────────────────────────────────────────────
 
   private computeAll(): void {
-    this.kazaTuruData = this.frequency(this.filteredAccidents.map(a => a.typeOfAccident), 20);
-    this.kazaYeriData = this.frequency(this.filteredAccidents.map(a => a.accidentArea));
-    this.sanatData    = this.frequency(this.filteredAccidents.map(a => a.profession), 20);
-    this.uzuvData     = this.frequency(this.filteredAccidents.map(a => a.limb));
+    this.accidentTypeData = this.frequency(this.filteredAccidents.map(a => a.typeOfAccident), 20);
+    this.accidentAreaData = this.frequency(this.filteredAccidents.map(a => a.accidentArea));
+    this.professionData   = this.frequency(this.filteredAccidents.map(a => a.profession), 20);
+    this.limbData         = this.frequency(this.filteredAccidents.map(a => a.limb));
     this.monthlyData  = this.monthlyFrequency();
     this.weekdayData  = this.weekdayFrequency();
     this.hourData     = this.hourFrequency();
@@ -214,10 +216,10 @@ export class AccidentAnalysisComponent extends BaseComponent implements OnInit, 
   // ─────────────────────────────────────────────
 
   private renderAll(): void {
-    this.renderHBar('chartKazaTuru',   this.kazaTuruData,  'Kaza Türü');
-    this.renderHBar('chartKazaYeri',   this.kazaYeriData,  'Kaza Yeri');
-    this.renderHBar('chartSanat',      this.sanatData,     'Meslek');
-    this.renderHBar('chartUzuv',       this.uzuvData,      'Uzuv');
+    this.renderHBar('chartAccidentType', this.accidentTypeData, 'Kaza Türü');
+    this.renderHBar('chartAccidentArea', this.accidentAreaData, 'Kaza Yeri');
+    this.renderHBar('chartProfession',   this.professionData,   'Meslek');
+    this.renderHBar('chartLimb',         this.limbData,         'Uzuv');
     this.renderVBar('chartMonthly',    this.monthlyData,   'Aylık Dağılım');
     this.renderVBar('chartWeekday',    this.weekdayData,   'Haftanın Günleri');
     this.renderVBar('chartHour',       this.hourData,      'Saat Dağılımı');
@@ -232,10 +234,47 @@ export class AccidentAnalysisComponent extends BaseComponent implements OnInit, 
     this.buildChart(id, data, label, 'x');
   }
 
+  // Modern renk paleti oluşturucu
+  private getChartColors(length: number, isHighlighted: boolean = false): any {
+    const colors = [];
+    const borderColors = [];
+    
+    for (let i = 0; i < length; i++) {
+      let baseColor: [number, number, number];
+      let opacity: number;
+      
+      if (i === 0) {
+        // En yüksek değer - koyu kırmızı
+        baseColor = [192, 57, 43];
+        opacity = 0.95;
+      } else if (i < 3) {
+        // İlk 3'te - orta kırmızı
+        baseColor = [192, 57, 43];
+        opacity = 0.75;
+      } else if (i < 5) {
+        // İlk 5'te - açık kırmızı
+        baseColor = [231, 76, 60];
+        opacity = 0.60;
+      } else {
+        // Diğerleri - daha açık
+        baseColor = [231, 76, 60];
+        opacity = 0.40;
+      }
+      
+      colors.push(`rgba(${baseColor[0]}, ${baseColor[1]}, ${baseColor[2]}, ${opacity})`);
+      borderColors.push(`rgba(${baseColor[0]}, ${baseColor[1]}, ${baseColor[2]}, ${Math.min(opacity + 0.2, 1)})`);
+    }
+    
+    return { backgroundColor: colors, borderColor: borderColors };
+  }
+
   private buildChart(id: string, data: FrequencyItem[], label: string, axis: 'x' | 'y'): void {
     const canvas = document.getElementById(id) as HTMLCanvasElement;
     if (!canvas) return;
     this.charts.get(id)?.destroy();
+
+    const colors = this.getChartColors(data.length);
+    const isHorizontal = axis === 'y';
 
     const chart = new Chart(canvas, {
       type: 'bar',
@@ -244,41 +283,110 @@ export class AccidentAnalysisComponent extends BaseComponent implements OnInit, 
         datasets: [{
           label,
           data: data.map(d => d.count),
-          backgroundColor: data.map((_, i) =>
-            i === 0 ? 'rgba(192,57,43,0.90)' :
-            i < 5   ? 'rgba(192,57,43,0.65)' :
-                      'rgba(192,57,43,0.40)'
-          ),
-          borderColor: 'rgba(192,57,43,0.9)',
-          borderWidth: 1,
-          borderRadius: 4,
+          backgroundColor: colors.backgroundColor,
+          borderColor: colors.borderColor,
+          borderWidth: 2,
+          borderRadius: 6,
+          borderSkipped: false,
+          hoverBackgroundColor: colors.borderColor,
+          hoverBorderColor: '#c0392b',
+          hoverBorderWidth: 3,
         }]
       },
       options: {
         indexAxis: axis,
         responsive: true,
         maintainAspectRatio: false,
+        animation: {
+          duration: 800,
+          easing: 'easeInOutQuart',
+        },
+        interaction: {
+          intersect: false,
+          mode: 'index'
+        },
         plugins: {
-          legend: { display: false },
+          legend: { 
+            display: false 
+          },
           tooltip: {
+            enabled: true,
+            backgroundColor: 'rgba(44, 62, 80, 0.95)',
+            titleColor: '#fff',
+            bodyColor: '#fff',
+            titleFont: {
+              size: 14,
+              weight: 'bold',
+              family: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"
+            },
+            bodyFont: {
+              size: 13,
+              family: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"
+            },
+            padding: 12,
+            cornerRadius: 8,
+            displayColors: true,
+            borderColor: 'rgba(192, 57, 43, 0.8)',
+            borderWidth: 2,
             callbacks: {
-              label: ctx => ` ${ctx.parsed[axis === 'y' ? 'x' : 'y']} kaza — %${data[ctx.dataIndex]?.percentage.toFixed(1)}`
+              label: ctx => {
+                const count = ctx.parsed[axis === 'y' ? 'x' : 'y'];
+                const percentage = data[ctx.dataIndex]?.percentage || 0;
+                return ` ${count} kaza (${percentage.toFixed(1)}%)`;
+              }
             }
           }
         },
         scales: {
           x: {
             beginAtZero: true,
-            ticks: { precision: 0, font: { size: 11 } },
-            grid: { color: 'rgba(0,0,0,0.05)' }
+            grid: {
+              display: !isHorizontal,
+              color: 'rgba(0, 0, 0, 0.06)',
+              lineWidth: 1,
+            },
+            border: {
+              display: false
+            },
+            ticks: { 
+              precision: 0,
+              font: { 
+                size: 11.5,
+                family: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"
+              },
+              color: '#5a6c7d',
+              padding: 8,
+              ...(isHorizontal ? {} : {
+                callback: (value: any, index: number) => {
+                  const lbl = data[index]?.label || '';
+                  return lbl.length > 12 ? lbl.slice(0, 12) + '…' : lbl;
+                }
+              })
+            }
           },
           y: {
+            beginAtZero: true,
+            grid: {
+              display: isHorizontal,
+              color: 'rgba(0, 0, 0, 0.06)',
+              lineWidth: 1,
+            },
+            border: {
+              display: false
+            },
             ticks: {
-              font: { size: 11 },
-              callback: (_val, idx) => {
-                const lbl = data[idx]?.label || '';
-                return lbl.length > 35 ? lbl.slice(0, 35) + '…' : lbl;
-              }
+              font: { 
+                size: 11.5,
+                family: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"
+              },
+              color: '#5a6c7d',
+              padding: 8,
+              ...(isHorizontal ? {
+                callback: (_val: any, idx: number) => {
+                  const lbl = data[idx]?.label || '';
+                  return lbl.length > 38 ? lbl.slice(0, 38) + '…' : lbl;
+                }
+              } : {})
             }
           }
         }

@@ -49,11 +49,11 @@
           <div class="chart-card">
             <div class="chart-title">En Fazla Kaza Türü (İlk 20)</div>
             <div class="chart-wrap tall">
-              <canvas id="chartKazaTuru"></canvas>
+              <canvas id="chartAccidentType"></canvas>
             </div>
           </div>
           <div class="table-card">
-            <ng-container *ngTemplateOutlet="freqTable; context: { data: kazaTuruData }"></ng-container>
+            <ng-container *ngTemplateOutlet="freqTable; context: { data: accidentTypeData }"></ng-container>
           </div>
         </div>
       </div>
@@ -69,11 +69,11 @@
           <div class="chart-card">
             <div class="chart-title">Kaza Yeri Dağılımı</div>
             <div class="chart-wrap medium">
-              <canvas id="chartKazaYeri"></canvas>
+              <canvas id="chartAccidentArea"></canvas>
             </div>
           </div>
           <div class="table-card">
-            <ng-container *ngTemplateOutlet="freqTable; context: { data: kazaYeriData }"></ng-container>
+            <ng-container *ngTemplateOutlet="freqTable; context: { data: accidentAreaData }"></ng-container>
           </div>
         </div>
       </div>
@@ -89,11 +89,11 @@
           <div class="chart-card">
             <div class="chart-title">Mesleklere Göre Kaza (İlk 20)</div>
             <div class="chart-wrap tall">
-              <canvas id="chartSanat"></canvas>
+              <canvas id="chartProfession"></canvas>
             </div>
           </div>
           <div class="table-card">
-            <ng-container *ngTemplateOutlet="freqTable; context: { data: sanatData }"></ng-container>
+            <ng-container *ngTemplateOutlet="freqTable; context: { data: professionData }"></ng-container>
           </div>
         </div>
       </div>
@@ -109,11 +109,11 @@
           <div class="chart-card">
             <div class="chart-title">Etkilenen Uzuv Dağılımı</div>
             <div class="chart-wrap medium">
-              <canvas id="chartUzuv"></canvas>
+              <canvas id="chartLimb"></canvas>
             </div>
           </div>
           <div class="table-card">
-            <ng-container *ngTemplateOutlet="freqTable; context: { data: uzuvData }"></ng-container>
+            <ng-container *ngTemplateOutlet="freqTable; context: { data: limbData }"></ng-container>
           </div>
         </div>
       </div>

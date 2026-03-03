@@ -1,23 +1,138 @@
-/* container for sidebar and main content */
-.container {
-    display: flex;
-  }
-  
-  /* sidebar */
+$sidebar-bg: #141619;
+$sidebar-width: 250px;
+$red: #c0392b;
+$red-light: rgba(192, 57, 43, 0.15);
+$text-light: rgba(255, 255, 255, 0.75);
+$text-muted: rgba(255, 255, 255, 0.4);
+$hover-bg: rgba(255, 255, 255, 0.07);
+$border-color: rgba(255, 255, 255, 0.08);
+
+.sidebar-wrapper {
   .left-sidebar {
-    position: fixed; /* Fixed position to keep it on the side */
-    top: 0; /* Align to the top */
-    left: 0; /* Align to the left */
-    bottom: 0; /* Full height */
-    width: 250px; /* Adjust based on your sidebar width */
-    background-color: #141619 !important ; /* Örneğin, koyu gri renk *//* Örneğin, koyu gri renk */; /* Adjust based on your sidebar color */
-    overflow-y: auto; /* Enable scrolling if necessary */
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: $sidebar-width;
+    background: $sidebar-bg;
+    overflow-y: auto;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+
+    &::-webkit-scrollbar {
+      width: 4px;
+    }
+    &::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    &::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 2px;
+    }
   }
-  
-  
-  /* main content */
-  .main-content {
-    flex: 1;
-    padding: 20px; /* Adjust as needed */
+}
+
+/* ─── Sidebar Header ─── */
+.sidebar-header {
+  padding: 20px 16px;
+  border-bottom: 1px solid $border-color;
+  flex-shrink: 0;
+}
+
+.sidebar-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  .sidebar-brand-logo {
+    width: 34px;
+    height: 34px;
+    object-fit: contain;
+    filter: drop-shadow(0 2px 6px rgba(192, 57, 43, 0.5));
+    flex-shrink: 0;
   }
-  
+
+  .sidebar-brand-text {
+    display: flex;
+    flex-direction: column;
+
+    .brand-title {
+      font-size: 15px;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: 0.5px;
+      line-height: 1.2;
+    }
+
+    .brand-subtitle {
+      font-size: 10.5px;
+      color: $text-muted;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+  }
+}
+
+/* ─── Sidebar Navigation ─── */
+.scroll-sidebar {
+  flex: 1;
+  padding: 12px 0;
+}
+
+.sidebar-menu {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.sidebar-item {
+  margin: 2px 8px;
+}
+
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 14px;
+  border-radius: 8px;
+  color: $text-light;
+  text-decoration: none;
+  font-size: 13.5px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  cursor: pointer;
+
+  i {
+    font-size: 20px;
+    flex-shrink: 0;
+    color: $text-muted;
+    transition: color 0.2s ease;
+  }
+
+  span {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &:hover {
+    background: $hover-bg;
+    color: #fff;
+
+    i {
+      color: $red;
+    }
+  }
+
+  &.active {
+    background: $red-light;
+    color: #fff;
+    border-left: 3px solid $red;
+    padding-left: 11px;
+
+    i {
+      color: $red;
+    }
+  }
+}

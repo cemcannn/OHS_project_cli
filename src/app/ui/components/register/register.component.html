@@ -1,38 +1,82 @@
-<div class="row">
-    <div class="col-md-3"></div>
-    <div class="col-md-6 mb-4">
-      <h2 class="page-title mt-3">Kullanıcı Kaydı</h2>
-      <form [formGroup]="frm" (ngSubmit)="onSubmit(frm.value)">
-        <div class="form-group">
-          <label for="name">Ad Soyad</label>
-          <input type="text" formControlName="name" class="form-control" id="name" placeholder="Ad Soyad" [ngClass]="{'is-invalid': submitted && component.name.errors}">
-          <small class="form-text text-muted invalid-feedback" *ngIf="submitted && component.name.errors?.required">Lütfen ad soyadı boş geçmeyiniz.</small>
-          <small class="form-text text-muted invalid-feedback" *ngIf="submitted && (component.name.errors?.maxlength || component.name.errors?.minlength)">Lütfen ad soyadı 3 ile 50 karakter arasında yazınız.</small>
-        </div>
-        <div class="form-group">
-          <label for="userName">Kullanıcı Adı</label>
-          <input type="text" formControlName="userName" class="form-control" id="userName" [ngClass]="{'is-invalid': submitted && component.userName.errors}" placeholder="Kullanıcı Adı">
-          <small class="form-text text-muted invalid-feedback" *ngIf="submitted && component.userName.errors?.required">Lütfen kullanıcı adını boş geçmeyiniz.</small>
-        </div>
-        <div class="form-group">
-          <label for="email">Email</label>
-          <input type="email" formControlName="email" class="form-control" id="email" placeholder="Email" [ngClass]="{'is-invalid': submitted && component.email.errors}">
-          <small class="form-text text-muted invalid-feedback" *ngIf="submitted && component.email.errors?.required">Lütfen emaili boş geçmeyiniz.</small>
-          <small class="form-text text-muted invalid-feedback" *ngIf="submitted && component.email.errors?.email">Lütfen emaili düzgün giriniz.</small>
-        </div>
-        <div class="form-group">
-          <label for="password">Şifre</label>
-          <input type="password" formControlName="password" class="form-control" id="password" placeholder="Şifre" [ngClass]="{'is-invalid': submitted && component.password.errors}">
-        </div>
-        <div class="form-group">
-          <label for="passwordConfirm">Şifre Tekrar</label>
-          <input type="password" formControlName="passwordConfirm" class="form-control" id="passwordConfirm" placeholder="Şifre Tekrar" [ngClass]="{'is-invalid': submitted && component.passwordConfirm.errors}">
-          <small *ngIf="submitted && frm.hasError('notSame')">Lütfen şifreyi doğrulayınız.</small>
-        </div>
-        <br />
-        <button type="submit" class="btn btn-primary ">Kayıt Ol</button>
-      </form>
-  
+<div class="auth-page">
+  <div class="auth-container" style="max-width: 480px">
+
+    <div class="auth-logo">
+      <i class="mdi mdi-hard-hat"></i>
+      <h1>OHS Program</h1>
+      <p>İş Güvenliği Yönetim Sistemi</p>
     </div>
-    <div class="col-md-3"></div>
+
+    <div class="auth-card">
+      <div class="auth-card-header">
+        <i class="mdi mdi-account-plus"></i>
+        <h2>Yeni Kullanıcı Kaydı</h2>
+      </div>
+
+      <div class="auth-card-body">
+        <form [formGroup]="frm" (ngSubmit)="onSubmit(frm.value)">
+
+          <div class="auth-form-field">
+            <label>Ad Soyad</label>
+            <div class="auth-input-wrapper">
+              <i class="mdi mdi-account auth-input-icon"></i>
+              <input type="text" formControlName="name" class="auth-input" placeholder="Ad ve soyadınızı giriniz"
+                [ngClass]="{'is-invalid': submitted && component.name.errors}">
+            </div>
+            <small class="auth-error" *ngIf="submitted && component.name.errors?.required">Lütfen ad soyadı boş geçmeyiniz.</small>
+            <small class="auth-error" *ngIf="submitted && (component.name.errors?.maxlength || component.name.errors?.minlength)">
+              Lütfen ad soyadı 3 ile 50 karakter arasında yazınız.
+            </small>
+          </div>
+
+          <div class="auth-form-field">
+            <label>Kullanıcı Adı</label>
+            <div class="auth-input-wrapper">
+              <i class="mdi mdi-at auth-input-icon"></i>
+              <input type="text" formControlName="userName" class="auth-input" placeholder="Kullanıcı adı belirleyiniz"
+                [ngClass]="{'is-invalid': submitted && component.userName.errors}">
+            </div>
+            <small class="auth-error" *ngIf="submitted && component.userName.errors?.required">Lütfen kullanıcı adını boş geçmeyiniz.</small>
+          </div>
+
+          <div class="auth-form-field">
+            <label>Email</label>
+            <div class="auth-input-wrapper">
+              <i class="mdi mdi-email auth-input-icon"></i>
+              <input type="email" formControlName="email" class="auth-input" placeholder="E-posta adresinizi giriniz"
+                [ngClass]="{'is-invalid': submitted && component.email.errors}">
+            </div>
+            <small class="auth-error" *ngIf="submitted && component.email.errors?.required">Lütfen emaili boş geçmeyiniz.</small>
+            <small class="auth-error" *ngIf="submitted && component.email.errors?.email">Lütfen geçerli bir email adresi giriniz.</small>
+          </div>
+
+          <div class="auth-form-field">
+            <label>Şifre</label>
+            <div class="auth-input-wrapper">
+              <i class="mdi mdi-lock auth-input-icon"></i>
+              <input type="password" formControlName="password" class="auth-input" placeholder="Şifre belirleyiniz"
+                [ngClass]="{'is-invalid': submitted && component.password.errors}">
+            </div>
+          </div>
+
+          <div class="auth-form-field">
+            <label>Şifre Tekrar</label>
+            <div class="auth-input-wrapper">
+              <i class="mdi mdi-lock-check auth-input-icon"></i>
+              <input type="password" formControlName="passwordConfirm" class="auth-input" placeholder="Şifrenizi tekrar giriniz"
+                [ngClass]="{'is-invalid': submitted && component.passwordConfirm.errors}">
+            </div>
+            <small class="auth-error" *ngIf="submitted && frm.hasError('notSame')">Lütfen şifreyi doğrulayınız.</small>
+          </div>
+
+          <button type="submit" class="auth-btn">
+            <i class="mdi mdi-account-check"></i>
+            Kayıt Ol
+          </button>
+
+        </form>
+      </div>
+    </div>
+
   </div>
+</div>

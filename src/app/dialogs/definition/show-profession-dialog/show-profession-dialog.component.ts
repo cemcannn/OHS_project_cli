@@ -22,8 +22,9 @@ export class ShowProfessionDialogComponent extends BaseDialog<ShowProfessionDial
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  editIndex: number | null = null; // Düzenleme modunda olan satırın indeksi
-  newProfession: string = ''; // Yeni kaza türü eklemek için
+  editIndex: number | null = null;
+  newProfession: string = '';
+  newProfessionDescription: string = '';
 
   constructor(
     dialogRef: MatDialogRef<ShowProfessionDialogComponent>,
@@ -34,9 +35,7 @@ export class ShowProfessionDialogComponent extends BaseDialog<ShowProfessionDial
     super(dialogRef);
   }
 
-  async ngOnInit(){
-    await this.showProfessions();
-  }
+  async ngOnInit() { await this.showProfessions(); }
 
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
@@ -50,71 +49,56 @@ export class ShowProfessionDialogComponent extends BaseDialog<ShowProfessionDial
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
     } catch (error) {
-      this.alertifyService.message('Uzuv bilgilerini yüklerken bir hata oluştu.', {
-        dismissOthers: true,
-        messageType: MessageType.Error,
-        position: Position.TopRight
+      this.alertifyService.message('Meslek bilgilerini yüklerken bir hata oluştu.', {
+        dismissOthers: true, messageType: MessageType.Error, position: Position.TopRight
       });
     }
   }
 
-  selectProfession(accident: List_Profession): void {
-    if (this.data.isPicker) {
-      this.dialogRef.close(accident);
-    }
+  selectProfession(profession: List_Profession): void {
+    if (this.data.isPicker) this.dialogRef.close(profession);
   }
 
-  startEdit(index: number): void {
-    this.editIndex = index;
-  }
+  startEdit(index: number): void { this.editIndex = index; }
 
   async saveEdit(element: List_Profession): Promise<void> {
     const updatedProfession: Update_Profession = {
       id: element.id,
-      name: element.name // Güncellenen kaza türü adı
+      name: element.name,
+      description: element.description
     };
-
     try {
       await this.professionService.updateProfession(updatedProfession);
-      this.alertifyService.message('Uzuv türü başarıyla güncellendi.', {
-        dismissOthers: true,
-        messageType: MessageType.Success,
-        position: Position.TopRight
+      this.alertifyService.message('Meslek başarıyla güncellendi.', {
+        dismissOthers: true, messageType: MessageType.Success, position: Position.TopRight
       });
-      this.editIndex = null; // Düzenleme modunu kapat
-      await this.showProfessions(); // Güncellenen kaza türünü yükleme
+      this.editIndex = null;
+      await this.showProfessions();
     } catch (error) {
-      this.alertifyService.message('Uzuv türü güncellenirken bir hata oluştu.', {
-        dismissOthers: true,
-        messageType: MessageType.Error,
-        position: Position.TopRight
+      this.alertifyService.message('Meslek güncellenirken bir hata oluştu.', {
+        dismissOthers: true, messageType: MessageType.Error, position: Position.TopRight
       });
     }
   }
 
-  cancelEdit(): void {
-    this.editIndex = null;
-  }
+  cancelEdit(): void { this.editIndex = null; }
 
   async createProfession(): Promise<void> {
     const newProfession: Create_Profession = {
-      name: this.newProfession // Yeni kaza türü adı
+      name: this.newProfession,
+      description: this.newProfessionDescription
     };
-
     try {
       await this.professionService.createProfession(newProfession);
-      this.alertifyService.message('Kaza türü başarıyla oluşturuldu.', {
-        dismissOthers: true,
-        messageType: MessageType.Success,
-        position: Position.TopRight
+      this.alertifyService.message('Meslek başarıyla oluşturuldu.', {
+        dismissOthers: true, messageType: MessageType.Success, position: Position.TopRight
       });
-      this.newProfession = ''; // Giriş alanını temizleme
-      await this.showProfessions(); // Yeni kaza türünü yükleme
+      this.newProfession = '';
+      this.newProfessionDescription = '';
+      await this.showProfessions();
     } catch (error) {
-      this.alertifyService.message('Kaza türü oluşturulurken bir hata oluştu.', {
-        dismissOthers: true,
-        messageType: MessageType.Error,
-        position: Position.TopRight
+      this.alertifyService.message('Meslek oluşturulurken bir hata oluştu.', {
+        dismissOthers: true, messageType: MessageType.Error, position: Position.TopRight
       });
     }
   }
@@ -122,9 +106,6 @@ export class ShowProfessionDialogComponent extends BaseDialog<ShowProfessionDial
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
-
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
-    }
+    if (this.dataSource.paginator) this.dataSource.paginator.firstPage();
   }
 }

@@ -8,6 +8,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
+import { MatButtonModule } from '@angular/material/button';
 import { RouterModule } from '@angular/router';
 
 
@@ -18,9 +19,8 @@ import { RouterModule } from '@angular/router';
     ListComponent
   ],
   imports: [
-    CommonModule, MatSidenavModule, MatFormFieldModule, MatSelectModule, FormsModule, ReactiveFormsModule,
-     MatTableModule,
-    MatSortModule,
+    CommonModule, MatSidenavModule, MatFormFieldModule, MatSelectModule, MatButtonModule, FormsModule, ReactiveFormsModule,
+    MatTableModule, MatSortModule,
     RouterModule.forChild([
       { path: "", component: AccidentRateComponent}
     ])

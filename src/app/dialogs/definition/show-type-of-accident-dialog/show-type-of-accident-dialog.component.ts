@@ -16,14 +16,15 @@ import { Update_Type_Of_Accident } from 'src/app/contracts/definitions/type_of_a
   styleUrls: ['./show-type-of-accident-dialog.component.scss']
 })
 export class ShowTypeOfAccidentDialogComponent extends BaseDialog<ShowTypeOfAccidentDialogComponent> implements OnInit {
-  displayedColumns: string[] = ['typeOfAccident', 'actions'];
+  displayedColumns: string[] = ['name', 'actions'];
   dataSource: MatTableDataSource<List_Type_Of_Accident> = new MatTableDataSource<List_Type_Of_Accident>();
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  editIndex: number | null = null; // Düzenleme modunda olan satırın indeksi
-  newTypeOfAccident: string = ''; // Yeni kaza türü eklemek için
+  editIndex: number | null = null;
+  newTypeOfAccident: string = '';
+  newTypeOfAccidentDescription: string = '';
 
   constructor(
     dialogRef: MatDialogRef<ShowTypeOfAccidentDialogComponent>,
@@ -51,70 +52,55 @@ export class ShowTypeOfAccidentDialogComponent extends BaseDialog<ShowTypeOfAcci
       this.dataSource.sort = this.sort;
     } catch (error) {
       this.alertifyService.message('Kaza türü bilgilerini yüklerken bir hata oluştu.', {
-        dismissOthers: true,
-        messageType: MessageType.Error,
-        position: Position.TopRight
+        dismissOthers: true, messageType: MessageType.Error, position: Position.TopRight
       });
     }
   }
 
   selectTypeOfAccident(accident: List_Type_Of_Accident): void {
-    if (this.data.isPicker) {
-      this.dialogRef.close(accident);
-    }
+    if (this.data.isPicker) this.dialogRef.close(accident);
   }
 
-  startEdit(index: number): void {
-    this.editIndex = index;
-  }
+  startEdit(index: number): void { this.editIndex = index; }
 
   async saveEdit(element: List_Type_Of_Accident): Promise<void> {
     const updatedTypeOfAccident: Update_Type_Of_Accident = {
       id: element.id,
-      name: element.name // Güncellenen kaza türü adı
+      name: element.name,
+      description: element.description
     };
-
     try {
       await this.typeOfAccidentService.updateTypeOfAccident(updatedTypeOfAccident);
       this.alertifyService.message('Kaza türü başarıyla güncellendi.', {
-        dismissOthers: true,
-        messageType: MessageType.Success,
-        position: Position.TopRight
+        dismissOthers: true, messageType: MessageType.Success, position: Position.TopRight
       });
-      this.editIndex = null; // Düzenleme modunu kapat
-      await this.showTypeOfAccidents(); // Güncellenen kaza türünü yükleme
+      this.editIndex = null;
+      await this.showTypeOfAccidents();
     } catch (error) {
       this.alertifyService.message('Kaza türü güncellenirken bir hata oluştu.', {
-        dismissOthers: true,
-        messageType: MessageType.Error,
-        position: Position.TopRight
+        dismissOthers: true, messageType: MessageType.Error, position: Position.TopRight
       });
     }
   }
 
-  cancelEdit(): void {
-    this.editIndex = null;
-  }
+  cancelEdit(): void { this.editIndex = null; }
 
   async createTypeOfAccident(): Promise<void> {
     const newTypeOfAccident: Create_Type_Of_Accident = {
-      name: this.newTypeOfAccident // Yeni kaza türü adı
+      name: this.newTypeOfAccident,
+      description: this.newTypeOfAccidentDescription
     };
-
     try {
       await this.typeOfAccidentService.createTypeOfAccident(newTypeOfAccident);
       this.alertifyService.message('Kaza türü başarıyla oluşturuldu.', {
-        dismissOthers: true,
-        messageType: MessageType.Success,
-        position: Position.TopRight
+        dismissOthers: true, messageType: MessageType.Success, position: Position.TopRight
       });
-      this.newTypeOfAccident = ''; // Giriş alanını temizleme
-      await this.showTypeOfAccidents(); // Yeni kaza türünü yükleme
+      this.newTypeOfAccident = '';
+      this.newTypeOfAccidentDescription = '';
+      await this.showTypeOfAccidents();
     } catch (error) {
       this.alertifyService.message('Kaza türü oluşturulurken bir hata oluştu.', {
-        dismissOthers: true,
-        messageType: MessageType.Error,
-        position: Position.TopRight
+        dismissOthers: true, messageType: MessageType.Error, position: Position.TopRight
       });
     }
   }
@@ -122,9 +108,6 @@ export class ShowTypeOfAccidentDialogComponent extends BaseDialog<ShowTypeOfAcci
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
-
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
-    }
+    if (this.dataSource.paginator) this.dataSource.paginator.firstPage();
   }
 }

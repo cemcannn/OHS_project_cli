@@ -1,80 +1,99 @@
-<!-- ============================================================== -->
-<!-- Bread crumb -->
-<!-- ============================================================== -->
-<div class="page-breadcrumb">
-  <div class="row">
-    <div class="col-12 d-flex no-block align-items-center">
-      <h2 class="page-title">Tanımlamalar</h2>
-    </div>
-  </div>
-  <!-- ============================================================== -->
-  <!-- End Bread crumb -->
-  <!-- ============================================================== -->
+<div class="modern-page">
 
-  <!-- ============================================================== -->
-  <!-- Container fluid  -->
-  <!-- ============================================================== -->
-  <div class="container-fluid">
-    <!-- ============================================================== -->
-    <!-- Sales Cards  -->
-    <!-- ============================================================== -->
-    <div class="row">
-      <!-- Column -->
-      <div class="col-md-6 col-lg-3 col-xlg-3">
-        <div class="card card-hover">
-          <div class="box bg-danger text-center card-size" (click)="showTypeOfAccidentDialog({})">
-            <h1 class="font-light text-white">
-              <i class="mdi mdi-chart-areaspline"></i>
-            </h1>
-            <h4 class="text-white">Kaza Türleri</h4>
-          </div>
+  <!-- ── Page Header ── -->
+  <div class="filter-bar">
+    <div class="filter-left">
+      <i class="mdi mdi-book-open-variant filter-icon"></i>
+      <span class="filter-title">Tanımlamalar</span>
+    </div>
+    <p class="header-subtitle">Bir kategori seçerek tanımlamaları yönetin</p>
+  </div>
+
+  <!-- ── Definitions Grid ── -->
+  <div class="defs-section">
+    <div class="defs-grid">
+
+      <!-- Kaza Türleri -->
+      <div class="def-card" (click)="showTypeOfAccidentDialog({})">
+        <div class="def-card-accent" style="--c1: #c0392b; --c2: #a93226"></div>
+        <div class="def-icon-wrap" style="--c1: #c0392b; --c2: #a93226">
+          <i class="mdi mdi-alert-circle"></i>
+        </div>
+        <div class="def-info">
+          <h3>Kaza Türleri</h3>
+          <p>Kazanın oluşum türlerini tanımla ve yönet</p>
+        </div>
+        <div class="def-action">
+          <span>Yönet</span>
+          <i class="mdi mdi-arrow-right"></i>
         </div>
       </div>
-      <!-- Column -->
-      <div class="col-md-6 col-lg-3 col-xlg-3">
-        <div class="card card-hover">
-          <div class="box bg-danger text-center card-size" (click)="showProfessionDialog({})">
-            <h1 class="font-light text-white">
-              <i class="mdi mdi-arrow-all"></i>
-            </h1>
-            <h4 class="text-white">Meslek Türleri</h4>
-          </div>
+
+      <!-- Meslek Türleri -->
+      <div class="def-card" (click)="showProfessionDialog({})">
+        <div class="def-card-accent" style="--c1: #d35400; --c2: #b94600"></div>
+        <div class="def-icon-wrap" style="--c1: #d35400; --c2: #b94600">
+          <i class="mdi mdi-briefcase"></i>
+        </div>
+        <div class="def-info">
+          <h3>Meslek Türleri</h3>
+          <p>Çalışan meslek tanımlamalarını güncelle</p>
+        </div>
+        <div class="def-action">
+          <span>Yönet</span>
+          <i class="mdi mdi-arrow-right"></i>
         </div>
       </div>
-      <!-- Column -->
-      <div class="col-md-6 col-lg-3 col-xlg-3">
-        <div class="card card-hover">
-          <div class="box bg-danger text-center card-size" (click)="showLimbDialog({})">
-            <h1 class="font-light text-white">
-              <i class="mdi mdi-receipt"></i>
-            </h1>
-            <h4 class="text-white">Uzuv Türleri</h4>
-          </div>
+
+      <!-- Uzuv Türleri -->
+      <div class="def-card" (click)="showLimbDialog({})">
+        <div class="def-card-accent" style="--c1: #2980b9; --c2: #1f6fa0"></div>
+        <div class="def-icon-wrap" style="--c1: #2980b9; --c2: #1f6fa0">
+          <i class="mdi mdi-human"></i>
+        </div>
+        <div class="def-info">
+          <h3>Uzuv Türleri</h3>
+          <p>Kazada etkilenen uzuv tanımlamalarını yönet</p>
+        </div>
+        <div class="def-action">
+          <span>Yönet</span>
+          <i class="mdi mdi-arrow-right"></i>
         </div>
       </div>
-      <!-- Column -->
-      <div class="col-md-6 col-lg-3 col-xlg-3">
-        <div class="card card-hover">
-          <div class="box bg-danger text-center card-size" (click)="showAccidentAreaDialog({})">
-            <h1 class="font-light text-white">
-              <i class="mdi mdi-relative-scale"></i>
-            </h1>
-            <h4 class="text-white">Kaza Yeri Türleri</h4>
-          </div>
+
+      <!-- Kaza Yeri Türleri -->
+      <div class="def-card" (click)="showAccidentAreaDialog({})">
+        <div class="def-card-accent" style="--c1: #16a085; --c2: #117a65"></div>
+        <div class="def-icon-wrap" style="--c1: #16a085; --c2: #117a65">
+          <i class="mdi mdi-map-marker"></i>
+        </div>
+        <div class="def-info">
+          <h3>Kaza Yeri Türleri</h3>
+          <p>Kazanın gerçekleştiği yer tanımlamalarını düzenle</p>
+        </div>
+        <div class="def-action">
+          <span>Yönet</span>
+          <i class="mdi mdi-arrow-right"></i>
         </div>
       </div>
-      <!-- Column -->
-      <div class="col-md-6 col-lg-3 col-xlg-3">
-        <div class="card card-hover">
-          <div class="box bg-danger text-center card-size" (click)="showDirectorateDialog({})">
-            <h1 class="font-light text-white">
-              <i class="mdi mdi-relative-scale"></i>
-            </h1>
-            <h4 class="text-white">İşletmeler</h4>
-          </div>
+
+      <!-- İşletmeler -->
+      <div class="def-card" (click)="showDirectorateDialog({})">
+        <div class="def-card-accent" style="--c1: #8e44ad; --c2: #6c3483"></div>
+        <div class="def-icon-wrap" style="--c1: #8e44ad; --c2: #6c3483">
+          <i class="mdi mdi-factory"></i>
+        </div>
+        <div class="def-info">
+          <h3>İşletmeler</h3>
+          <p>İşletme ve müdürlük bilgilerini yönet</p>
+        </div>
+        <div class="def-action">
+          <span>Yönet</span>
+          <i class="mdi mdi-arrow-right"></i>
         </div>
       </div>
-      <!-- Column -->
+
     </div>
   </div>
+
 </div>

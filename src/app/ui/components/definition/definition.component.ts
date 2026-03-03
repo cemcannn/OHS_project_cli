@@ -26,7 +26,7 @@ export class DefinitionComponent implements OnInit {
 
   async showTypeOfAccidentDialog(typeOfAccidentData: any): Promise<void> {
     const dialogRef = await this.dialog.open(ShowTypeOfAccidentDialogComponent, {
-      width: '500px',
+      width: '860px',
       data: typeOfAccidentData
     });
 
@@ -39,7 +39,7 @@ export class DefinitionComponent implements OnInit {
 
   async showLimbDialog(limbData: any): Promise<void> {
     const dialogRef = await this.dialog.open(ShowLimbDialogComponent, {
-      width: '500px',
+      width: '860px',
       data: limbData
     });
 
@@ -52,7 +52,7 @@ export class DefinitionComponent implements OnInit {
 
   async showProfessionDialog(professionData: any): Promise<void> {
     const dialogRef = await this.dialog.open(ShowProfessionDialogComponent, {
-      width: '500px',
+      width: '860px',
       data: professionData
     });
 
@@ -65,7 +65,7 @@ export class DefinitionComponent implements OnInit {
 
   async showAccidentAreaDialog(accidentAreaData: any): Promise<void> {
     const dialogRef = await this.dialog.open(ShowAccidentAreaDialogComponent, {
-      width: '500px',
+      width: '860px',
       data: accidentAreaData
     });
 
@@ -78,7 +78,7 @@ export class DefinitionComponent implements OnInit {
 
   async showDirectorateDialog(directorateData: any): Promise<void> {
     const dialogRef = await this.dialog.open(ShowDirectorateDialogComponent, {
-      width: '500px',
+      width: '860px',
       data: directorateData
     });
 

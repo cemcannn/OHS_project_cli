@@ -1,13 +1,51 @@
-       <!-- ============================================================== -->
-        <!-- Bread crumb -->
-        <!-- ============================================================== -->
-        <div class="page-breadcrumb">
-            <div class="row">
-              <div class="col-12 d-flex no-block align-items-center">
-                <h4 class="page-title">Yönetici Sayfası</h4>
-              </div>
-            </div>
-          </div>
-          <!-- ============================================================== -->
-          <!-- End Bread crumb -->
-          <!-- ============================================================== -->
+<div class="admin-dashboard">
+
+  <div class="dash-header">
+    <i class="mdi mdi-shield-account dash-icon"></i>
+    <div>
+      <h1 class="dash-title">Admin Paneli</h1>
+      <p class="dash-sub">Sistem yönetimi ve yapılandırma</p>
+    </div>
+  </div>
+
+  <div class="dash-cards">
+
+    <div class="dash-card" routerLink="/admin/definition" style="--c1:#16a085;--c2:#117a65">
+      <div class="dc-icon"><i class="mdi mdi-book-open-variant"></i></div>
+      <div class="dc-info">
+        <h3>Tanımlamalar</h3>
+        <p>Kaza türü, yeri ve meslek tanımlarını yönet</p>
+      </div>
+      <i class="mdi mdi-chevron-right dc-arrow"></i>
+    </div>
+
+    <div class="dash-card" routerLink="/admin/authorize-menu" style="--c1:#8e44ad;--c2:#6c3483">
+      <div class="dc-icon"><i class="mdi mdi-fingerprint"></i></div>
+      <div class="dc-info">
+        <h3>Yetkilendirme</h3>
+        <p>Menü ve işlem yetkilerini düzenle</p>
+      </div>
+      <i class="mdi mdi-chevron-right dc-arrow"></i>
+    </div>
+
+    <div class="dash-card" routerLink="/admin/roles" style="--c1:#2980b9;--c2:#1f6fa0">
+      <div class="dc-icon"><i class="mdi mdi-account-check"></i></div>
+      <div class="dc-info">
+        <h3>Rol Sayfası</h3>
+        <p>Sistem rollerini oluştur ve düzenle</p>
+      </div>
+      <i class="mdi mdi-chevron-right dc-arrow"></i>
+    </div>
+
+    <div class="dash-card" routerLink="/admin/users" style="--c1:#c0392b;--c2:#a93226">
+      <div class="dc-icon"><i class="mdi mdi-account-group"></i></div>
+      <div class="dc-info">
+        <h3>Kullanıcılar</h3>
+        <p>Kullanıcı hesaplarını ve rollerini yönet</p>
+      </div>
+      <i class="mdi mdi-chevron-right dc-arrow"></i>
+    </div>
+
+  </div>
+
+</div>

@@ -14,6 +14,7 @@ import { DialogModule } from 'src/app/dialogs/dialog.module';
 import { MatSortModule } from '@angular/material/sort';
 import { CommonPipesModule } from 'src/app/pipes/common-pipes.module';
 import { MatSelectModule } from '@angular/material/select';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 
 
@@ -25,7 +26,7 @@ import { MatSelectModule } from '@angular/material/select';
   imports: [
     CommonModule, MatSidenavModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatTableModule, MatPaginatorModule,
     DialogModule, MatSortModule, MatSelectModule,
-    DeleteDirectiveModule, CommonPipesModule,
+    DeleteDirectiveModule, CommonPipesModule, MatTooltipModule,
     RouterModule.forChild([
       { path: "", component: AccidentComponent}
     ])

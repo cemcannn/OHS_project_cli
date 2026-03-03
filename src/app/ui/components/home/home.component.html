@@ -1,102 +1,127 @@
-<!-- ============================================================== -->
-<!-- Bread crumb -->
-<!-- ============================================================== -->
-<div class="page-breadcrumb" style="background-image: url('/assets/images/tki.jfif'); background-size: cover; background-position: center; min-height: 100vh;">
-  <div class="row">
-    <div class="col-12 d-flex no-block align-items-center">
-      <h2 class="page-title">Ana Sayfa</h2>
+<div class="home-page">
+
+  <!-- ── Hero Section ── -->
+  <div class="home-hero">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <div class="hero-badge">
+        <i class="mdi mdi-hard-hat"></i>
+      </div>
+      <h1 class="hero-title">İş Güvenliği Yönetim Sistemi</h1>
+      <p class="hero-subtitle">
+        Kaza kayıtları, istatistikler ve analizleri tek platformda yönetin
+      </p>
+      <div class="hero-divider"></div>
     </div>
   </div>
-  <!-- ============================================================== -->
-  <!-- End Bread crumb -->
-  <!-- ============================================================== -->
 
-  <!-- ============================================================== -->
-  <!-- Container fluid  -->
-  <!-- ============================================================== -->
-  <div class="container-fluid">
-    <!-- ============================================================== -->
-    <!-- Sales Cards  -->
-    <!-- ============================================================== -->
-    <div class="row">
-      <!-- Column -->
-      <div class="col-md-6 col-lg-3 col-xlg-3">
-        <div class="card card-hover waves-effect" routerLink="accident">
-          <div class="box bg-warning text-center card-size">
-            <h1 class="font-light text-white">
-              <i class="mdi mdi-chart-areaspline"></i>
-            </h1>
-            <h4 class="text-white">İş Kazaları</h4>
-          </div>
-        </div>
-      </div>
-      <!-- Column -->
-      <div class="col-md-6 col-lg-3 col-xlg-3">
-        <div class="card card-hover waves-effect" routerLink="definition">
-          <div class="box bg-primary text-center card-size">
-            <h1 class="font-light text-white">
-              <i class="mdi mdi-arrow-all"></i>
-            </h1>
-            <h4 class="text-white">Tanımlamalar</h4>
-          </div>
-        </div>
-      </div>
-      <!-- Column -->
-      <div class="col-md-6 col-lg-3 col-xlg-3">
-        <div class="card card-hover waves-effect" routerLink="personnel">
-          <div class="box bg-success text-center card-size">
-            <h1 class="font-light text-white">
-              <i class="mdi mdi-receipt"></i>
-            </h1>
-            <h4 class="text-white">Personel</h4>
-          </div>
-        </div>
-      </div>
-      <!-- Column -->
-      <div class="col-md-6 col-lg-3 col-xlg-3">
-        <div class="card card-hover waves-effect" routerLink="monthly-directorate-data">
-          <div class="box bg-info text-center card-size">
-            <h1 class="font-light text-white">
-              <i class="mdi mdi-relative-scale"></i>
-            </h1>
-            <h4 class="text-white">Aylık İşletme Verileri</h4>
-          </div>
-        </div>
-      </div>
-      <!-- Column -->
-      <div class="col-md-6 col-lg-3 col-xlg-3">
-        <div class="card card-hover waves-effect" routerLink="accident-statistic">
-          <div class="box bg-secondary text-center card-size">
-            <h1 class="font-light text-white">
-              <i class="mdi mdi-relative-scale"></i>
-            </h1>
-            <h4 class="text-white">Kaza İstatistikleri</h4>
-          </div>
-        </div>
-      </div>
-      <!-- Column -->
-      <div class="col-md-6 col-lg-3 col-xlg-3">
-        <div class="card card-hover waves-effect" routerLink="accident-rate">
-          <div class="box bg-danger text-center card-size">
-            <h1 class="font-light text-white">
-              <i class="mdi mdi-relative-scale"></i>
-            </h1>
-            <h4 class="text-white">Kaza Geçiren Çalışan Sayıları</h4>
-          </div>
-        </div>
-      </div>
-      <!-- Column -->
-      <div class="col-md-6 col-lg-3 col-xlg-3">
-        <div class="card card-hover waves-effect" routerLink="chart">
-          <div class="box bg-light text-center card-size">
-            <h1 class="font-light text-dark">
-              <i class="mdi mdi-relative-scale"></i>
-            </h1>
-            <h4 class="text-dark">Grafikler</h4>
-          </div>
-        </div>
-      </div>
-      <!-- Column -->
+  <!-- ── Section Header ── -->
+  <div class="section-header">
+    <div class="section-title-wrap">
+      <span class="section-accent"></span>
+      <h2 class="section-title">Modüller</h2>
     </div>
+    <p class="section-desc">Hızlı erişim için aşağıdaki modüllerden birini seçin</p>
+  </div>
+
+  <!-- ── Navigation Cards ── -->
+  <div class="nav-grid">
+
+    <div class="nav-card" routerLink="accident"
+      style="--c1: #c0392b; --c2: #a93226">
+      <div class="card-icon-wrap">
+        <i class="mdi mdi-alert-circle"></i>
+      </div>
+      <div class="card-info">
+        <h3>İş Kazaları</h3>
+        <p>Kaza kayıtlarını görüntüle ve yönet</p>
+      </div>
+      <i class="mdi mdi-chevron-right card-arrow"></i>
+    </div>
+
+    <div class="nav-card" routerLink="personnel"
+      style="--c1: #2980b9; --c2: #1f6fa0">
+      <div class="card-icon-wrap">
+        <i class="mdi mdi-account-group"></i>
+      </div>
+      <div class="card-info">
+        <h3>Personel</h3>
+        <p>Çalışan bilgilerini görüntüle ve güncelle</p>
+      </div>
+      <i class="mdi mdi-chevron-right card-arrow"></i>
+    </div>
+
+    <div class="nav-card" routerLink="monthly-directorate-data"
+      style="--c1: #16a085; --c2: #117a65">
+      <div class="card-icon-wrap">
+        <i class="mdi mdi-calendar-month"></i>
+      </div>
+      <div class="card-info">
+        <h3>Aylık İşletme Verileri</h3>
+        <p>İşletme bazlı aylık veri girişi ve takibi</p>
+      </div>
+      <i class="mdi mdi-chevron-right card-arrow"></i>
+    </div>
+
+    <div class="nav-card" routerLink="accident-statistic"
+      style="--c1: #8e44ad; --c2: #6c3483">
+      <div class="card-icon-wrap">
+        <i class="mdi mdi-calculator-variant"></i>
+      </div>
+      <div class="card-info">
+        <h3>Kaza İstatistikleri</h3>
+        <p>Detaylı istatistik tabloları ve raporlar</p>
+      </div>
+      <i class="mdi mdi-chevron-right card-arrow"></i>
+    </div>
+
+    <div class="nav-card" routerLink="accident-rate"
+      style="--c1: #922b21; --c2: #7b241c">
+      <div class="card-icon-wrap">
+        <i class="mdi mdi-medical-bag"></i>
+      </div>
+      <div class="card-info">
+        <h3>Kaza Geçiren Çalışan</h3>
+        <p>Yaralanan çalışan sayıları ve oranları</p>
+      </div>
+      <i class="mdi mdi-chevron-right card-arrow"></i>
+    </div>
+
+    <div class="nav-card" routerLink="chart"
+      style="--c1: #2471a3; --c2: #1a5276">
+      <div class="card-icon-wrap">
+        <i class="mdi mdi-chart-areaspline"></i>
+      </div>
+      <div class="card-info">
+        <h3>Grafikler</h3>
+        <p>Görsel grafikler ve trend analizleri</p>
+      </div>
+      <i class="mdi mdi-chevron-right card-arrow"></i>
+    </div>
+
+    <div class="nav-card" routerLink="accident-analysis"
+      style="--c1: #e67e22; --c2: #ca6f1e">
+      <div class="card-icon-wrap">
+        <i class="mdi mdi-chart-bar"></i>
+      </div>
+      <div class="card-info">
+        <h3>Kaza Analizi</h3>
+        <p>Kaza verilerinin çok boyutlu analizi</p>
+      </div>
+      <i class="mdi mdi-chevron-right card-arrow"></i>
+    </div>
+
+    <div class="nav-card" routerLink="data-import"
+      style="--c1: #27ae60; --c2: #1e8449">
+      <div class="card-icon-wrap">
+        <i class="mdi mdi-database-import-outline"></i>
+      </div>
+      <div class="card-info">
+        <h3>Veri Güncelle</h3>
+        <p>Excel dosyasından toplu veri aktarımı</p>
+      </div>
+      <i class="mdi mdi-chevron-right card-arrow"></i>
+    </div>
+
   </div>
 </div>

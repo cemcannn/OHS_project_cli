@@ -1,9 +1,106 @@
-.header{
-    margin-left: 20px;
+@import '../shared-styles.scss';
+
+// ─── Chart Card ───
+.chart-card {
+  background: $bg-card;
+  border-radius: 14px;
+  border: 1px solid $border;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+}
+
+// ─── Card Header ───
+.chart-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(135deg, #c0392b 0%, #a93226 100%);
+  padding: 18px 28px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.chart-header-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.chart-icon-wrap {
+  width: 46px;
+  height: 46px;
+  background: rgba(255, 255, 255, 0.18);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  flex-shrink: 0;
+
+  i {
+    font-size: 24px;
+    color: #fff;
   }
-  
-  
-  .main-title {
-    height: 55px; 
-    margin-bottom: 25px;
+}
+
+.chart-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 0.3px;
+}
+
+.chart-subtitle {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.72);
+  margin-top: 3px;
+}
+
+.chart-header-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.chart-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(255, 255, 255, 0.18);
+  color: #fff;
+  padding: 5px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  backdrop-filter: blur(4px);
+  white-space: nowrap;
+
+  i {
+    font-size: 14px;
+    opacity: 0.85;
   }
+
+  &.secondary {
+    background: rgba(255, 255, 255, 0.10);
+    border-color: rgba(255, 255, 255, 0.18);
+  }
+}
+
+// ─── Chart Body ───
+.chart-body {
+  padding: 28px 28px 20px;
+  background: linear-gradient(180deg, #fafafa 0%, #ffffff 100%);
+}
+
+.canvas-wrap {
+  position: relative;
+
+  canvas {
+    width: 100% !important;
+    max-height: 440px;
+    border-radius: 6px;
+  }
+}

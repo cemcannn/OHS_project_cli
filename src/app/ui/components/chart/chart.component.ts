@@ -52,6 +52,13 @@ export class ChartComponent extends BaseComponent implements OnInit {
     { value: 'accidentSeverityRate', label: 'Kaza Ağırlık Oranı' },
   ];
 
+  get activeMetricLabel(): string {
+    const key = this.selectedChartType === 'monthly'
+      ? this.selectedMonthlyMetric
+      : this.selectedYearlyMetric;
+    return this.metrics.find(m => m.value === key)?.label ?? '';
+  }
+
   constructor(
     spinner: NgxSpinnerService,
     private accidentStatisticService: AccidentStatisticService,
@@ -125,61 +132,97 @@ updateMonthlyChart() {
   const allMonths = this.accidentStatisticFilterService.getMonthNames(); // 12 ay
   const filteredData = this.applyMonthlyFilters();
 
-  // Etiketler ve veri dizilerini oluştur
   const maxMonth =
     this.selectedYear === 'Tüm Yıllar' ? null : this.getMaxMonthForMonthlySelection();
-  // Etiketler hep görünsün (Aralık da dahil). Çizginin bitmesi için maxMonth sonrası değerleri null yapacağız.
   const labels = allMonths;
 
   const data = labels.map((label, idx) => {
     const monthData = filteredData.find((d: any) => d.month === label);
-
-    // Seçili yılda "son veri ayı" sonrası çizgi bitmeli: label görünsün ama değer null olsun.
-    // Aradaki eksik aylar 0 olarak kalsın.
     if (this.selectedYear !== 'Tüm Yıllar' && maxMonth && idx + 1 > maxMonth) {
       return null;
     }
-
     return monthData ? Number(monthData[this.selectedMonthlyMetric] ?? 0) : 0;
   });
 
-  // Grafik yapılandırması
+  if (this.monthlyChart) {
+    this.monthlyChart.destroy();
+  }
+
+  const ctx = this.monthlyChartCanvas.nativeElement.getContext('2d');
+  const gradient = ctx.createLinearGradient(0, 0, 0, 420);
+  gradient.addColorStop(0, 'rgba(192, 57, 43, 0.30)');
+  gradient.addColorStop(0.65, 'rgba(192, 57, 43, 0.06)');
+  gradient.addColorStop(1, 'rgba(192, 57, 43, 0.00)');
+
   const chartConfig: ChartConfiguration = {
     type: 'line',
     data: {
-      labels: labels,
+      labels,
       datasets: [
         {
-          label: this.metrics.find(
-            (m) => m.value === this.selectedMonthlyMetric
-          ).label,
-          data: data,
-          fill: false,
-          borderColor: 'rgb(237, 20, 17)',
-          tension: 0.1,
-        },
+          label: this.metrics.find(m => m.value === this.selectedMonthlyMetric)?.label,
+          data,
+          fill: true,
+          backgroundColor: gradient,
+          borderColor: '#c0392b',
+          borderWidth: 2.5,
+          tension: 0.4,
+          pointBackgroundColor: '#fff',
+          pointBorderColor: '#c0392b',
+          pointBorderWidth: 2.5,
+          pointRadius: 5,
+          pointHoverRadius: 8,
+          pointHoverBackgroundColor: '#c0392b',
+          pointHoverBorderColor: '#fff',
+          pointHoverBorderWidth: 2.5,
+          spanGaps: false,
+        } as any,
       ],
     },
     options: {
       responsive: true,
+      maintainAspectRatio: true,
+      animation: { duration: 700, easing: 'easeInOutQuart' } as any,
+      plugins: {
+        legend: {
+          display: true,
+          position: 'top',
+          labels: {
+            font: { size: 13, weight: '600' } as any,
+            color: '#2c3e50',
+            usePointStyle: true,
+            pointStyleWidth: 14,
+            padding: 20,
+          },
+        },
+        tooltip: {
+          backgroundColor: 'rgba(30, 39, 46, 0.92)',
+          titleColor: '#fff',
+          bodyColor: 'rgba(255,255,255,0.82)',
+          padding: 12,
+          cornerRadius: 8,
+          borderColor: '#c0392b',
+          borderWidth: 1,
+          displayColors: false,
+        },
+      },
       scales: {
+        x: {
+          grid: { color: 'rgba(0,0,0,0.04)' },
+          ticks: { color: '#7f8c8d', font: { size: 11 } as any },
+          border: { color: '#e8e8e8' } as any,
+        },
         y: {
           beginAtZero: true,
+          grid: { color: 'rgba(0,0,0,0.05)' },
+          ticks: { color: '#7f8c8d', font: { size: 11 } as any },
+          border: { color: '#e8e8e8', dash: [4, 4] } as any,
         },
       },
     },
   };
 
-  // Eski grafik varsa yok et
-  if (this.monthlyChart) {
-    this.monthlyChart.destroy();
-  }
-
-  // Yeni grafik oluştur
-  this.monthlyChart = new Chart(
-    this.monthlyChartCanvas.nativeElement,
-    chartConfig
-  );
+  this.monthlyChart = new Chart(this.monthlyChartCanvas.nativeElement, chartConfig);
 }
 
 
@@ -187,45 +230,87 @@ updateMonthlyChart() {
     const filteredData = this.applyYearlyFilters();
 
     const labels = filteredData.map((d: any) => d.year);
-    const data = filteredData.map((d: any) => {
-      // Sıfır değerleri null ile değiştir
-      return d[this.selectedYearlyMetric] || null;
-    });
-
-    const chartConfig: ChartConfiguration = {
-      type: 'line',
-      data: {
-        labels: labels,
-        datasets: [
-          {
-            label: this.metrics.find(
-              (m) => m.value === this.selectedYearlyMetric
-            ).label,
-            data: data,
-            fill: false,
-            borderColor: 'rgb(237, 20, 17)',
-            tension: 0.1,
-          },
-        ],
-      },
-      options: {
-        responsive: true,
-        scales: {
-          y: {
-            beginAtZero: true,
-          },
-        },
-      },
-    };
+    const data = filteredData.map((d: any) => d[this.selectedYearlyMetric] || null);
 
     if (this.yearlyChart) {
       this.yearlyChart.destroy();
     }
 
-    this.yearlyChart = new Chart(
-      this.yearlyChartCanvas.nativeElement,
-      chartConfig
-    );
+    const ctx = this.yearlyChartCanvas.nativeElement.getContext('2d');
+    const gradient = ctx.createLinearGradient(0, 0, 0, 420);
+    gradient.addColorStop(0, 'rgba(192, 57, 43, 0.30)');
+    gradient.addColorStop(0.65, 'rgba(192, 57, 43, 0.06)');
+    gradient.addColorStop(1, 'rgba(192, 57, 43, 0.00)');
+
+    const chartConfig: ChartConfiguration = {
+      type: 'line',
+      data: {
+        labels,
+        datasets: [
+          {
+            label: this.metrics.find(m => m.value === this.selectedYearlyMetric)?.label,
+            data,
+            fill: true,
+            backgroundColor: gradient,
+            borderColor: '#c0392b',
+            borderWidth: 2.5,
+            tension: 0.4,
+            pointBackgroundColor: '#fff',
+            pointBorderColor: '#c0392b',
+            pointBorderWidth: 2.5,
+            pointRadius: 5,
+            pointHoverRadius: 8,
+            pointHoverBackgroundColor: '#c0392b',
+            pointHoverBorderColor: '#fff',
+            pointHoverBorderWidth: 2.5,
+            spanGaps: false,
+          } as any,
+        ],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: true,
+        animation: { duration: 700, easing: 'easeInOutQuart' } as any,
+        plugins: {
+          legend: {
+            display: true,
+            position: 'top',
+            labels: {
+              font: { size: 13, weight: '600' } as any,
+              color: '#2c3e50',
+              usePointStyle: true,
+              pointStyleWidth: 14,
+              padding: 20,
+            },
+          },
+          tooltip: {
+            backgroundColor: 'rgba(30, 39, 46, 0.92)',
+            titleColor: '#fff',
+            bodyColor: 'rgba(255,255,255,0.82)',
+            padding: 12,
+            cornerRadius: 8,
+            borderColor: '#c0392b',
+            borderWidth: 1,
+            displayColors: false,
+          },
+        },
+        scales: {
+          x: {
+            grid: { color: 'rgba(0,0,0,0.04)' },
+            ticks: { color: '#7f8c8d', font: { size: 11 } as any },
+            border: { color: '#e8e8e8' } as any,
+          },
+          y: {
+            beginAtZero: true,
+            grid: { color: 'rgba(0,0,0,0.05)' },
+            ticks: { color: '#7f8c8d', font: { size: 11 } as any },
+            border: { color: '#e8e8e8', dash: [4, 4] } as any,
+          },
+        },
+      },
+    };
+
+    this.yearlyChart = new Chart(this.yearlyChartCanvas.nativeElement, chartConfig);
   }
 
   applyMonthlyFilters(): List_Accident_Statistic[] {

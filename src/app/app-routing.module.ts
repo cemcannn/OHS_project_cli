@@ -13,6 +13,7 @@ const routes: Routes = [
       { path: "authorize-menu", loadChildren: () => import("./admin/components/authorize-menu/authorize-menu.module").then(module => module.AuthorizeMenuModule), canActivate: [AuthGuard] },
       { path: "roles", loadChildren: () => import("./admin/components/role/role.module").then(module => module.RoleModule), canActivate: [AuthGuard] },
       { path: "users", loadChildren: () => import("./admin/components/user/user.module").then(module => module.UserModule), canActivate: [AuthGuard] },
+      { path: "definition", loadChildren: () => import("./ui/components/definition/definition.module").then(module => module.DefinitionModule), canActivate: [AuthGuard] },
     ], canActivate: [AuthGuard]
   },
   {
@@ -20,9 +21,6 @@ const routes: Routes = [
       { path: "", component: HomeComponent, canActivate: [AuthGuard] },
       {
         path: "accident", loadChildren: () => import("./ui/components/accident/accident.module").then(module => module.AccidentModule), canActivate: [AuthGuard]
-      },
-      {
-        path: "definition", loadChildren: () => import("./ui/components/definition/definition.module").then(module => module.DefinitionModule), canActivate: [AuthGuard]
       },
       {
         path: "personnel", loadChildren: () => import("./ui/components/personnel/personnel.module").then(module => module.PersonnelModule), canActivate: [AuthGuard]

@@ -1,161 +1,125 @@
-<!-- ============================================================== -->
-<!-- Bread Crumb -->
-<!-- ============================================================== -->
-<div class="page-breadcrumb">
-  <div class="row">
-    <div class="col-12 d-flex no-block align-items-center"></div>
-  </div>
-</div>
-<!-- ============================================================== -->
-<!-- End Bread Crumb -->
-<!-- ============================================================== -->
+<div class="modern-page">
 
-<!-- ============================================================== -->
-<!-- Container Fluid  -->
-<!-- ============================================================== -->
-<div class="container-fluid">
-  <!-- ============================================================== -->
-  <!-- Accident Statistic Charts -->
-  <!-- ============================================================== -->
-  <div class="row">
-    <div class="col-md-12">
-      <div class="card">
-        <div class="card-body bg-danger">
+  <!-- ── Filter Bar ── -->
+  <div class="filter-bar">
+    <div class="filter-left">
+      <i class="mdi mdi-chart-areaspline filter-icon"></i>
+      <span class="filter-title">Grafikler</span>
+    </div>
 
-          <mat-form-field appearance="fill" class="header">
-            <mat-label class="card-title text-dark" for="chartTypeSelect"
-              >Grafik Türü:</mat-label
-            >
-            <mat-select
-              id="chartTypeSelect"
-              [(ngModel)]="selectedChartType"
-              (ngModelChange)="loadData()"
-            >
-              <mat-option value="monthly">Aylık İstatistik Grafiği</mat-option>
-              <mat-option value="yearly">Yıllık İstatistik Grafiği</mat-option>
-            </mat-select>
-          </mat-form-field>
+    <div class="filter-controls">
 
-          <!-- ============================================================== -->
-          <!-- Monthly Chart  -->
-          <!-- ============================================================== -->
-          <div *ngIf="selectedChartType === 'monthly'">
-            <!-- Year Dropdown -->
-            <mat-form-field appearance="fill" class="header">
-              <mat-label class="card-title text-dark" for="yearSelect"
-                >Yıl (İstatistikler):</mat-label
-              >
-              <mat-select
-                id="yearSelect"
-                [(ngModel)]="selectedYear"
-                (ngModelChange)="updateMonthlyChart()"
-              >
-                <mat-option *ngFor="let year of years" [value]="year">{{
-                  year
-                }}</mat-option>
-              </mat-select>
-            </mat-form-field>
+      <mat-form-field appearance="outline" class="filter-field">
+        <mat-label>Grafik Türü</mat-label>
+        <mat-select [(ngModel)]="selectedChartType" (ngModelChange)="loadData()">
+          <mat-option value="monthly">Aylık İstatistik</mat-option>
+          <mat-option value="yearly">Yıllık İstatistik</mat-option>
+        </mat-select>
+      </mat-form-field>
 
-            <!-- Directorate Dropdown -->
-            <mat-form-field appearance="fill" class="header">
-              <mat-label class="card-title text-dark" for="directorateSelect"
-                >İşletme:</mat-label
-              >
-              <mat-select
-                id="directorateSelect"
-                [(ngModel)]="selectedMonthlyDirectorate"
-                (ngModelChange)="updateMonthlyChart()"
-              >
-                <mat-option
-                  *ngFor="let directorate of directorates"
-                  [value]="directorate"
-                  >{{ directorate }}</mat-option
-                >
-              </mat-select>
-            </mat-form-field>
+      <!-- Monthly filters -->
+      <ng-container *ngIf="selectedChartType === 'monthly'">
+        <mat-form-field appearance="outline" class="filter-field">
+          <mat-label>Yıl</mat-label>
+          <mat-select [(ngModel)]="selectedYear" (ngModelChange)="updateMonthlyChart()">
+            <mat-option *ngFor="let year of years" [value]="year">{{ year }}</mat-option>
+          </mat-select>
+        </mat-form-field>
 
-            <!-- Metric Drowpdown  -->
-            <mat-form-field appearance="fill" class="header">
-              <mat-label class="card-title text-dark" for="monthlyMetricSelect"
-                >Metrik:</mat-label
-              >
-              <mat-select
-                id="monthlyMetricSelect"
-                [(ngModel)]="selectedMonthlyMetric"
-                (ngModelChange)="updateMonthlyChart()"
-              >
-                <mat-option
-                  *ngFor="let metric of metrics"
-                  [value]="metric.value"
-                  >{{ metric.label }}</mat-option
-                >
-              </mat-select>
-            </mat-form-field>
+        <mat-form-field appearance="outline" class="filter-field">
+          <mat-label>İşletme</mat-label>
+          <mat-select [(ngModel)]="selectedMonthlyDirectorate" (ngModelChange)="updateMonthlyChart()">
+            <mat-option *ngFor="let directorate of directorates" [value]="directorate">
+              {{ directorate }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
 
-            <canvas #monthlyChart class="bg-white mb-3"></canvas>
-          </div>
-          <!-- ============================================================== -->
-          <!-- Yerly Chart  -->
-          <!-- ============================================================== -->
-          <div *ngIf="selectedChartType === 'yearly'">
+        <mat-form-field appearance="outline" class="filter-field">
+          <mat-label>Metrik</mat-label>
+          <mat-select [(ngModel)]="selectedMonthlyMetric" (ngModelChange)="updateMonthlyChart()">
+            <mat-option *ngFor="let metric of metrics" [value]="metric.value">
+              {{ metric.label }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </ng-container>
 
-            <!-- Yearly Dropdown -->
-            <mat-form-field appearance="fill" class="header">
-              <mat-label class="card-title text-dark" for="timeRangeSelect"
-                >Zaman Aralığı:</mat-label
-              >
-              <mat-select
-                id="timeRangeSelect"
-                [(ngModel)]="selectedTimeRange"
-                (ngModelChange)="updateYearlyChart()"
-              >
-                <mat-option value="5">Son 5 Yıl</mat-option>
-                <mat-option value="10">Son 10 Yıl</mat-option>
-                <mat-option value="20">Son 20 Yıl</mat-option>
-              </mat-select>
-            </mat-form-field>
+      <!-- Yearly filters -->
+      <ng-container *ngIf="selectedChartType === 'yearly'">
+        <mat-form-field appearance="outline" class="filter-field">
+          <mat-label>Zaman Aralığı</mat-label>
+          <mat-select [(ngModel)]="selectedTimeRange" (ngModelChange)="updateYearlyChart()">
+            <mat-option value="5">Son 5 Yıl</mat-option>
+            <mat-option value="10">Son 10 Yıl</mat-option>
+            <mat-option value="20">Son 20 Yıl</mat-option>
+          </mat-select>
+        </mat-form-field>
 
-            <!-- Metric Dropdown -->
-            <mat-form-field appearance="fill" class="header">
-              <mat-label class="card-title text-dark" for="yearlyMetricSelect"
-                >Metrik:</mat-label
-              >
-              <mat-select
-                id="yearlyMetricSelect"
-                [(ngModel)]="selectedYearlyMetric"
-                (ngModelChange)="updateYearlyChart()"
-              >
-                <mat-option
-                  *ngFor="let metric of metrics"
-                  [value]="metric.value"
-                  >{{ metric.label }}</mat-option
-                >
-              </mat-select>
-            </mat-form-field>
+        <mat-form-field appearance="outline" class="filter-field">
+          <mat-label>Metrik</mat-label>
+          <mat-select [(ngModel)]="selectedYearlyMetric" (ngModelChange)="updateYearlyChart()">
+            <mat-option *ngFor="let metric of metrics" [value]="metric.value">
+              {{ metric.label }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
 
-            <!-- Directorate Dropdown -->
-            <mat-form-field appearance="fill" class="header">
-              <mat-label
-                class="card-title text-dark"
-                for="yearlyDirectorateSelect"
-                >İşletme:</mat-label
-              >
-              <mat-select
-                id="yearlyMetricSelect"
-                [(ngModel)]="selectedYearlyDirectorate"
-                (ngModelChange)="updateYearlyChart()"
-              >
-                <mat-option
-                  *ngFor="let directorate of directorates"
-                  [value]="directorate"
-                  >{{ directorate }}</mat-option
-                >
-              </mat-select>
-            </mat-form-field>
-            <canvas #yearlyChart class="bg-white"></canvas>
-          </div>
-        </div>
-      </div>
+        <mat-form-field appearance="outline" class="filter-field">
+          <mat-label>İşletme</mat-label>
+          <mat-select [(ngModel)]="selectedYearlyDirectorate" (ngModelChange)="updateYearlyChart()">
+            <mat-option *ngFor="let directorate of directorates" [value]="directorate">
+              {{ directorate }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </ng-container>
+
     </div>
   </div>
+
+  <!-- ── Chart Area ── -->
+  <div class="content-container">
+    <div class="chart-card">
+
+      <!-- Chart Card Header -->
+      <div class="chart-card-header">
+        <div class="chart-header-left">
+          <div class="chart-icon-wrap">
+            <i class="mdi" [ngClass]="selectedChartType === 'monthly' ? 'mdi-chart-line' : 'mdi-chart-bar'"></i>
+          </div>
+          <div>
+            <div class="chart-title">
+              {{ selectedChartType === 'monthly' ? 'Aylık İstatistik Grafiği' : 'Yıllık İstatistik Grafiği' }}
+            </div>
+            <div class="chart-subtitle">
+              {{ activeMetricLabel }}
+            </div>
+          </div>
+        </div>
+        <div class="chart-header-right">
+          <span class="chart-badge">
+            <i class="mdi mdi-calendar-range"></i>
+            {{ selectedChartType === 'monthly' ? selectedYear : 'Son ' + selectedTimeRange + ' Yıl' }}
+          </span>
+          <span class="chart-badge secondary">
+            <i class="mdi mdi-office-building-outline"></i>
+            {{ selectedChartType === 'monthly' ? selectedMonthlyDirectorate : selectedYearlyDirectorate }}
+          </span>
+        </div>
+      </div>
+
+      <!-- Chart Body -->
+      <div class="chart-body">
+        <div *ngIf="selectedChartType === 'monthly'" class="canvas-wrap">
+          <canvas #monthlyChart></canvas>
+        </div>
+        <div *ngIf="selectedChartType === 'yearly'" class="canvas-wrap">
+          <canvas #yearlyChart></canvas>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
 </div>
