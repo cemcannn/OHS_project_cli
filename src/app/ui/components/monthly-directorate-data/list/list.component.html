@@ -10,14 +10,14 @@
 
     <div class="filter-controls">
 
-      <mat-form-field appearance="outline" class="filter-field">
+      <mat-form-field appearance="outline" class="filter-field" subscriptSizing="dynamic">
         <mat-label>Yıl</mat-label>
         <mat-select [(value)]="selectedYear" (selectionChange)="applyFilters()">
           <mat-option *ngFor="let year of years" [value]="year">{{ year }}</mat-option>
         </mat-select>
       </mat-form-field>
 
-      <mat-form-field appearance="outline" class="filter-field">
+      <mat-form-field appearance="outline" class="filter-field" subscriptSizing="dynamic">
         <mat-label>İşletme</mat-label>
         <mat-select [(value)]="selectedDirectorate" (selectionChange)="applyFilters()">
           <mat-option *ngFor="let directorate of directorates" [value]="directorate">
@@ -26,10 +26,9 @@
         </mat-select>
       </mat-form-field>
 
-      <mat-form-field appearance="outline" class="filter-field search-field">
+      <mat-form-field appearance="outline" class="filter-field search-field" floatLabel="always" subscriptSizing="dynamic">
         <mat-label>Ara</mat-label>
-        <input matInput (keyup)="applySearch($event)" placeholder="İşletme verisi ara...">
-        <mat-icon matSuffix>search</mat-icon>
+        <input matInput (keyup)="applySearch($event)" placeholder="Ara...">
       </mat-form-field>
 
     </div>

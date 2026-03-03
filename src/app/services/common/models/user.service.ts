@@ -1,7 +1,7 @@
 
 import { Injectable } from '@angular/core';
 import { Toast } from 'ngx-toastr';
-import { firstValueFrom, observable, Observable } from 'rxjs';
+import { firstValueFrom, observable, Observable, Subject } from 'rxjs';
 import { Token } from '../../../contracts/token/token';
 import { TokenResponse } from '../../../contracts/token/tokenResponse';
 import { Create_User } from '../../../contracts/users/create_user';
@@ -16,6 +16,8 @@ import { HttpErrorResponse } from '@angular/common/http';
   providedIn: 'root'
 })
 export class UserService {
+  profilePhotoUpdated$ = new Subject<string | null>();
+
   constructor(private httpClientService: HttpClientService, private toastrService: CustomToastrService) { }
 
   private async handleRequest<T>(observable: Observable<T>, successCallBack?: () => void, errorCallBack?: (errorMessage: string) => void): Promise<T> {
@@ -97,6 +99,15 @@ export class UserService {
       .catch(error => errorCallBack(error));
 
     await promiseData;
+  }
+
+
+  async uploadProfilePhoto(userId: string, photoBase64: string): Promise<void> {
+    const observable = this.httpClientService.put({
+      controller: "users",
+      action: "upload-photo"
+    }, { userId, photoBase64 });
+    await firstValueFrom(observable);
   }
 
   async getRolesToUser(userId: string, successCallBack?: () => void, errorCallBack?: (error) => void): Promise<string[]> {

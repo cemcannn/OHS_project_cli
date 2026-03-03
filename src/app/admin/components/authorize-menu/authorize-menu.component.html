@@ -1,15 +1,65 @@
-<mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
-    <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding>
-      <button mat-icon-button disabled></button>
-      <button mat-button color="primary" (click)="assignRole(node.code, node.name, node.menuName)">Rol Ata</button>  {{node.name}} 
-    </mat-tree-node>
-    <mat-tree-node *matTreeNodeDef="let node;when: hasChild" matTreeNodePadding>
-      <button mat-icon-button matTreeNodeToggle
-              [attr.aria-label]="'Toggle ' + node.name">
-        <mat-icon class="mat-icon-rtl-mirror">
-          {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
-        </mat-icon>
+<div class="auth-page">
+
+  <!-- ── Header ── -->
+  <div class="filter-bar">
+    <div class="filter-left">
+      <i class="mdi mdi-shield-key filter-icon"></i>
+      <span class="filter-title">Yetkilendirme</span>
+    </div>
+    <div class="header-actions">
+      <button mat-stroked-button class="expand-all-btn" (click)="treeControl.expandAll()">
+        <i class="mdi mdi-chevron-double-down"></i>
+        <span>Tümünü Aç</span>
       </button>
-      {{node.name}}
-    </mat-tree-node>
-  </mat-tree>
+      <button mat-stroked-button class="collapse-all-btn" (click)="treeControl.collapseAll()">
+        <i class="mdi mdi-chevron-double-up"></i>
+        <span>Tümünü Kapat</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- ── Tree ── -->
+  <div class="tree-container">
+    <div class="tree-card">
+
+      <mat-tree [dataSource]="dataSource" [treeControl]="treeControl" class="auth-tree">
+
+        <!-- Leaf node (action) -->
+        <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding matTreeNodePaddingIndent="24">
+          <div class="action-row">
+            <div class="action-left">
+              <i class="mdi mdi-api action-icon"></i>
+              <span class="action-name">{{ node.name }}</span>
+            </div>
+            <button mat-raised-button class="assign-btn" (click)="assignRole(node.code, node.name, node.menuName)">
+              <i class="mdi mdi-account-key"></i>
+              <span>Rol Ata</span>
+            </button>
+          </div>
+        </mat-tree-node>
+
+        <!-- Parent node (menu) -->
+        <mat-tree-node *matTreeNodeDef="let node; when: hasChild" matTreeNodePadding matTreeNodePaddingIndent="24">
+          <div class="menu-row" [class.expanded]="treeControl.isExpanded(node)" matTreeNodeToggle>
+            <div class="menu-left">
+              <button mat-icon-button class="toggle-btn" [attr.aria-label]="'Toggle ' + node.name">
+                <i class="mdi" [ngClass]="treeControl.isExpanded(node) ? 'mdi-chevron-down' : 'mdi-chevron-right'"></i>
+              </button>
+              <i class="mdi mdi-folder-outline menu-icon" [class.open]="treeControl.isExpanded(node)"></i>
+              <span class="menu-name">{{ node.name }}</span>
+            </div>
+            <span class="menu-badge" *ngIf="treeControl.isExpanded(node)">Açık</span>
+          </div>
+        </mat-tree-node>
+
+      </mat-tree>
+
+      <div class="empty-tree" *ngIf="!dataSource.data || dataSource.data.length === 0">
+        <i class="mdi mdi-shield-off-outline"></i>
+        <span>Yetkilendirme verisi bulunamadı</span>
+      </div>
+
+    </div>
+  </div>
+
+</div>

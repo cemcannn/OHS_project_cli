@@ -4,4 +4,5 @@ export class List_User {
     name: string;
     userName: string;
     twoFactorEnabled: boolean;
+    profilePhoto?: string;
   }

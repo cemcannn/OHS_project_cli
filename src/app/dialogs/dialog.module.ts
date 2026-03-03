@@ -36,6 +36,8 @@ import { AddAccidentStatisticDialogComponent } from './accident-statistic/add-ac
 import { UpdateAccidentStatisticDialogComponent } from './accident-statistic/update-accident-statistic-dialog/update-accident-statistic-dialog.component';
 import { UserUpdateDialogComponent } from './user/user-update-dialog/user-update-dialog.component';
 import { UserPasswordUpdateComponent } from './user/user-password-update/user-password-update.component';
+import { ProfilePhotoCropDialogComponent } from './user/profile-photo-crop-dialog/profile-photo-crop-dialog.component';
+import { ImageCropperComponent } from 'ngx-image-cropper';
 
 
 
@@ -59,10 +61,11 @@ import { UserPasswordUpdateComponent } from './user/user-password-update/user-pa
     AddAccidentStatisticDialogComponent,
     UpdateAccidentStatisticDialogComponent,
     UserUpdateDialogComponent,
-    UserPasswordUpdateComponent
+    UserPasswordUpdateComponent,
+    ProfilePhotoCropDialogComponent
   ],
   imports: [
-    FormsModule, MatSelectModule, MatIconModule, MatDatepickerModule, MatNativeDateModule, MatPaginatorModule, MatSortModule, ReactiveFormsModule, CommonModule, MatDialogModule, MatButtonModule, MatCardModule, MatTableModule, MatToolbarModule, MatBadgeModule, MatListModule, MatFormFieldModule, MatInputModule, DeleteDirectiveModule, CommonPipesModule
+    FormsModule, MatSelectModule, MatIconModule, MatDatepickerModule, MatNativeDateModule, MatPaginatorModule, MatSortModule, ReactiveFormsModule, CommonModule, MatDialogModule, MatButtonModule, MatCardModule, MatTableModule, MatToolbarModule, MatBadgeModule, MatListModule, MatFormFieldModule, MatInputModule, DeleteDirectiveModule, CommonPipesModule, ImageCropperComponent
   ]
 })
 export class DialogModule { }

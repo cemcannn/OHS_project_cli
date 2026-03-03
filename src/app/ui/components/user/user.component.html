@@ -8,6 +8,25 @@
         Kullanıcı Bilgilerinizi görüntüleyebilir ve güncelleyebilirsiniz.
       </mat-card-subtitle>
     </mat-card-header>
+
+    <!-- Profil Fotoğrafı -->
+    <div class="avatar-section">
+      <div class="avatar-wrapper" (click)="triggerPhotoInput()" [class.uploading]="uploadingPhoto">
+        <img *ngIf="photoPreview" [src]="photoPreview" class="avatar-img" alt="Profil Fotoğrafı">
+        <div *ngIf="!photoPreview" class="avatar-placeholder">
+          <i class="mdi mdi-account"></i>
+        </div>
+        <div class="avatar-overlay">
+          <i class="mdi mdi-camera"></i>
+          <span>Fotoğraf Değiştir</span>
+        </div>
+      </div>
+      <input #photoInput type="file" accept="image/*" style="display:none" (change)="onPhotoSelected($event)">
+      <button mat-stroked-button class="crop-btn" *ngIf="photoPreview" (click)="openCropDialog()">
+        <mat-icon>crop</mat-icon> Düzenle
+      </button>
+    </div>
+
     <mat-card-content>
       <div class="user-info">
         <div class="info-item">

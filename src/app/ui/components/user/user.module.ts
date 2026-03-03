@@ -6,6 +6,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatChipsModule } from '@angular/material/chips';
+import { DialogModule } from 'src/app/dialogs/dialog.module';
 
 
 @NgModule({
@@ -13,7 +14,7 @@ import { MatChipsModule } from '@angular/material/chips';
     UserComponent
   ],
   imports: [
-    CommonModule, MatCardModule, MatIconModule, MatButtonModule, MatChipsModule,
+    CommonModule, MatCardModule, MatIconModule, MatButtonModule, MatChipsModule, DialogModule,
     RouterModule.forChild([
       { path: "", component: UserComponent }
     ])

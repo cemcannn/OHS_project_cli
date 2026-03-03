@@ -11,14 +11,14 @@
     </div>
 
     <div class="filter-controls">
-      <mat-form-field appearance="outline" class="filter-field">
+      <mat-form-field appearance="outline" class="filter-field" subscriptSizing="dynamic">
         <mat-label>Yıl</mat-label>
         <mat-select [(ngModel)]="selectedYear" (ngModelChange)="onFilterChange()">
           <mat-option *ngFor="let y of years" [value]="y">{{ y }}</mat-option>
         </mat-select>
       </mat-form-field>
 
-      <mat-form-field appearance="outline" class="filter-field">
+      <mat-form-field appearance="outline" class="filter-field" subscriptSizing="dynamic">
         <mat-label>Ay</mat-label>
         <mat-select [(ngModel)]="selectedMonth" (ngModelChange)="onFilterChange()"
                     [disabled]="selectedYear === 'Tüm Yıllar'">

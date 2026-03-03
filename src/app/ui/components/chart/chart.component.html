@@ -9,7 +9,7 @@
 
     <div class="filter-controls">
 
-      <mat-form-field appearance="outline" class="filter-field">
+      <mat-form-field appearance="outline" class="filter-field" subscriptSizing="dynamic">
         <mat-label>Grafik Türü</mat-label>
         <mat-select [(ngModel)]="selectedChartType" (ngModelChange)="loadData()">
           <mat-option value="monthly">Aylık İstatistik</mat-option>
@@ -19,14 +19,14 @@
 
       <!-- Monthly filters -->
       <ng-container *ngIf="selectedChartType === 'monthly'">
-        <mat-form-field appearance="outline" class="filter-field">
+        <mat-form-field appearance="outline" class="filter-field" subscriptSizing="dynamic">
           <mat-label>Yıl</mat-label>
           <mat-select [(ngModel)]="selectedYear" (ngModelChange)="updateMonthlyChart()">
             <mat-option *ngFor="let year of years" [value]="year">{{ year }}</mat-option>
           </mat-select>
         </mat-form-field>
 
-        <mat-form-field appearance="outline" class="filter-field">
+        <mat-form-field appearance="outline" class="filter-field" subscriptSizing="dynamic">
           <mat-label>İşletme</mat-label>
           <mat-select [(ngModel)]="selectedMonthlyDirectorate" (ngModelChange)="updateMonthlyChart()">
             <mat-option *ngFor="let directorate of directorates" [value]="directorate">
@@ -35,7 +35,7 @@
           </mat-select>
         </mat-form-field>
 
-        <mat-form-field appearance="outline" class="filter-field">
+        <mat-form-field appearance="outline" class="filter-field" subscriptSizing="dynamic">
           <mat-label>Metrik</mat-label>
           <mat-select [(ngModel)]="selectedMonthlyMetric" (ngModelChange)="updateMonthlyChart()">
             <mat-option *ngFor="let metric of metrics" [value]="metric.value">
@@ -47,7 +47,7 @@
 
       <!-- Yearly filters -->
       <ng-container *ngIf="selectedChartType === 'yearly'">
-        <mat-form-field appearance="outline" class="filter-field">
+        <mat-form-field appearance="outline" class="filter-field" subscriptSizing="dynamic">
           <mat-label>Zaman Aralığı</mat-label>
           <mat-select [(ngModel)]="selectedTimeRange" (ngModelChange)="updateYearlyChart()">
             <mat-option value="5">Son 5 Yıl</mat-option>
@@ -56,7 +56,7 @@
           </mat-select>
         </mat-form-field>
 
-        <mat-form-field appearance="outline" class="filter-field">
+        <mat-form-field appearance="outline" class="filter-field" subscriptSizing="dynamic">
           <mat-label>Metrik</mat-label>
           <mat-select [(ngModel)]="selectedYearlyMetric" (ngModelChange)="updateYearlyChart()">
             <mat-option *ngFor="let metric of metrics" [value]="metric.value">
@@ -65,7 +65,7 @@
           </mat-select>
         </mat-form-field>
 
-        <mat-form-field appearance="outline" class="filter-field">
+        <mat-form-field appearance="outline" class="filter-field" subscriptSizing="dynamic">
           <mat-label>İşletme</mat-label>
           <mat-select [(ngModel)]="selectedYearlyDirectorate" (ngModelChange)="updateYearlyChart()">
             <mat-option *ngFor="let directorate of directorates" [value]="directorate">

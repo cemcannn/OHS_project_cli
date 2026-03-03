@@ -52,11 +52,16 @@
               data-toggle="dropdown"
             >
               <img
-                src="../assets/images/users/1.jpg"
+                *ngIf="profilePhoto"
+                [src]="profilePhoto"
                 alt="user"
-                class="rounded-circle"
-                width="31"
+                class="rounded-circle nav-avatar-img"
               />
+              <span
+                *ngIf="!profilePhoto"
+                class="nav-avatar-placeholder rounded-circle"
+              ><i class="mdi mdi-account"></i></span>
+              <span class="nav-user-name" *ngIf="userName">{{ userName }}</span>
             </a>
             <div class="dropdown-menu">
               <a class="dropdown-item" routerLink="user"

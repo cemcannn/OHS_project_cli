@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { AlertifyService, MessageType, Position } from 'src/app/services/admin/alertify.service';
 import { UserService } from 'src/app/services/common/models/user.service';
 import { List_User } from 'src/app/contracts/users/list_user';
@@ -9,6 +9,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { UserUpdateDialogComponent } from 'src/app/dialogs/user/user-update-dialog/user-update-dialog.component';
 import { UserPasswordUpdateComponent } from 'src/app/dialogs/user/user-password-update/user-password-update.component';
+import { ProfilePhotoCropDialogComponent } from 'src/app/dialogs/user/profile-photo-crop-dialog/profile-photo-crop-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 
 @Component({
@@ -17,7 +18,6 @@ import { MatDialog } from '@angular/material/dialog';
   styleUrl: './user.component.scss'
 })
 export class UserComponent extends BaseComponent implements OnInit {
-
 
   constructor(spinner: NgxSpinnerService,
     private userService: UserService,
@@ -30,9 +30,12 @@ export class UserComponent extends BaseComponent implements OnInit {
   displayedColumns: string[] = ['userName', 'name', 'email', 'role', 'userUpdate', 'delete'];
   dataSource: MatTableDataSource<List_User> = null;
   @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild('photoInput') photoInput: ElementRef<HTMLInputElement>;
 
   user: List_User = null;
   userId: string = null;
+  photoPreview: string | null = null;
+  uploadingPhoto = false;
 
   async ngOnInit() {
     await this.getUserId()
@@ -50,12 +53,65 @@ export class UserComponent extends BaseComponent implements OnInit {
 
   async getUser(userId: string) {
     this.showSpinner(SpinnerType.Cog);
-
     this.user = await this.userService.getUserById(userId, () => this.hideSpinner(SpinnerType.Cog), errorMessage => this.alertifyService.message(errorMessage, {
       dismissOthers: true,
       messageType: MessageType.Error,
       position: Position.TopRight
-    }))
+    }));
+    this.photoPreview = this.user?.profilePhoto || null;
+  }
+
+  triggerPhotoInput() {
+    this.photoInput.nativeElement.click();
+  }
+
+  onPhotoSelected(event: Event) {
+    const file = (event.target as HTMLInputElement).files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = async () => {
+      this.photoPreview = reader.result as string;
+      await this.uploadPhoto(this.photoPreview);
+    };
+    reader.readAsDataURL(file);
+  }
+
+  openCropDialog() {
+    if (!this.photoPreview) return;
+
+    const dialogRef = this.dialog.open(ProfilePhotoCropDialogComponent, {
+      width: '520px',
+      data: { imageBase64: this.photoPreview },
+      disableClose: true
+    });
+
+    dialogRef.afterClosed().subscribe(async (croppedBase64: string | null) => {
+      if (!croppedBase64) return;
+      this.photoPreview = croppedBase64;
+      await this.uploadPhoto(croppedBase64);
+    });
+  }
+
+  async uploadPhoto(photoBase64: string) {
+    this.uploadingPhoto = true;
+    try {
+      await this.userService.uploadProfilePhoto(this.userId, photoBase64);
+      this.userService.profilePhotoUpdated$.next(photoBase64);
+      this.alertifyService.message('Profil fotoğrafı güncellendi.', {
+        dismissOthers: true,
+        messageType: MessageType.Success,
+        position: Position.TopRight
+      });
+    } catch {
+      this.alertifyService.message('Fotoğraf yüklenemedi.', {
+        dismissOthers: true,
+        messageType: MessageType.Error,
+        position: Position.TopRight
+      });
+    } finally {
+      this.uploadingPhoto = false;
+    }
   }
 
   async openUpdateUserDialog(userData: any, id: any): Promise<void>  {
@@ -64,15 +120,13 @@ export class UserComponent extends BaseComponent implements OnInit {
       data: {
         userId: id,
         email: userData.email,
-        name: userData.name, 
+        name: userData.name,
         userName: userData.userName
       }
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result && result.success) {
-        // Update successful
       } else if (result && result.error) {
-        // Update error
       }
     });
   }
@@ -80,7 +134,7 @@ export class UserComponent extends BaseComponent implements OnInit {
   openUpdatePasswordDialog(id: any) {
     this.dialogService.openDialog({
       componentType: UserPasswordUpdateComponent,
-      data: { userId: id }, // userId'yi gönderiyoruz
+      data: { userId: id },
       options: {
         width: '400px',
       },
@@ -92,5 +146,5 @@ export class UserComponent extends BaseComponent implements OnInit {
       },
     });
   }
-  
+
 }

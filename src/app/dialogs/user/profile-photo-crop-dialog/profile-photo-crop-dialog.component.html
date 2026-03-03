@@ -1,0 +1,23 @@
+<h2 mat-dialog-title>Profil Fotoğrafını Düzenle</h2>
+
+<mat-dialog-content>
+  <div class="cropper-container">
+    <image-cropper
+      [imageBase64]="imageBase64"
+      [maintainAspectRatio]="true"
+      [aspectRatio]="1"
+      [roundCropper]="true"
+      [resizeToWidth]="300"
+      [resizeToHeight]="300"
+      format="jpeg"
+      output="base64"
+      (imageCropped)="imageCropped($event)"
+    ></image-cropper>
+  </div>
+  <p class="crop-hint">Fotoğrafı sürükleyerek veya köşeleri kaydırarak düzenleyin.</p>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="cancel()">İptal</button>
+  <button mat-raised-button color="warn" (click)="confirm()" [disabled]="!croppedImage">Kaydet</button>
+</mat-dialog-actions>
