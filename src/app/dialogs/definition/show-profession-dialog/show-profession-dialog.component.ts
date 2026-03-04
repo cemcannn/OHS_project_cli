@@ -16,7 +16,7 @@ import { ProfessionService } from 'src/app/services/common/models/profession.ser
   styleUrls: ['./show-profession-dialog.component.scss']
 })
 export class ShowProfessionDialogComponent extends BaseDialog<ShowProfessionDialogComponent> implements OnInit {
-  displayedColumns: string[] = ['profession', 'actions'];
+  displayedColumns: string[] = ['profession', 'workType', 'actions'];
   dataSource: MatTableDataSource<List_Profession> = new MatTableDataSource<List_Profession>();
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -25,6 +25,10 @@ export class ShowProfessionDialogComponent extends BaseDialog<ShowProfessionDial
   editIndex: number | null = null;
   newProfession: string = '';
   newProfessionDescription: string = '';
+  newProfessionWorkType: string = 'Yeraltı';
+
+  activeTab: 'all' | 'Yeraltı' | 'Yerüstü' = 'all';
+  allProfessions: List_Profession[] = [];
 
   constructor(
     dialogRef: MatDialogRef<ShowProfessionDialogComponent>,
@@ -44,8 +48,9 @@ export class ShowProfessionDialogComponent extends BaseDialog<ShowProfessionDial
 
   async showProfessions(): Promise<void> {
     try {
-      const allProfessions = await this.professionService.getProfessions();
-      this.dataSource.data = allProfessions.datas;
+      const result = await this.professionService.getProfessions();
+      this.allProfessions = result.datas;
+      this.applyTab(this.activeTab);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
     } catch (error) {
@@ -53,6 +58,18 @@ export class ShowProfessionDialogComponent extends BaseDialog<ShowProfessionDial
         dismissOthers: true, messageType: MessageType.Error, position: Position.TopRight
       });
     }
+  }
+
+  setTab(tab: 'all' | 'Yeraltı' | 'Yerüstü') {
+    this.activeTab = tab;
+    this.editIndex = null;
+    this.applyTab(tab);
+  }
+
+  private applyTab(tab: 'all' | 'Yeraltı' | 'Yerüstü') {
+    this.dataSource.data = tab === 'all'
+      ? this.allProfessions
+      : this.allProfessions.filter(p => p.workType === tab);
   }
 
   selectProfession(profession: List_Profession): void {
@@ -65,7 +82,8 @@ export class ShowProfessionDialogComponent extends BaseDialog<ShowProfessionDial
     const updatedProfession: Update_Profession = {
       id: element.id,
       name: element.name,
-      description: element.description
+      description: element.description,
+      workType: element.workType
     };
     try {
       await this.professionService.updateProfession(updatedProfession);
@@ -86,7 +104,8 @@ export class ShowProfessionDialogComponent extends BaseDialog<ShowProfessionDial
   async createProfession(): Promise<void> {
     const newProfession: Create_Profession = {
       name: this.newProfession,
-      description: this.newProfessionDescription
+      description: this.newProfessionDescription,
+      workType: this.newProfessionWorkType
     };
     try {
       await this.professionService.createProfession(newProfession);
@@ -108,4 +127,7 @@ export class ShowProfessionDialogComponent extends BaseDialog<ShowProfessionDial
     this.dataSource.filter = filterValue.trim().toLowerCase();
     if (this.dataSource.paginator) this.dataSource.paginator.firstPage();
   }
+
+  get undergroundCount() { return this.allProfessions.filter(p => p.workType === 'Yeraltı').length; }
+  get surfaceCount() { return this.allProfessions.filter(p => p.workType === 'Yerüstü').length; }
 }

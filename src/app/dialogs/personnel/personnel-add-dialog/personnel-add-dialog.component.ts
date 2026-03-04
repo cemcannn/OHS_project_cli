@@ -60,8 +60,8 @@ export class PersonnelAddDialogComponent extends BaseDialog<PersonnelAddDialogCo
       tkiId: formValue.tkiId,
       name: formValue.name,
       surname: formValue.surname,
-      profession: this.profession ? this.profession.id : formValue.profession,
-      directorate: this.directorate ? this.directorate.id : formValue.directorate,
+      profession: this.profession ? this.profession.name : formValue.profession,
+      directorate: this.directorate ? this.directorate.name : formValue.directorate,
       bornDate: bornDateValue
     };
 
@@ -85,7 +85,7 @@ export class PersonnelAddDialogComponent extends BaseDialog<PersonnelAddDialogCo
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.profession = result;
-        this.personnelForm.patchValue({ profession: result.id });
+        this.personnelForm.patchValue({ profession: result.name });
       }
     });
   }
@@ -99,7 +99,7 @@ export class PersonnelAddDialogComponent extends BaseDialog<PersonnelAddDialogCo
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.directorate = result;
-        this.personnelForm.patchValue({ directorate: result.id });
+        this.personnelForm.patchValue({ directorate: result.name });
       }
     });
   }

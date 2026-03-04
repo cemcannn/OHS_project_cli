@@ -18,6 +18,7 @@ import { AccidentUpdateDialogComponent } from '../accident-update-dialog/acciden
 export class AccidentListComponent extends BaseDialog<AccidentListComponent> implements OnInit, AfterViewInit {
   displayedColumns: string[] = ['typeOfAccident', 'limb', 'accidentArea', 'accidentDate', 'accidentHour', 'lostDayOfWork', 'description', 'accidentUpdate', 'delete'];
   dataSource: MatTableDataSource<List_Accident> = new MatTableDataSource<List_Accident>();
+  personnelName: string = '';
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -45,15 +46,14 @@ export class AccidentListComponent extends BaseDialog<AccidentListComponent> imp
 
   async openUpdateAccidentDialog(accidentData: any): Promise<void> {
     const dialogRef = await this.dialog.open(AccidentUpdateDialogComponent, {
-      width: '500px',
+      width: '540px',
+      panelClass: 'no-padding-dialog',
       data: accidentData
     });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result && result.success) {
-        // Update successful
-      } else if (result && result.error) {
-        // Update error
+        this.loadAccidents(this.data.personId);
       }
     });
   }
@@ -62,10 +62,13 @@ export class AccidentListComponent extends BaseDialog<AccidentListComponent> imp
     try {
       const allAccidents: { datas: List_Accident[], totalCount: number } = await this.accidentService.getAccidentById(personId);
 
-      // Use the correct type for MatTableDataSource
       this.dataSource = new MatTableDataSource<List_Accident>(allAccidents.datas);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
+      if (allAccidents.datas.length > 0) {
+        const first = allAccidents.datas[0];
+        this.personnelName = `${first.name || ''} ${first.surname || ''}`.trim();
+      }
     }
     catch (error) {
       this.alertifyService.message('Kaza bilgilerini yüklerken bir hata oluştu.', {

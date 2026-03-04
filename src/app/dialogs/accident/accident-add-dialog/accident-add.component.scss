@@ -1,3 +1,167 @@
-.field {
-    width: 350px;
+@import '../../definition/dialog-def.scss';
+
+:host {
+  --c1: #c0392b;
+  --c2: #a93226;
+  display: block;
+}
+
+// ── Content area
+.dlg-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px 24px;
+  background: #fafbfc;
+
+  &::-webkit-scrollbar { width: 5px; }
+  &::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.12); border-radius: 3px; }
+}
+
+// ── Sections
+.form-section {
+  margin-bottom: 20px;
+  &:last-child { margin-bottom: 0; }
+}
+
+.section-title {
+  font-size: 11px;
+  font-weight: 700;
+  color: #7f8c8d;
+  text-transform: uppercase;
+  letter-spacing: 0.7px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  i { font-size: 13px; }
+}
+
+// ── Picker boxes (clickable select-like fields)
+.picker-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 11px 14px;
+  border: 1.5px solid #dde2e8;
+  border-radius: 8px;
+  background: #fff;
+  cursor: pointer;
+  transition: all 0.18s;
+  margin-bottom: 8px;
+
+  &:hover {
+    border-color: #c0392b;
+    background: rgba(192,57,43,0.025);
+    .picker-arrow { color: #c0392b; }
+  }
+
+  &.selected {
+    border-color: #c0392b;
+    background: rgba(192,57,43,0.03);
+    .picker-value { color: #2c3e50; font-weight: 600; }
+    .picker-arrow { color: #c0392b; }
+  }
+}
+
+.picker-info {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  flex: 1;
+  min-width: 0;
+}
+
+.picker-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: #7f8c8d;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  .req { color: #c0392b; }
+}
+
+.picker-value {
+  font-size: 13px;
+  color: #aab2bd;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  i { font-size: 15px; opacity: 0.6; }
+}
+
+.picker-arrow {
+  color: #bdc3c7;
+  font-size: 20px;
+  flex-shrink: 0;
+  transition: color 0.18s;
+}
+
+// ── Two-column row
+.form-row-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+// ── Outline form fields
+.form-field {
+  width: 100%;
+
+  ::ng-deep {
+    .mdc-notched-outline__leading,
+    .mdc-notched-outline__notch,
+    .mdc-notched-outline__trailing {
+      border-color: #dde2e8 !important;
+    }
+    &.mat-focused .mdc-notched-outline__leading,
+    &.mat-focused .mdc-notched-outline__notch,
+    &.mat-focused .mdc-notched-outline__trailing {
+      border-color: #c0392b !important;
+      border-width: 2px !important;
+    }
+    .mat-mdc-form-field-infix {
+      padding-top: 10px !important;
+      padding-bottom: 10px !important;
+      min-height: unset !important;
+    }
+    input, .mat-mdc-select-value { font-size: 13px; }
+    label { font-size: 13px; }
+  }
+}
+
+// ── Footer
+.dlg-footer {
+  padding: 14px 24px;
+  background: #f8f9fa;
+  border-top: 1px solid #e8e8e8;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.footer-cancel {
+  color: #7f8c8d !important;
+  border-color: #dde2e8 !important;
+  font-weight: 600;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  i { font-size: 16px; }
+}
+
+.footer-submit {
+  background: linear-gradient(135deg, #c0392b 0%, #a93226 100%) !important;
+  color: #fff !important;
+  font-weight: 600;
+  font-size: 13px;
+  box-shadow: 0 2px 8px rgba(192,57,43,0.3);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  i { font-size: 16px; }
+
+  &:hover:not([disabled]) { box-shadow: 0 4px 14px rgba(192,57,43,0.4); }
+  &[disabled] { opacity: 0.5 !important; box-shadow: none; }
 }

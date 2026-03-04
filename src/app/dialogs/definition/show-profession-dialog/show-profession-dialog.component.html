@@ -13,6 +13,19 @@
     </button>
   </div>
 
+  <!-- Grup Sekmeleri -->
+  <div class="group-tabs">
+    <button class="group-tab" [class.active]="activeTab === 'all'" (click)="setTab('all')">
+      Tümü <span class="tab-count">{{ allProfessions.length }}</span>
+    </button>
+    <button class="group-tab underground" [class.active]="activeTab === 'Yeraltı'" (click)="setTab('Yeraltı')">
+      <i class="mdi mdi-shovel"></i> Yeraltı <span class="tab-count">{{ undergroundCount }}</span>
+    </button>
+    <button class="group-tab surface" [class.active]="activeTab === 'Yerüstü'" (click)="setTab('Yerüstü')">
+      <i class="mdi mdi-weather-sunny"></i> Yerüstü <span class="tab-count">{{ surfaceCount }}</span>
+    </button>
+  </div>
+
   <div class="dlg-search">
     <mat-form-field appearance="outline" class="search-field">
       <mat-label>Ara</mat-label>
@@ -41,6 +54,27 @@
           <ng-template #readMode>
             <div class="cell-name">{{ element.name }}</div>
             <div class="cell-desc" *ngIf="element.description">{{ element.description }}</div>
+          </ng-template>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="workType">
+        <th mat-header-cell *matHeaderCellDef>Çalışma Alanı</th>
+        <td mat-cell *matCellDef="let element; let i = index">
+          <ng-container *ngIf="editIndex === i; else workTypeRead">
+            <mat-form-field appearance="outline" class="inline-field" style="max-width:130px">
+              <mat-label>Grup</mat-label>
+              <mat-select [(ngModel)]="element.workType">
+                <mat-option value="Yeraltı">Yeraltı</mat-option>
+                <mat-option value="Yerüstü">Yerüstü</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </ng-container>
+          <ng-template #workTypeRead>
+            <span class="work-type-badge" [class.underground]="element.workType === 'Yeraltı'" [class.surface]="element.workType === 'Yerüstü'" *ngIf="element.workType">
+              <i class="mdi" [class.mdi-shovel]="element.workType === 'Yeraltı'" [class.mdi-weather-sunny]="element.workType === 'Yerüstü'"></i>
+              {{ element.workType }}
+            </span>
           </ng-template>
         </td>
       </ng-container>
@@ -91,6 +125,21 @@
         <mat-label>Açıklama</mat-label>
         <input matInput [(ngModel)]="newProfessionDescription" placeholder="Kısa açıklama">
       </mat-form-field>
+      <div class="work-type-toggle">
+        <label class="toggle-label">Çalışma Alanı</label>
+        <div class="toggle-buttons">
+          <button type="button" class="toggle-btn underground-btn"
+                  [class.selected]="newProfessionWorkType === 'Yeraltı'"
+                  (click)="newProfessionWorkType = 'Yeraltı'">
+            <i class="mdi mdi-shovel"></i> Yeraltı
+          </button>
+          <button type="button" class="toggle-btn surface-btn"
+                  [class.selected]="newProfessionWorkType === 'Yerüstü'"
+                  (click)="newProfessionWorkType = 'Yerüstü'">
+            <i class="mdi mdi-weather-sunny"></i> Yerüstü
+          </button>
+        </div>
+      </div>
     </div>
     <button mat-raised-button class="dlg-add-btn" (click)="createProfession()">
       <i class="mdi mdi-plus"></i> Ekle

@@ -1,8 +1,38 @@
-<mat-drawer-container class="role-create">
-    <mat-drawer mode="side" opened>
-      <app-create (createdRole)="createdRole($event)"></app-create>
-    </mat-drawer>
-    <mat-drawer-content>
+<div class="role-page">
+
+  <!-- Page Header -->
+  <div class="page-header">
+    <div class="header-left">
+      <i class="mdi mdi-shield-crown header-icon"></i>
+      <div>
+        <h1 class="header-title">Rol Yönetimi</h1>
+        <p class="header-sub">Sistem rollerini oluşturun ve yönetin</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Content Grid -->
+  <div class="role-grid">
+
+    <!-- Create Panel -->
+    <div class="role-panel">
+      <div class="panel-header">
+        <i class="mdi mdi-plus-circle-outline"></i>
+        Yeni Rol Ekle
+      </div>
+      <div class="panel-body">
+        <app-create (createdRole)="createdRole($event)"></app-create>
+      </div>
+    </div>
+
+    <!-- List Panel -->
+    <div class="role-panel">
+      <div class="panel-header">
+        <i class="mdi mdi-format-list-bulleted"></i>
+        Mevcut Roller
+      </div>
       <app-list></app-list>
-    </mat-drawer-content>
-  </mat-drawer-container>
+    </div>
+
+  </div>
+</div>

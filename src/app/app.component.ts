@@ -81,6 +81,15 @@ export class AppComponent implements OnInit {
         });
       })
       .catch(err => console.error('SignalR personnels-hub error', err));
+
+    this.signalRService
+      .on(HubUrls.UserActivityHub, ReceiveFunctions.UserActivityReceiveFunction, (message: any) => {
+        this.toastrService.message(message, 'Kullanıcı İşlemi', {
+          messageType: ToastrMessageType.Info,
+          position: ToastrPosition.TopRight,
+        });
+      })
+      .catch(err => console.error('SignalR activity-hub error', err));
   }
 
   private _lastUserId: string | null = null;

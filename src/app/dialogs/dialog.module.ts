@@ -25,6 +25,7 @@ import { PersonnelUpdateDialogComponent } from './personnel/personnel-update-dia
 import { PersonnelAddDialogComponent } from './personnel/personnel-add-dialog/personnel-add-dialog.component';
 import { DateNotInFutureValidatorDirective, TimeNotInFutureValidatorDirective } from '../directives/validator.directive';
 import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSelectModule } from '@angular/material/select';
 import { ShowTypeOfAccidentDialogComponent } from './definition/show-type-of-accident-dialog/show-type-of-accident-dialog.component';
 import { ShowLimbDialogComponent } from './definition/show-limb-dialog/show-limb-dialog.component';
@@ -65,7 +66,7 @@ import { ImageCropperComponent } from 'ngx-image-cropper';
     ProfilePhotoCropDialogComponent
   ],
   imports: [
-    FormsModule, MatSelectModule, MatIconModule, MatDatepickerModule, MatNativeDateModule, MatPaginatorModule, MatSortModule, ReactiveFormsModule, CommonModule, MatDialogModule, MatButtonModule, MatCardModule, MatTableModule, MatToolbarModule, MatBadgeModule, MatListModule, MatFormFieldModule, MatInputModule, DeleteDirectiveModule, CommonPipesModule, ImageCropperComponent
+    FormsModule, MatSelectModule, MatIconModule, MatTooltipModule, MatDatepickerModule, MatNativeDateModule, MatPaginatorModule, MatSortModule, ReactiveFormsModule, CommonModule, MatDialogModule, MatButtonModule, MatCardModule, MatTableModule, MatToolbarModule, MatBadgeModule, MatListModule, MatFormFieldModule, MatInputModule, DeleteDirectiveModule, CommonPipesModule, ImageCropperComponent
   ]
 })
 export class DialogModule { }

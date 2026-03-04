@@ -1,61 +1,113 @@
-<h1 mat-dialog-title>Kaza Bilgilerini Güncelle:</h1>
-<div mat-dialog-content>
-  <form #accidentForm="ngForm">
-    <mat-form-field appearance="fill" class="field">
-      <mat-label>Kaza Oluşum Tipi</mat-label>
-      <input matInput [value]="typeOfAccident" name="typeOfAccident?" [(ngModel)]="data.typeOfAccident" readonly (click)="openTypeOfAccidentPicker()">
-      <button mat-icon-button matSuffix (click)="openTypeOfAccidentPicker()">
-        <mat-icon>arrow_drop_down</mat-icon>
-      </button>
-    </mat-form-field>
+<div class="dlg-wrapper">
 
-    <mat-form-field appearance="fill" class="field">
-      <mat-label>Uzuv</mat-label>
-      <input matInput [value]="limb" name="limb?" [(ngModel)]="data.limb" readonly (click)="openLimbPicker()">
-      <button mat-icon-button matSuffix (click)="openLimbPicker()">
-        <mat-icon>arrow_drop_down</mat-icon>
-      </button>
-    </mat-form-field>
+  <!-- ── Header ── -->
+  <div class="dlg-header">
+    <div class="dlg-header-left">
+      <i class="mdi mdi-pencil-circle dlg-icon"></i>
+      <div>
+        <h2>Kaza Kaydını Güncelle</h2>
+        <p>Mevcut kaza bilgilerini düzenleyin</p>
+      </div>
+    </div>
+    <button mat-icon-button class="dlg-close" (click)="close()">
+      <i class="mdi mdi-close"></i>
+    </button>
+  </div>
 
-    <mat-form-field appearance="fill" class="field">
-      <mat-label>Kaza Yeri</mat-label>
-      <input matInput [value]="accidentArea" name="accidentArea?" [(ngModel)]="data.accidentArea" readonly (click)="openAccidentAreaPicker()">
-      <button mat-icon-button matSuffix (click)="openAccidentAreaPicker()">
-        <mat-icon>arrow_drop_down</mat-icon>
-      </button>
-    </mat-form-field>
+  <!-- ── Form Content ── -->
+  <div class="dlg-content">
+    <form [formGroup]="accidentForm">
 
-    <mat-form-field appearance="fill" class="field">
-      <mat-label>Kaza Tarihi</mat-label>
-      <input matInput [matDatepicker]="picker1" name="accidentDate" [(ngModel)]="data.accidentDate">
-      <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
-      <mat-datepicker #picker1></mat-datepicker>
-      <!-- <mat-error *ngIf="accidentForm.controls['accidentDate'].invalid && (accidentForm.controls['accidentDate'].dirty || accidentForm.controls['accidentDate'].touched)">
-        <span *ngIf="accidentForm.controls['accidentDate'].errors?.required">Kaza tarihi gereklidir.</span>
-      </mat-error> -->
-    </mat-form-field>
+      <!-- Kaza Tanımı -->
+      <div class="form-section">
+        <div class="section-title">
+          <i class="mdi mdi-tag-outline"></i>
+          Kaza Tanımı
+        </div>
 
-    <mat-form-field appearance="fill" class="field">
-      <mat-label>Kaza Saati</mat-label>
-      <input matInput type="time" name="accidentHour" [(ngModel)]="data.accidentHour">
-      <!-- <mat-error *ngIf="accidentForm.controls['accidentHour'].invalid && (accidentForm.controls['accidentHour'].dirty || accidentForm.controls['accidentHour'].touched)">
-        <span *ngIf="accidentForm.controls['accidentHour'].errors?.required">Kaza saati gereklidir.</span>
-      </mat-error> -->
-    </mat-form-field>
+        <div class="picker-box" [class.selected]="accidentForm.get('typeOfAccident')?.value" (click)="openTypeOfAccidentPicker()">
+          <div class="picker-info">
+            <span class="picker-label">Kaza Oluşum Türü <span class="req">*</span></span>
+            <span class="picker-value">
+              <i class="mdi mdi-alert-circle-outline"></i>
+              {{ accidentForm.get('typeOfAccident')?.value || 'Seçmek için tıklayın...' }}
+            </span>
+          </div>
+          <i class="mdi mdi-chevron-right picker-arrow"></i>
+        </div>
 
-    <mat-form-field appearance="fill" class="field">
-      <mat-label>Raporlu Olduğu Gün Sayısı</mat-label>
-      <input matInput type="text" name="lostDayOfWork" [(ngModel)]="data.lostDayOfWork">
-    </mat-form-field>
+        <div class="picker-box" [class.selected]="accidentForm.get('limb')?.value" (click)="openLimbPicker()">
+          <div class="picker-info">
+            <span class="picker-label">Uzuv <span class="req">*</span></span>
+            <span class="picker-value">
+              <i class="mdi mdi-human"></i>
+              {{ accidentForm.get('limb')?.value || 'Seçmek için tıklayın...' }}
+            </span>
+          </div>
+          <i class="mdi mdi-chevron-right picker-arrow"></i>
+        </div>
 
-    <mat-form-field appearance="fill" class="field">
-      <mat-label>Açıklama</mat-label>
-      <textarea matInput name="description" [(ngModel)]="data.description"></textarea>
-    </mat-form-field>
-  </form>
-</div>
-<div mat-dialog-actions>
-  <button mat-button (click)="close()">İptal</button>
-  <button mat-raised-button color="primary" [disabled]="accidentForm.invalid" 
-  (click)="updateAccident()">Güncelle</button>
+        <div class="picker-box" [class.selected]="accidentForm.get('accidentArea')?.value" (click)="openAccidentAreaPicker()">
+          <div class="picker-info">
+            <span class="picker-label">Kaza Yeri <span class="req">*</span></span>
+            <span class="picker-value">
+              <i class="mdi mdi-map-marker-outline"></i>
+              {{ accidentForm.get('accidentArea')?.value || 'Seçmek için tıklayın...' }}
+            </span>
+          </div>
+          <i class="mdi mdi-chevron-right picker-arrow"></i>
+        </div>
+      </div>
+
+      <!-- Zaman Bilgisi -->
+      <div class="form-section">
+        <div class="section-title">
+          <i class="mdi mdi-clock-outline"></i>
+          Zaman Bilgisi
+        </div>
+        <div class="form-row-2">
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Kaza Tarihi</mat-label>
+            <input matInput [matDatepicker]="picker1" formControlName="accidentDate">
+            <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+            <mat-datepicker #picker1></mat-datepicker>
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Kaza Saati</mat-label>
+            <input matInput type="time" formControlName="accidentHour">
+          </mat-form-field>
+        </div>
+      </div>
+
+      <!-- Ek Bilgiler -->
+      <div class="form-section">
+        <div class="section-title">
+          <i class="mdi mdi-clipboard-text-outline"></i>
+          Ek Bilgiler
+        </div>
+        <div class="form-row-2">
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Raporlu Gün Sayısı</mat-label>
+            <input matInput type="text" formControlName="lostDayOfWork">
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Açıklama</mat-label>
+            <input matInput formControlName="description">
+          </mat-form-field>
+        </div>
+      </div>
+
+    </form>
+  </div>
+
+  <!-- ── Footer ── -->
+  <div class="dlg-footer">
+    <button mat-stroked-button class="footer-cancel" (click)="close()">
+      <i class="mdi mdi-close"></i> İptal
+    </button>
+    <button mat-raised-button class="footer-submit" [disabled]="accidentForm.invalid" (click)="updateAccident()">
+      <i class="mdi mdi-content-save"></i> Güncelle
+    </button>
+  </div>
+
 </div>

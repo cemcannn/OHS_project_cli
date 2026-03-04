@@ -1,4 +1,5 @@
 export enum ReceiveFunctions {
     AccidentAddedMessageReceiveFunction = "receiveAccidentAddedMessage",
-    PersonnelAddedMessageReceiveFunction = "receivePersonnelAddedMessage"
+    PersonnelAddedMessageReceiveFunction = "receivePersonnelAddedMessage",
+    UserActivityReceiveFunction = "receiveUserActivity"
   }

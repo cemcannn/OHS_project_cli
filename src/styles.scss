@@ -8,6 +8,13 @@
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
+// ─── Dialog: padding sıfırla ───
+.no-padding-dialog .mat-mdc-dialog-surface {
+  padding: 0 !important;
+  overflow: hidden !important;
+  border-radius: 12px !important;
+}
+
 // ─── Açıklama Tooltip ───
 .desc-tooltip {
   font-size: 12.5px !important;

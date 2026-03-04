@@ -1,6 +1,79 @@
-.role-create {
-    width: 98%;
-    height: 300pt;
-    margin: 10px;
-    border: 1px solid #555;
-  }
+@import '../../../ui/components/shared-styles.scss';
+
+:host {
+  display: block;
+  background: $bg-page;
+  min-height: 100%;
+}
+
+.role-page {
+  background: $bg-page;
+  min-height: 100%;
+}
+
+.page-header {
+  background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
+  border-bottom: 3px solid $red;
+  padding: 14px 28px;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.header-icon {
+  font-size: 28px;
+  color: $red;
+}
+
+.header-title {
+  margin: 0 0 2px;
+  font-size: 18px;
+  font-weight: 700;
+  background: linear-gradient(135deg, $red 0%, #e74c3c 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.header-sub {
+  margin: 0;
+  font-size: 12px;
+  color: $text-muted;
+}
+
+.role-grid {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 24px;
+  padding: 24px;
+  align-items: start;
+}
+
+.role-panel {
+  background: $bg-card;
+  border-radius: 10px;
+  border: 1px solid $border;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  overflow: hidden;
+}
+
+.panel-header {
+  background: linear-gradient(135deg, $red 0%, $red-dark 100%);
+  color: #fff;
+  padding: 12px 18px;
+  font-size: 12.5px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+
+  i { font-size: 16px; }
+}

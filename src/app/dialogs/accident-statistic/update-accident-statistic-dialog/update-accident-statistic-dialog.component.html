@@ -1,51 +1,98 @@
-<h2 mat-dialog-title>Aylık İşletme Verisi Güncelle</h2>
-<div mat-dialog-content>
-    <form #form="ngForm">
-        <mat-form-field appearance="fill" class="field">
+<div class="dlg-wrapper">
+
+  <!-- ── Header ── -->
+  <div class="dlg-header">
+    <div class="dlg-header-left">
+      <i class="mdi mdi-chart-bar dlg-icon"></i>
+      <div>
+        <h2>Aylık İşletme Verisi Güncelle</h2>
+        <p>Mevcut aylık verileri düzenleyin</p>
+      </div>
+    </div>
+    <button mat-icon-button class="dlg-close" (click)="close()">
+      <i class="mdi mdi-close"></i>
+    </button>
+  </div>
+
+  <!-- ── Form Content ── -->
+  <div class="dlg-content">
+    <form [formGroup]="statisticForm">
+
+      <!-- Dönem & İşletme -->
+      <div class="form-section">
+        <div class="section-title">
+          <i class="mdi mdi-calendar-month-outline"></i>
+          Dönem &amp; İşletme
+        </div>
+
+        <div class="form-row-2">
+          <mat-form-field appearance="outline" class="form-field">
             <mat-label>Ay</mat-label>
-            <mat-select [(ngModel)]="data.month">
-                <mat-option *ngFor="let month of months" [value]="month.value">{{ month.viewValue }}</mat-option>
+            <mat-select formControlName="month">
+              <mat-option *ngFor="let month of months" [value]="month.value">{{ month.viewValue }}</mat-option>
             </mat-select>
-        </mat-form-field>
-
-        <mat-form-field appearance="fill" class="field">
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="form-field">
             <mat-label>Yıl</mat-label>
-            <mat-select [(ngModel)]="data.year">
-                <mat-option *ngFor="let year of years" [value]="year">{{ year }}</mat-option>
+            <mat-select formControlName="year">
+              <mat-option *ngFor="let year of years" [value]="year">{{ year }}</mat-option>
             </mat-select>
-        </mat-form-field>
+          </mat-form-field>
+        </div>
 
-        <mat-form-field appearance="fill" class="field">
-            <mat-label>İşletme</mat-label>
-            <input matInput [value]="directorate?.name" readonly (click)="openDirectoratePicker()">
-            <button mat-icon-button matSuffix (click)="openDirectoratePicker()">
-                <mat-icon>arrow_drop_down</mat-icon>
-            </button>
-        </mat-form-field>
+        <div class="picker-box" [class.selected]="statisticForm.get('directorate')?.value" (click)="openDirectoratePicker()">
+          <div class="picker-info">
+            <span class="picker-label">İşletme <span class="req">*</span></span>
+            <span class="picker-value">
+              <i class="mdi mdi-office-building-outline"></i>
+              {{ statisticForm.get('directorate')?.value || 'Seçmek için tıklayın...' }}
+            </span>
+          </div>
+          <i class="mdi mdi-chevron-right picker-arrow"></i>
+        </div>
+      </div>
 
-        <mat-form-field appearance="fill" class="field">
-            <mat-label>Fiili Yevmiye Sayısı (Yerüstü)</mat-label>
-            <input matInput [(ngModel)]="data.actualDailyWageSurface">
-        </mat-form-field>
+      <!-- Çalışan & Yevmiye Bilgileri -->
+      <div class="form-section">
+        <div class="section-title">
+          <i class="mdi mdi-account-hard-hat-outline"></i>
+          Çalışan &amp; Yevmiye Bilgileri
+        </div>
 
-        <mat-form-field appearance="fill" class="field">
-            <mat-label>Fiili Yevmiye Sayısı (Yeraltı)</mat-label>
-            <input matInput [(ngModel)]="data.actualDailyWageUnderground">
-        </mat-form-field>
+        <div class="form-row-2">
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Fiili Yevmiye (Yerüstü)</mat-label>
+            <input matInput type="number" formControlName="actualDailyWageSurface">
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Fiili Yevmiye (Yeraltı)</mat-label>
+            <input matInput type="number" formControlName="actualDailyWageUnderground">
+          </mat-form-field>
+        </div>
 
-        <mat-form-field appearance="fill" class="field">
+        <div class="form-row-2">
+          <mat-form-field appearance="outline" class="form-field">
             <mat-label>Çalışan Sayısı (Yerüstü)</mat-label>
-            <input matInput [(ngModel)]="data.employeesNumberSurface">
-        </mat-form-field>
-
-        <mat-form-field appearance="fill" class="field">
+            <input matInput type="number" formControlName="employeesNumberSurface">
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="form-field">
             <mat-label>Çalışan Sayısı (Yeraltı)</mat-label>
-            <input matInput [(ngModel)]="data.employeesNumberUnderground">
-        </mat-form-field>
+            <input matInput type="number" formControlName="employeesNumberUnderground">
+          </mat-form-field>
+        </div>
+      </div>
+
     </form>
-</div>
-<div mat-dialog-actions>
-    <button mat-button (click)="close()">İptal</button>
-    <button mat-raised-button color="primary" [disabled]="form.invalid"
-        (click)="updateAccidentStatistic()">Güncelle</button>
+  </div>
+
+  <!-- ── Footer ── -->
+  <div class="dlg-footer">
+    <button mat-stroked-button class="footer-cancel" (click)="close()">
+      <i class="mdi mdi-close"></i> İptal
+    </button>
+    <button mat-raised-button class="footer-submit" [disabled]="statisticForm.invalid" (click)="updateAccidentStatistic()">
+      <i class="mdi mdi-content-save"></i> Güncelle
+    </button>
+  </div>
+
 </div>

@@ -1,71 +1,113 @@
-<h1 mat-dialog-title>Personel Bilgilerini Güncelle:</h1>
-<div mat-dialog-content>
-  <form #personnelForm="ngForm">
-    <mat-form-field appearance="fill" class="field">
-      <mat-label>TC Kimlik Numarası</mat-label>
-      <input matInput type="text" maxlength="11" minlength="11" pattern="^[0-9]*$" name="trIdNumber" [(ngModel)]="data.trIdNumber">
-      <mat-error *ngIf="personnelForm.controls['trIdNumber'].invalid && (personnelForm.controls['trIdNumber'].dirty || personnelForm.controls['trIdNumber'].touched)">
-        <span *ngIf="personnelForm.controls['trIdNumber'].errors?.pattern">TC Kimlik Numarası sadece rakamlardan oluşmalıdır.</span>
-        <span *ngIf="personnelForm.controls['trIdNumber'].errors?.minlength || personnelForm.controls['trIdNumber'].errors?.maxlength">TC Kimlik Numarası 11 haneli
-          olmalıdır.</span>
-      </mat-error>
-    </mat-form-field>
-    
-    <mat-form-field appearance="fill" class="field">
-      <mat-label>TKİ Sicil No</mat-label>
-      <input matInput type="text" pattern="^[0-9]*$" name="tkiId" [(ngModel)]="data.tkiId">
-      <mat-error *ngIf="personnelForm.controls['tkiId'].invalid && (personnelForm.controls['tkiId'].dirty || personnelForm.controls['tkiId'].touched)">
-        <span *ngIf="personnelForm.controls['tkiId'].errors?.pattern">TKİ Sicil Numarası sadece rakamlardan oluşmalıdır.</span>
-        <span *ngIf="personnelForm.controls['tkiId'].errors?.minlength || personnelForm.controls['tkiId'].errors?.maxlength">TKİ Sicil Numarası 11 haneli
-          olmalıdır.</span>
-      </mat-error>
-    </mat-form-field>
+<div class="dlg-wrapper">
 
-    <mat-form-field appearance="fill" class="field">
-      <mat-label>İsim</mat-label>
-      <input matInput type="text" name="name" [(ngModel)]="data.name">
-      <mat-error *ngIf="personnelForm.controls['name'].invalid && (personnelForm.controls['name'].dirty || personnelForm.controls['name'].touched)">
-        <span *ngIf="personnelForm.controls['name'].errors?.required">İsim gereklidir.</span>
-      </mat-error>
-    </mat-form-field>
+  <!-- ── Header ── -->
+  <div class="dlg-header">
+    <div class="dlg-header-left">
+      <i class="mdi mdi-account-edit dlg-icon"></i>
+      <div>
+        <h2>Personel Güncelle</h2>
+        <p>Mevcut personel bilgilerini düzenleyin</p>
+      </div>
+    </div>
+    <button mat-icon-button class="dlg-close" (click)="close()">
+      <i class="mdi mdi-close"></i>
+    </button>
+  </div>
 
-    <mat-form-field appearance="fill" class="field">
-      <mat-label>Soyisim</mat-label>
-      <input matInput type="text" name="surname" [(ngModel)]="data.surname">
-      <mat-error *ngIf="personnelForm.controls['surname'].invalid && (personnelForm.controls['surname'].dirty || personnelForm.controls['surname'].touched)">
-        <span *ngIf="personnelForm.controls['surname'].errors?.required">Soyisim gereklidir.</span>
-      </mat-error>
-    </mat-form-field>
+  <!-- ── Form Content ── -->
+  <div class="dlg-content">
+    <form [formGroup]="personnelForm">
 
-    <mat-form-field appearance="fill" class="field">
-      <mat-label>Mesleği</mat-label>
-      <input matInput [value]="profession" name="profession?" [(ngModel)]="data.profession" readonly (click)="openProfessionPicker()">
-      <button mat-icon-button matSuffix (click)="openProfessionPicker()">
-        <mat-icon>arrow_drop_down</mat-icon>
-      </button>
-    </mat-form-field>
-    
-    <mat-form-field appearance="fill" class="field">
-      <mat-label>İşletme</mat-label>
-      <input matInput [value]="directorate" name="directorate?" [(ngModel)]="data.directorate" readonly (click)="openDirectoratePicker()">
-      <button mat-icon-button matSuffix (click)="openDirectoratePicker()">
-        <mat-icon>arrow_drop_down</mat-icon>
-      </button>
-    </mat-form-field>
+      <!-- Kimlik Bilgileri -->
+      <div class="form-section">
+        <div class="section-title">
+          <i class="mdi mdi-card-account-details-outline"></i>
+          Kimlik Bilgileri
+        </div>
+        <div class="form-row-2">
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>TC Kimlik No</mat-label>
+            <input matInput type="text" maxlength="11" formControlName="trIdNumber">
+            <mat-error *ngIf="personnelForm.get('trIdNumber')?.invalid && personnelForm.get('trIdNumber')?.touched">
+              TC Kimlik No 11 haneli ve sayısal olmalıdır.
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>TKİ Sicil No</mat-label>
+            <input matInput type="text" formControlName="tkiId">
+            <mat-error *ngIf="personnelForm.get('tkiId')?.invalid && personnelForm.get('tkiId')?.touched">
+              TKİ Sicil Numarası sadece rakam olmalıdır.
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
 
-    <mat-form-field appearance="fill" class="field">
-      <mat-label>Doğum Tarihi</mat-label>
-      <input matInput [matDatepicker]="picker1" name="bornDate" [(ngModel)]="data.bornDate">
-      <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
-      <mat-datepicker #picker1></mat-datepicker>
-      <!-- <mat-error *ngIf="personnelForm.controls['bornDate'].invalid && (personnelForm.controls['bornDate'].dirty || accidentForm.controls['accidentDate'].touched)">
-        <span *ngIf="personnelForm.controls['bornDate'].errors?.required">Doğum tarihi gereklidir.</span>
-      </mat-error> -->
-    </mat-form-field>
-  </form>
-</div>
-<div mat-dialog-actions>
-  <button mat-button (click)="close()">İptal</button>
-  <button mat-raised-button color="primary" [disabled]="personnelForm.invalid"
-    (click)="updatePersonnel()">Güncelle</button>
+      <!-- Ad Soyad -->
+      <div class="form-section">
+        <div class="section-title">
+          <i class="mdi mdi-account-outline"></i>
+          Ad Soyad
+        </div>
+        <div class="form-row-2">
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>İsim</mat-label>
+            <input matInput type="text" formControlName="name">
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Soyisim</mat-label>
+            <input matInput type="text" formControlName="surname">
+          </mat-form-field>
+        </div>
+      </div>
+
+      <!-- İş & Kişisel Bilgiler -->
+      <div class="form-section">
+        <div class="section-title">
+          <i class="mdi mdi-briefcase-outline"></i>
+          İş &amp; Kişisel Bilgiler
+        </div>
+
+        <div class="picker-box" [class.selected]="personnelForm.get('profession')?.value" (click)="openProfessionPicker()">
+          <div class="picker-info">
+            <span class="picker-label">Meslek</span>
+            <span class="picker-value">
+              <i class="mdi mdi-hammer-wrench"></i>
+              {{ personnelForm.get('profession')?.value || 'Seçmek için tıklayın...' }}
+            </span>
+          </div>
+          <i class="mdi mdi-chevron-right picker-arrow"></i>
+        </div>
+
+        <div class="picker-box" [class.selected]="personnelForm.get('directorate')?.value" (click)="openDirectoratePicker()">
+          <div class="picker-info">
+            <span class="picker-label">İşletme</span>
+            <span class="picker-value">
+              <i class="mdi mdi-office-building-outline"></i>
+              {{ personnelForm.get('directorate')?.value || 'Seçmek için tıklayın...' }}
+            </span>
+          </div>
+          <i class="mdi mdi-chevron-right picker-arrow"></i>
+        </div>
+
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Doğum Tarihi</mat-label>
+          <input matInput [matDatepicker]="picker1" formControlName="bornDate">
+          <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+          <mat-datepicker #picker1></mat-datepicker>
+        </mat-form-field>
+      </div>
+
+    </form>
+  </div>
+
+  <!-- ── Footer ── -->
+  <div class="dlg-footer">
+    <button mat-stroked-button class="footer-cancel" (click)="close()">
+      <i class="mdi mdi-close"></i> İptal
+    </button>
+    <button mat-raised-button class="footer-submit" [disabled]="personnelForm.invalid" (click)="updatePersonnel()">
+      <i class="mdi mdi-content-save"></i> Güncelle
+    </button>
+  </div>
+
 </div>

@@ -1,65 +1,81 @@
-<div class="user-table-card">
-  <table mat-table [dataSource]="dataSource">
+<div class="user-page-wrapper">
 
-    <ng-container matColumnDef="userName">
-      <th mat-header-cell *matHeaderCellDef>Kullanıcı Adı</th>
-      <td mat-cell *matCellDef="let element">{{ element.userName }}</td>
-    </ng-container>
+  <!-- Page Header -->
+  <div class="user-page-header">
+    <div class="header-left">
+      <i class="mdi mdi-account-group header-icon"></i>
+      <div>
+        <h1 class="header-title">Kullanıcı Yönetimi</h1>
+        <p class="header-sub">Sistem kullanıcılarını görüntüleyin ve yönetin</p>
+      </div>
+    </div>
+  </div>
 
-    <ng-container matColumnDef="name">
-      <th mat-header-cell *matHeaderCellDef>İsim Soyisim</th>
-      <td mat-cell *matCellDef="let element">{{ element.name }}</td>
-    </ng-container>
+  <!-- Table Card -->
+  <div class="user-table-card">
+    <table mat-table [dataSource]="dataSource">
 
-    <ng-container matColumnDef="email">
-      <th mat-header-cell *matHeaderCellDef>E-posta</th>
-      <td mat-cell *matCellDef="let element">{{ element.email }}</td>
-    </ng-container>
+      <ng-container matColumnDef="userName">
+        <th mat-header-cell *matHeaderCellDef>Kullanıcı Adı</th>
+        <td mat-cell *matCellDef="let element">{{ element.userName }}</td>
+      </ng-container>
 
-    <ng-container matColumnDef="role">
-      <th mat-header-cell *matHeaderCellDef class="action-header">Rol Ata</th>
-      <td mat-cell *matCellDef="let element" class="action-cell">
-        <button mat-icon-button class="action-btn assign-btn"
-          (click)="assignRole(element.id)" title="Rol Ata">
-          <i class="mdi mdi-shield-account"></i>
-        </button>
-      </td>
-    </ng-container>
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef>İsim Soyisim</th>
+        <td mat-cell *matCellDef="let element">{{ element.name }}</td>
+      </ng-container>
 
-    <ng-container matColumnDef="userUpdate">
-      <th mat-header-cell *matHeaderCellDef class="action-header">Güncelle</th>
-      <td mat-cell *matCellDef="let element" class="action-cell">
-        <button mat-icon-button class="action-btn edit-btn"
-          (click)="openUpdateUserDialog(element)" title="Kullanıcı Güncelle">
-          <i class="mdi mdi-pencil"></i>
-        </button>
-      </td>
-    </ng-container>
+      <ng-container matColumnDef="email">
+        <th mat-header-cell *matHeaderCellDef>E-posta</th>
+        <td mat-cell *matCellDef="let element">{{ element.email }}</td>
+      </ng-container>
 
-    <ng-container matColumnDef="passwordUpdate">
-      <th mat-header-cell *matHeaderCellDef class="action-header">Şifre</th>
-      <td mat-cell *matCellDef="let element" class="action-cell">
-        <button mat-icon-button class="action-btn pwd-btn"
-          (click)="openUpdatePasswordDialog(element.id)" title="Şifre Güncelle">
-          <i class="mdi mdi-lock-reset"></i>
-        </button>
-      </td>
-    </ng-container>
+      <ng-container matColumnDef="role">
+        <th mat-header-cell *matHeaderCellDef class="action-header">Rol Ata</th>
+        <td mat-cell *matCellDef="let element" class="action-cell">
+          <button mat-icon-button class="action-btn assign-btn"
+            (click)="assignRole(element.id)" title="Rol Ata">
+            <i class="mdi mdi-shield-account"></i>
+          </button>
+        </td>
+      </ng-container>
 
-    <ng-container matColumnDef="delete">
-      <th mat-header-cell *matHeaderCellDef class="action-header">Sil</th>
-      <td mat-cell *matCellDef="let element" class="action-cell"
-          appDelete [id]="element.id" (callback)="getUsers()" controller="users">
-      </td>
-    </ng-container>
+      <ng-container matColumnDef="userUpdate">
+        <th mat-header-cell *matHeaderCellDef class="action-header">Güncelle</th>
+        <td mat-cell *matCellDef="let element" class="action-cell">
+          <button mat-icon-button class="action-btn edit-btn"
+            (click)="openUpdateUserDialog(element)" title="Kullanıcı Güncelle">
+            <i class="mdi mdi-pencil"></i>
+          </button>
+        </td>
+      </ng-container>
 
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-  </table>
+      <ng-container matColumnDef="passwordUpdate">
+        <th mat-header-cell *matHeaderCellDef class="action-header">Şifre</th>
+        <td mat-cell *matCellDef="let element" class="action-cell">
+          <button mat-icon-button class="action-btn pwd-btn"
+            (click)="openUpdatePasswordDialog(element.id)" title="Şifre Güncelle">
+            <i class="mdi mdi-lock-reset"></i>
+          </button>
+        </td>
+      </ng-container>
 
-  <mat-paginator (page)="pageChanged()"
-                 [pageSizeOptions]="[5, 10, 20]"
-                 showFirstLastButtons
-                 aria-label="Sayfa seçimi">
-  </mat-paginator>
+      <ng-container matColumnDef="delete">
+        <th mat-header-cell *matHeaderCellDef class="action-header">Sil</th>
+        <td mat-cell *matCellDef="let element" class="action-cell"
+            appDelete [id]="element.id" (callback)="getUsers()" controller="users">
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+
+    <mat-paginator (page)="pageChanged()"
+                   [pageSizeOptions]="[5, 10, 20]"
+                   showFirstLastButtons
+                   aria-label="Sayfa seçimi">
+    </mat-paginator>
+  </div>
+
 </div>

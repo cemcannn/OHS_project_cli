@@ -109,7 +109,7 @@ export class ListComponent extends BaseComponent implements OnInit, AfterViewIni
 
   async openPersonnelAddDialog(): Promise<void> {
     const dialogRef = this.dialog.open(PersonnelAddDialogComponent, {
-      width: '400px',
+      width: '540px',
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -121,7 +121,7 @@ export class ListComponent extends BaseComponent implements OnInit, AfterViewIni
 
   async openAccidentAddDialog(id: number): Promise<void> {
     const dialogRef = this.dialog.open(AccidentAddComponent, {
-      width: '400px',
+      width: '520px',
       data: { personnelId: id }
     });
 
@@ -134,7 +134,8 @@ export class ListComponent extends BaseComponent implements OnInit, AfterViewIni
 
   async openPersonnelUpdateDialog(personnelData: any): Promise<void> {
     const dialogRef = await this.dialog.open(PersonnelUpdateDialogComponent, {
-      width: '500px',
+      width: '540px',
+      panelClass: 'no-padding-dialog',
       data: personnelData
     });
 
@@ -149,7 +150,8 @@ export class ListComponent extends BaseComponent implements OnInit, AfterViewIni
 
   async openAccidentsDialog(id: string): Promise<void> {
     const dialogRef = this.dialog.open(AccidentListComponent, {
-      width: '800px',
+      width: '820px',
+      panelClass: 'no-padding-dialog',
       data: { personId: id }
     });
   

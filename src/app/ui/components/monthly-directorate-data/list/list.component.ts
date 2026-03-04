@@ -68,7 +68,8 @@ export class ListComponent extends BaseComponent implements OnInit {
 
   async openUpdateMonthlyDirectorateData(accidentData: any): Promise<void> {
     const dialogRef = await this.dialog.open(UpdateAccidentStatisticDialogComponent, {
-      width: '500px',
+      width: '560px',
+      panelClass: 'no-padding-dialog',
       data: accidentData
     });
 
