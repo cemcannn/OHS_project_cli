@@ -48,7 +48,7 @@ return null;
     this.activatedRoute.params.subscribe({
       next: async params => {
         const userId: string = params["userId"];
-        await this.userService.updatePassword(userId, password, passwordConfirm,
+        await this.userService.updatePassword(userId, '', password, passwordConfirm,
           () => {
             this.alertifyService.message("Şifre başarıyla güncellenmiştir.", {
               messageType: MessageType.Success,

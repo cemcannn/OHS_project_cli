@@ -48,12 +48,13 @@ export class UserService {
     await promiseData;
   }
 
-  async updatePassword(userId: string, password: string, passwordConfirm: string, successCallBack?: () => void, errorCallBack?: (error) => void) {
+  async updatePassword(userId: string, currentPassword: string, password: string, passwordConfirm: string, successCallBack?: () => void, errorCallBack?: (error) => void) {
     const observable: Observable<any> = this.httpClientService.put({
       action: "update-password",
       controller: "users"
     }, {
       userId: userId,
+      currentPassword: currentPassword,
       password: password,
       passwordConfirm: passwordConfirm
     });

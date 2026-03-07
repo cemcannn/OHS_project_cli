@@ -3,13 +3,13 @@
 
     <!-- Sidebar Header -->
     <div class="sidebar-header">
-      <div class="sidebar-brand">
-        <i class="mdi mdi-shield-account sidebar-brand-icon"></i>
+      <a class="sidebar-brand" routerLink="/admin">
+        <img src="assets/images/logo-tki.png" alt="TKİ Logo" class="sidebar-brand-logo" />
         <div class="sidebar-brand-text">
           <span class="brand-title">Admin Panel</span>
           <span class="brand-subtitle">OHS Program</span>
         </div>
-      </div>
+      </a>
     </div>
 
     <!-- Sidebar Navigation -->
@@ -49,6 +49,13 @@
             <a class="sidebar-link" routerLink="users" routerLinkActive="active">
               <i class="mdi mdi-account-group"></i>
               <span>Kullanıcılar</span>
+            </a>
+          </li>
+
+          <li class="sidebar-item">
+            <a class="sidebar-link" routerLink="audit-log" routerLinkActive="active">
+              <i class="mdi mdi-history"></i>
+              <span>İşlem Logları</span>
             </a>
           </li>
 

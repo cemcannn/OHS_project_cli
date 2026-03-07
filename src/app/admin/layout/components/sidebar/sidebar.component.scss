@@ -40,10 +40,13 @@ $border-color: rgba(255, 255, 255, 0.08);
   display: flex;
   align-items: center;
   gap: 12px;
+  text-decoration: none;
+  cursor: pointer;
 
-  .sidebar-brand-icon {
-    font-size: 32px;
-    color: $red;
+  .sidebar-brand-logo {
+    width: 34px;
+    height: 34px;
+    object-fit: contain;
     filter: drop-shadow(0 2px 6px rgba(192, 57, 43, 0.5));
     flex-shrink: 0;
   }

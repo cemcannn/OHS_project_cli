@@ -1,0 +1,235 @@
+.audit-page {
+  padding: 24px;
+  background: #f4f6f8;
+  min-height: 100%;
+}
+
+/* Header */
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.header-icon {
+  font-size: 36px;
+  color: #c0392b;
+}
+
+.header-title {
+  margin: 0 0 2px;
+  font-size: 22px;
+  font-weight: 700;
+  color: #2c3e50;
+}
+
+.header-sub {
+  margin: 0;
+  font-size: 13px;
+  color: #7f8c8d;
+}
+
+.header-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: linear-gradient(135deg, #c0392b 0%, #a93226 100%);
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  i { font-size: 16px; }
+}
+
+/* Search */
+.search-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #fff;
+  border-radius: 10px;
+  padding: 16px 20px;
+  margin-bottom: 16px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+}
+
+.search-field {
+  flex: 1;
+  margin-bottom: -1.25em;
+}
+
+.search-prefix-icon {
+  font-size: 18px;
+  color: #7f8c8d;
+  margin-right: 6px;
+}
+
+.search-btn {
+  background: linear-gradient(135deg, #c0392b 0%, #a93226 100%) !important;
+  color: #fff !important;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  height: 40px;
+  i { font-size: 16px; }
+}
+
+/* Table Card */
+.table-card {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+  overflow: hidden;
+  position: relative;
+}
+
+.loading-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(255,255,255,0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+.loading-icon {
+  font-size: 40px;
+  color: #c0392b;
+}
+
+.log-table {
+  width: 100%;
+}
+
+.mat-mdc-header-row {
+  background: #f8f9fa;
+}
+
+.mat-mdc-header-cell {
+  font-size: 12px;
+  font-weight: 700;
+  color: #7f8c8d;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 2px solid #e8e8e8;
+  padding: 14px 16px;
+}
+
+.mat-mdc-cell {
+  font-size: 13.5px;
+  color: #2c3e50;
+  padding: 12px 16px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.mat-mdc-row:hover .mat-mdc-cell {
+  background: #fef9f8;
+}
+
+/* User cell */
+.user-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.user-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #c0392b 0%, #a93226 100%);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+/* Action chips */
+.action-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12.5px;
+  font-weight: 600;
+  i { font-size: 14px; }
+}
+
+.chip-add    { background: #e8f8f0; color: #1a7a45; }
+.chip-update { background: #fff3e0; color: #e65100; }
+.chip-delete { background: #fde8e8; color: #c0392b; }
+.chip-assign { background: #e8f0fe; color: #1a56db; }
+.chip-default { background: #f0f0f0; color: #555; }
+
+/* Date cell */
+.date-cell {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #7f8c8d;
+  font-size: 13px;
+  i { font-size: 15px; }
+}
+
+/* Page cell */
+.page-cell {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 13px;
+  color: #2c3e50;
+  font-weight: 500;
+}
+
+.page-icon {
+  font-size: 16px;
+  color: #7f8c8d;
+}
+
+/* Action cell */
+.action-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.action-verb-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 9px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  width: fit-content;
+  i { font-size: 13px; }
+}
+
+.action-detail {
+  font-size: 12px;
+  color: #7f8c8d;
+  padding-left: 2px;
+}
+
+/* No data */
+.no-data-cell {
+  text-align: center;
+  padding: 40px !important;
+  color: #7f8c8d;
+  font-size: 14px;
+  i { font-size: 18px; margin-right: 6px; vertical-align: middle; }
+}

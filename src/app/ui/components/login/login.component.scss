@@ -1,1 +1,40 @@
 @import '../auth-styles';
+
+.auth-register-box {
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.auth-register-text {
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 13px;
+}
+
+.auth-register-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  padding: 7px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.25s ease;
+  letter-spacing: 0.3px;
+
+  i { font-size: 16px; }
+
+  &:hover {
+    background: rgba(192, 57, 43, 0.7);
+    border-color: rgba(192, 57, 43, 0.8);
+    box-shadow: 0 4px 14px rgba(192, 57, 43, 0.35);
+    transform: translateY(-1px);
+  }
+}

@@ -117,6 +117,7 @@ export class UserComponent extends BaseComponent implements OnInit {
   async openUpdateUserDialog(userData: any, id: any): Promise<void>  {
     const dialogRef = await this.dialog.open(UserUpdateDialogComponent, {
       width: '500px',
+      panelClass: 'no-padding-dialog',
       data: {
         userId: id,
         email: userData.email,
@@ -126,24 +127,16 @@ export class UserComponent extends BaseComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result && result.success) {
-      } else if (result && result.error) {
+        this.getUser(this.userId);
       }
     });
   }
 
   openUpdatePasswordDialog(id: any) {
-    this.dialogService.openDialog({
-      componentType: UserPasswordUpdateComponent,
-      data: { userId: id },
-      options: {
-        width: '400px',
-      },
-      afterClosed: () => {
-        this.alertifyService.message('Şifre güncelleme işlemi tamamlandı.', {
-          messageType: MessageType.Success,
-          position: Position.TopRight,
-        });
-      },
+    this.dialog.open(UserPasswordUpdateComponent, {
+      width: '460px',
+      panelClass: 'no-padding-dialog',
+      data: { userId: id }
     });
   }
 

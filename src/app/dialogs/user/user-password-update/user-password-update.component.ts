@@ -15,21 +15,18 @@ export class UserPasswordUpdateComponent extends BaseDialog<UserPasswordUpdateCo
   passwordForm: FormGroup;
 
   constructor(dialogRef: MatDialogRef<UserPasswordUpdateComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: {
-      userId: string;
-      password?: string;
-      passwordConfirm?: string;
-    },
+    @Inject(MAT_DIALOG_DATA) public data: { userId: string },
     private alertifyService: AlertifyService,
     private userService: UserService,
-    private fb: FormBuilder) 
-    {
-      super(dialogRef);
-      this.passwordForm = this.fb.group({
-        password: ['', [Validators.required, strongPasswordValidator()]],
-        passwordConfirm: ['', [Validators.required, passwordMatchValidator('password')]]
-      });
-    }
+    private fb: FormBuilder)
+  {
+    super(dialogRef);
+    this.passwordForm = this.fb.group({
+      currentPassword: ['', [Validators.required]],
+      password: ['', [Validators.required, strongPasswordValidator()]],
+      passwordConfirm: ['', [Validators.required, passwordMatchValidator('password')]]
+    });
+  }
 
   ngOnInit(): void {}
 
@@ -38,30 +35,29 @@ export class UserPasswordUpdateComponent extends BaseDialog<UserPasswordUpdateCo
       Object.keys(this.passwordForm.controls).forEach(key => {
         this.passwordForm.get(key)?.markAsTouched();
       });
-      
-      if (this.passwordForm.hasError('passwordMatch', 'passwordConfirm')) {
-        this.alertifyService.message("Şifreler eşleşmiyor!", {
+      return;
+    }
+
+    const { currentPassword, password, passwordConfirm } = this.passwordForm.value;
+
+    await this.userService.updatePassword(
+      this.data.userId,
+      currentPassword.trim(),
+      password.trim(),
+      passwordConfirm.trim(),
+      () => {
+        this.alertifyService.message('Şifre başarıyla güncellendi.', {
+          messageType: MessageType.Success,
+          position: Position.TopRight
+        });
+        this.dialogRef.close({ success: true });
+      },
+      error => {
+        this.alertifyService.message('Mevcut şifre hatalı veya bir sorun oluştu.', {
           messageType: MessageType.Error,
           position: Position.TopRight
         });
       }
-      return;
-    }
-
-    const formValue = this.passwordForm.value;
-    const password = formValue.password.trim();
-    const passwordConfirm = formValue.passwordConfirm.trim();
-
-    await this.userService.updatePassword(this.data.userId, password, passwordConfirm,
-      () => {
-        this.alertifyService.message("Şifre başarıyla güncellenmiştir.", {
-          messageType: MessageType.Success,
-          position: Position.TopRight
-        });
-        this.dialogRef.close(this.data);
-      },
-      error => {
-        // Error handled by interceptor
-      });
+    );
   }
 }

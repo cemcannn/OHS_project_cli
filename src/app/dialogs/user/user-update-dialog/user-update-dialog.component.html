@@ -1,33 +1,55 @@
-<h1 mat-dialog-title>Kullanıcı Bilgilerini Güncelle:</h1>
-<div mat-dialog-content>
-  <form #userForm="ngForm">
-    <mat-form-field appearance="fill" class="field">
-        <mat-label>E-mail Adresi</mat-label>
-        <input matInput type="text" name="email" [(ngModel)]="data.email">
-        <mat-error *ngIf="userForm.controls['email'].invalid && (userForm.controls['email'].dirty || userForm.controls['email'].touched)">
-          <span *ngIf="userForm.controls['email'].errors?.required">E-mail adresi gereklidir.</span>
-        </mat-error>
+<div class="dlg-wrapper">
+
+  <!-- Header -->
+  <div class="dlg-header">
+    <div class="dlg-header-left">
+      <i class="mdi mdi-account-edit dlg-icon"></i>
+      <div>
+        <h2>Kullanıcı Bilgilerini Güncelle</h2>
+        <p>Hesap bilgilerinizi düzenleyin</p>
+      </div>
+    </div>
+    <button mat-icon-button class="dlg-close" (click)="close()">
+      <i class="mdi mdi-close"></i>
+    </button>
+  </div>
+
+  <!-- Content -->
+  <div class="dlg-content">
+    <form [formGroup]="userForm">
+
+      <mat-form-field appearance="outline" class="form-field">
+        <mat-label>Ad Soyad</mat-label>
+        <input matInput formControlName="name" placeholder="Ad ve soyadınız">
+        <mat-error *ngIf="userForm.get('name')?.hasError('required')">İsim gereklidir.</mat-error>
+        <mat-error *ngIf="userForm.get('name')?.hasError('minlength')">En az 2 karakter giriniz.</mat-error>
       </mat-form-field>
 
-    <mat-form-field appearance="fill" class="field">
-      <mat-label>İsim</mat-label>
-      <input matInput type="text" name="name" [(ngModel)]="data.name">
-      <mat-error *ngIf="userForm.controls['name'].invalid && (userForm.controls['name'].dirty || userForm.controls['name'].touched)">
-        <span *ngIf="userForm.controls['name'].errors?.required">İsim gereklidir.</span>
-      </mat-error>
-    </mat-form-field>
+      <mat-form-field appearance="outline" class="form-field">
+        <mat-label>Kullanıcı Adı</mat-label>
+        <input matInput formControlName="userName" placeholder="Kullanıcı adınız">
+        <mat-error *ngIf="userForm.get('userName')?.hasError('required')">Kullanıcı adı gereklidir.</mat-error>
+        <mat-error *ngIf="userForm.get('userName')?.hasError('invalidUsername')">Geçerli bir kullanıcı adı giriniz.</mat-error>
+      </mat-form-field>
 
-    <mat-form-field appearance="fill" class="field">
-      <mat-label>Kulllanıcı Adı</mat-label>
-      <input matInput type="text" name="userName" [(ngModel)]="data.userName">
-      <mat-error *ngIf="userForm.controls['userName'].invalid && (userForm.controls['userName'].dirty || userForm.controls['userName'].touched)">
-        <span *ngIf="userForm.controls['userName'].errors?.required">Kullanıcı adı gereklidir.</span>
-      </mat-error>
-    </mat-form-field>
-  </form>
-</div>
-<div mat-dialog-actions>
-  <button mat-button (click)="close()">İptal</button>
-  <button mat-raised-button color="primary" [disabled]="userForm.invalid"
-    (click)="updateUser()">Güncelle</button>
+      <mat-form-field appearance="outline" class="form-field">
+        <mat-label>E-posta Adresi</mat-label>
+        <input matInput formControlName="email" placeholder="E-posta adresiniz">
+        <mat-error *ngIf="userForm.get('email')?.hasError('required')">E-posta gereklidir.</mat-error>
+        <mat-error *ngIf="userForm.get('email')?.hasError('invalidEmail')">Geçerli bir e-posta adresi giriniz.</mat-error>
+      </mat-form-field>
+
+    </form>
+  </div>
+
+  <!-- Footer -->
+  <div class="dlg-footer">
+    <button mat-stroked-button class="footer-cancel" (click)="close()">
+      <i class="mdi mdi-close"></i> İptal
+    </button>
+    <button mat-raised-button class="footer-submit" [disabled]="userForm.invalid" (click)="updateUser()">
+      <i class="mdi mdi-content-save"></i> Güncelle
+    </button>
+  </div>
+
 </div>

@@ -32,6 +32,12 @@ export class AppComponent implements OnInit {
   completion: any;
   profilePhoto: string | null = null;
   userName: string | null = null;
+  isAuthPage: boolean = false;
+
+  private readonly authPaths = ['/login', '/register', '/update-password'];
+  private checkAuthPage(url: string): boolean {
+    return this.authPaths.some(p => url.startsWith(p));
+  }
 
   constructor(
     public authService: AuthService,
@@ -42,13 +48,15 @@ export class AppComponent implements OnInit {
     private userService: UserService,
   ) {
     authService.identityCheck();
+    this.isAuthPage = this.checkAuthPage(this.router.url);
   }
 
   async ngOnInit(): Promise<void> {
     // Rota değişimlerini dinle — giriş sonrası fotoğrafı yükle
     this.router.events.pipe(
       filter(e => e instanceof NavigationEnd)
-    ).subscribe(() => {
+    ).subscribe((e: NavigationEnd) => {
+      this.isAuthPage = this.checkAuthPage(e.urlAfterRedirects);
       if (this.authService.isAuthenticated) {
         this.loadProfilePhoto();
       } else {
