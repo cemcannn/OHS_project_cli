@@ -22,6 +22,8 @@ import {
 } from '../../services/admin/alertify.service';
 import { DialogService } from '../../services/common/dialog.service';
 import { HttpClientService } from '../../services/common/http-client.service';
+import { AuthService } from '../../services/common/auth.service';
+import { CustomToastrService, ToastrMessageType, ToastrPosition } from '../../services/ui/custom-toastr.service';
 
 declare var $: any;
 
@@ -36,7 +38,9 @@ export class DeleteDirective {
     private spinner: NgxSpinnerService,
     public dialog: MatDialog,
     private alertifyService: AlertifyService,
-    private dialogService: DialogService
+    private dialogService: DialogService,
+    private authService: AuthService,
+    private toastrService: CustomToastrService
   ) {
     const img = _renderer.createElement('img');
     img.setAttribute('src', '../../../../../assets/icons/delete.png');
@@ -52,6 +56,15 @@ export class DeleteDirective {
 
   @HostListener('click')
   async onclick() {
+    this.authService.identityCheck();
+    if (!this.authService.canModifyData) {
+      this.toastrService.message('Bu işlemi yapmaya yetkiniz bulunmamaktadır!', 'Yetkisiz işlem!', {
+        messageType: ToastrMessageType.Warning,
+        position: ToastrPosition.TopRight
+      });
+      return;
+    }
+
     this.dialogService.openDialog({
       componentType: DeleteDialogComponent,
       data: DeleteState.Yes,

@@ -11,6 +11,8 @@ import { AccidentUpdateDialogComponent } from 'src/app/dialogs/accident/accident
 import { AlertifyService, MessageType, Position } from 'src/app/services/admin/alertify.service';
 import { AccidentFilterService } from 'src/app/services/common/accident-filter.service';
 import { AccidentService } from 'src/app/services/common/models/accident.service';
+import { AuthService } from 'src/app/services/common/auth.service';
+import { CustomToastrService, ToastrMessageType, ToastrPosition } from 'src/app/services/ui/custom-toastr.service';
 
 
 @Component({
@@ -39,8 +41,23 @@ export class ListComponent extends BaseComponent implements OnInit, AfterViewIni
     private accidentFilterService: AccidentFilterService,
     private alertifyService: AlertifyService,
     private dialog: MatDialog,
+    private authService: AuthService,
+    private toastrService: CustomToastrService,
   ) {
     super(spinner);
+  }
+
+  private blockUnauthorizedWriteAction(): boolean {
+    this.authService.identityCheck();
+
+    if (this.authService.canModifyData)
+      return false;
+
+    this.toastrService.message('Bu işlemi yapmaya yetkiniz bulunmamaktadır!', 'Yetkisiz işlem!', {
+      messageType: ToastrMessageType.Warning,
+      position: ToastrPosition.TopRight,
+    });
+    return true;
   }
 
   async pageChanged() {
@@ -107,6 +124,9 @@ export class ListComponent extends BaseComponent implements OnInit, AfterViewIni
   } 
   
   async openUpdateAccidentDialog(accidentData: any): Promise<void> {
+    if (this.blockUnauthorizedWriteAction())
+      return;
+
     const dialogRef = await this.dialog.open(AccidentUpdateDialogComponent, {
       width: '500px',
       data: accidentData

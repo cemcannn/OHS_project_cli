@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { DashboardComponent } from './admin/components/dashboard/dashboard.component';
 import { AuthGuard } from './guards/common/auth.guard';
+import { SuperAdminGuard } from './guards/common/super-admin.guard';
 import { LayoutComponent } from './admin/layout/layout.component';
 import { LayoutComponent as UiLayoutComponent } from './ui/layout/layout.component';
 import { HomeComponent } from './ui/components/home/home.component';
@@ -9,13 +10,13 @@ import { HomeComponent } from './ui/components/home/home.component';
 const routes: Routes = [
   {
     path: "admin", component: LayoutComponent, children: [
-      { path: "", component: DashboardComponent, canActivate: [AuthGuard] },
-      { path: "authorize-menu", loadChildren: () => import("./admin/components/authorize-menu/authorize-menu.module").then(module => module.AuthorizeMenuModule), canActivate: [AuthGuard] },
-      { path: "roles", loadChildren: () => import("./admin/components/role/role.module").then(module => module.RoleModule), canActivate: [AuthGuard] },
-      { path: "users", loadChildren: () => import("./admin/components/user/user.module").then(module => module.UserModule), canActivate: [AuthGuard] },
-      { path: "definition", loadChildren: () => import("./ui/components/definition/definition.module").then(module => module.DefinitionModule), canActivate: [AuthGuard] },
-      { path: "audit-log", loadChildren: () => import("./admin/components/audit-log/audit-log.module").then(module => module.AuditLogModule), canActivate: [AuthGuard] },
-    ], canActivate: [AuthGuard]
+      { path: "", component: DashboardComponent, canActivate: [AuthGuard, SuperAdminGuard] },
+      { path: "authorize-menu", loadChildren: () => import("./admin/components/authorize-menu/authorize-menu.module").then(module => module.AuthorizeMenuModule), canActivate: [AuthGuard, SuperAdminGuard] },
+      { path: "roles", loadChildren: () => import("./admin/components/role/role.module").then(module => module.RoleModule), canActivate: [AuthGuard, SuperAdminGuard] },
+      { path: "users", loadChildren: () => import("./admin/components/user/user.module").then(module => module.UserModule), canActivate: [AuthGuard, SuperAdminGuard] },
+      { path: "definition", loadChildren: () => import("./ui/components/definition/definition.module").then(module => module.DefinitionModule), canActivate: [AuthGuard, SuperAdminGuard] },
+      { path: "audit-log", loadChildren: () => import("./admin/components/audit-log/audit-log.module").then(module => module.AuditLogModule), canActivate: [AuthGuard, SuperAdminGuard] },
+    ], canActivate: [AuthGuard, SuperAdminGuard]
   },
   // Auth sayfaları — layout yok
   { path: "login", loadChildren: () => import("./ui/components/login/login.module").then(module => module.LoginModule) },

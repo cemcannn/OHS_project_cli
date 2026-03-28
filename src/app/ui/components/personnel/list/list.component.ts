@@ -13,6 +13,8 @@ import { AccidentListComponent } from 'src/app/dialogs/accident/accident-list/ac
 import { PersonnelUpdateDialogComponent } from 'src/app/dialogs/personnel/personnel-update-dialog/personnel-update-dialog.component';
 import { AccidentAddComponent } from 'src/app/dialogs/accident/accident-add-dialog/accident-add.component';
 import { PersonnelAddDialogComponent } from 'src/app/dialogs/personnel/personnel-add-dialog/personnel-add-dialog.component';
+import { AuthService } from 'src/app/services/common/auth.service';
+import { CustomToastrService, ToastrMessageType, ToastrPosition } from 'src/app/services/ui/custom-toastr.service';
 
 
 @Component({
@@ -35,9 +37,24 @@ export class ListComponent extends BaseComponent implements OnInit, AfterViewIni
     private personnelService: PersonnelService,
     private personnelFilterService: PersonnelFilterService,
     private alertifyService: AlertifyService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private authService: AuthService,
+    private toastrService: CustomToastrService
   ) {
     super(spinner);
+  }
+
+  private blockUnauthorizedWriteAction(): boolean {
+    this.authService.identityCheck();
+
+    if (this.authService.canModifyData)
+      return false;
+
+    this.toastrService.message('Bu işlemi yapmaya yetkiniz bulunmamaktadır!', 'Yetkisiz işlem!', {
+      messageType: ToastrMessageType.Warning,
+      position: ToastrPosition.TopRight,
+    });
+    return true;
   }
 
   async pageChanged() {
@@ -108,6 +125,9 @@ export class ListComponent extends BaseComponent implements OnInit, AfterViewIni
   }  
 
   async openPersonnelAddDialog(): Promise<void> {
+    if (this.blockUnauthorizedWriteAction())
+      return;
+
     const dialogRef = this.dialog.open(PersonnelAddDialogComponent, {
       width: '540px',
     });
@@ -120,6 +140,9 @@ export class ListComponent extends BaseComponent implements OnInit, AfterViewIni
   }
 
   async openAccidentAddDialog(id: number): Promise<void> {
+    if (this.blockUnauthorizedWriteAction())
+      return;
+
     const dialogRef = this.dialog.open(AccidentAddComponent, {
       width: '520px',
       data: { personnelId: id }
@@ -133,6 +156,9 @@ export class ListComponent extends BaseComponent implements OnInit, AfterViewIni
   }
 
   async openPersonnelUpdateDialog(personnelData: any): Promise<void> {
+    if (this.blockUnauthorizedWriteAction())
+      return;
+
     const dialogRef = await this.dialog.open(PersonnelUpdateDialogComponent, {
       width: '540px',
       panelClass: 'no-padding-dialog',

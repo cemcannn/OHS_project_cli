@@ -75,14 +75,14 @@
 
           <li class="sidebar-item">
             <a class="sidebar-link" routerLink="data-import" routerLinkActive="active">
-              <i class="mdi mdi-database-import-outline"></i>
+              <i class="mdi mdi-database-plus"></i>
               <span>Veri Güncelle</span>
             </a>
           </li>
 
-          <li class="sidebar-item" *ngIf="authService.isAuthenticated">
+          <li class="sidebar-item" *ngIf="authService.canAccessAdminPanel">
             <a class="sidebar-link" routerLink="admin" routerLinkActive="active">
-              <i class="mdi mdi-shield-account"></i>
+              <i class="mdi mdi-shield"></i>
               <span>Admin</span>
             </a>
           </li>

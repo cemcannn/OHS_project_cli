@@ -9,6 +9,8 @@ import { ShowLimbDialogComponent } from 'src/app/dialogs/definition/show-limb-di
 import { ShowProfessionDialogComponent } from 'src/app/dialogs/definition/show-profession-dialog/show-profession-dialog.component';
 import { ShowTypeOfAccidentDialogComponent } from 'src/app/dialogs/definition/show-type-of-accident-dialog/show-type-of-accident-dialog.component';
 import { AlertifyService } from 'src/app/services/admin/alertify.service';
+import { AuthService } from 'src/app/services/common/auth.service';
+import { CustomToastrService, ToastrMessageType, ToastrPosition } from 'src/app/services/ui/custom-toastr.service';
 
 @Component({
   selector: 'app-definition',
@@ -19,12 +21,30 @@ export class DefinitionComponent implements OnInit {
   constructor(
     private alertify: AlertifyService,
     private dialog: MatDialog,
-  private activatedRoute: ActivatedRoute) {}
+    private activatedRoute: ActivatedRoute,
+    private authService: AuthService,
+    private toastrService: CustomToastrService) {}
+
+  private blockUnauthorizedWriteAction(): boolean {
+    this.authService.identityCheck();
+
+    if (this.authService.canModifyData)
+      return false;
+
+    this.toastrService.message('Bu işlemi yapmaya yetkiniz bulunmamaktadır!', 'Yetkisiz işlem!', {
+      messageType: ToastrMessageType.Warning,
+      position: ToastrPosition.TopRight,
+    });
+    return true;
+  }
 
   ngOnInit(): void {
   }
 
   async showTypeOfAccidentDialog(typeOfAccidentData: any): Promise<void> {
+    if (this.blockUnauthorizedWriteAction())
+      return;
+
     const dialogRef = await this.dialog.open(ShowTypeOfAccidentDialogComponent, {
       width: '860px',
       data: typeOfAccidentData
@@ -38,6 +58,9 @@ export class DefinitionComponent implements OnInit {
   }
 
   async showLimbDialog(limbData: any): Promise<void> {
+    if (this.blockUnauthorizedWriteAction())
+      return;
+
     const dialogRef = await this.dialog.open(ShowLimbDialogComponent, {
       width: '860px',
       data: limbData
@@ -51,6 +74,9 @@ export class DefinitionComponent implements OnInit {
   }
 
   async showProfessionDialog(professionData: any): Promise<void> {
+    if (this.blockUnauthorizedWriteAction())
+      return;
+
     const dialogRef = await this.dialog.open(ShowProfessionDialogComponent, {
       width: '860px',
       data: professionData
@@ -64,6 +90,9 @@ export class DefinitionComponent implements OnInit {
   }
 
   async showAccidentAreaDialog(accidentAreaData: any): Promise<void> {
+    if (this.blockUnauthorizedWriteAction())
+      return;
+
     const dialogRef = await this.dialog.open(ShowAccidentAreaDialogComponent, {
       width: '860px',
       data: accidentAreaData
@@ -77,6 +106,9 @@ export class DefinitionComponent implements OnInit {
   }
 
   async showDirectorateDialog(directorateData: any): Promise<void> {
+    if (this.blockUnauthorizedWriteAction())
+      return;
+
     const dialogRef = await this.dialog.open(ShowDirectorateDialogComponent, {
       width: '860px',
       data: directorateData

@@ -16,8 +16,23 @@ export class HttpErrorHandlerInterceptorService implements HttpInterceptor {
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     this.spinner.show(); // Spinner'ı her istek öncesi gösteriyoruz
+    const isLoginRequest = req.url.toLowerCase().includes('/auth/login');
     
     return next.handle(req).pipe(catchError(error => {
+      if (isLoginRequest && (
+        error.status === HttpStatusCode.Unauthorized ||
+        error.status === HttpStatusCode.BadRequest ||
+        error.status === HttpStatusCode.InternalServerError
+      )) {
+        this.toastrService.message("Kullanıcı adı veya şifre hatalı.", "Giriş başarısız!", {
+          messageType: ToastrMessageType.Warning,
+          position: ToastrPosition.TopRight
+        });
+
+        this.spinner.hide(SpinnerType.BallAtom);
+        return of(error);
+      }
+
       switch (error.status) {
         case HttpStatusCode.Unauthorized:
 
@@ -35,11 +50,6 @@ export class HttpErrorHandlerInterceptorService implements HttpInterceptor {
                   position: ToastrPosition.BottomFullWidth
                 });
             }
-          }).then(data => {
-            this.toastrService.message("Bu işlemi yapmaya yetkiniz bulunmamaktadır!", "Yetkisiz işlem!", {
-              messageType: ToastrMessageType.Warning,
-              position: ToastrPosition.BottomFullWidth
-            });
           });
           break;
         case HttpStatusCode.InternalServerError:
