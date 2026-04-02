@@ -10,19 +10,27 @@ import { TypeOfAccidentService } from 'src/app/services/common/models/type-of-ac
 import { Create_Type_Of_Accident } from 'src/app/contracts/definitions/type_of_accident/create_type_of_accident';
 import { Update_Type_Of_Accident } from 'src/app/contracts/definitions/type_of_accident/update_type_of_accident';
 
+interface TypeOfAccidentVm extends List_Type_Of_Accident {
+  code?: string;
+  plainDescription: string;
+}
+
 @Component({
   selector: 'app-show-type-of-accident-dialog',
   templateUrl: './show-type-of-accident-dialog.component.html',
   styleUrls: ['./show-type-of-accident-dialog.component.scss']
 })
 export class ShowTypeOfAccidentDialogComponent extends BaseDialog<ShowTypeOfAccidentDialogComponent> implements OnInit {
-  displayedColumns: string[] = ['name', 'actions'];
-  dataSource: MatTableDataSource<List_Type_Of_Accident> = new MatTableDataSource<List_Type_Of_Accident>();
+  private readonly codePrefix = '__code__:';
+
+  displayedColumns: string[] = ['code', 'name', 'description', 'actions'];
+  dataSource: MatTableDataSource<TypeOfAccidentVm> = new MatTableDataSource<TypeOfAccidentVm>();
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
   editIndex: number | null = null;
+  newTypeOfAccidentCode: string = '';
   newTypeOfAccident: string = '';
   newTypeOfAccidentDescription: string = '';
 
@@ -47,7 +55,7 @@ export class ShowTypeOfAccidentDialogComponent extends BaseDialog<ShowTypeOfAcci
   async showTypeOfAccidents(): Promise<void> {
     try {
       const allTypeOfAccidents = await this.typeOfAccidentService.getTypeOfAccidents();
-      this.dataSource.data = allTypeOfAccidents.datas;
+      this.dataSource.data = allTypeOfAccidents.datas.map(item => this.toVm(item));
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
     } catch (error) {
@@ -57,17 +65,24 @@ export class ShowTypeOfAccidentDialogComponent extends BaseDialog<ShowTypeOfAcci
     }
   }
 
-  selectTypeOfAccident(accident: List_Type_Of_Accident): void {
+  selectTypeOfAccident(accident: TypeOfAccidentVm): void {
     if (this.data.isPicker) this.dialogRef.close(accident);
   }
 
   startEdit(index: number): void { this.editIndex = index; }
 
-  async saveEdit(element: List_Type_Of_Accident): Promise<void> {
+  async saveEdit(element: TypeOfAccidentVm): Promise<void> {
+    if (this.hasCodeConflict(element.code, element.id)) {
+      this.alertifyService.message('Bu kod başka bir kayıt ile eşleşiyor. Lütfen farklı bir kod girin.', {
+        dismissOthers: true, messageType: MessageType.Warning, position: Position.TopRight
+      });
+      return;
+    }
+
     const updatedTypeOfAccident: Update_Type_Of_Accident = {
       id: element.id,
       name: element.name,
-      description: element.description
+      description: this.encodeDescription(element.code, element.plainDescription)
     };
     try {
       await this.typeOfAccidentService.updateTypeOfAccident(updatedTypeOfAccident);
@@ -86,15 +101,23 @@ export class ShowTypeOfAccidentDialogComponent extends BaseDialog<ShowTypeOfAcci
   cancelEdit(): void { this.editIndex = null; }
 
   async createTypeOfAccident(): Promise<void> {
+    if (this.hasCodeConflict(this.newTypeOfAccidentCode)) {
+      this.alertifyService.message('Bu kod başka bir kayıt ile eşleşiyor. Lütfen farklı bir kod girin.', {
+        dismissOthers: true, messageType: MessageType.Warning, position: Position.TopRight
+      });
+      return;
+    }
+
     const newTypeOfAccident: Create_Type_Of_Accident = {
       name: this.newTypeOfAccident,
-      description: this.newTypeOfAccidentDescription
+      description: this.encodeDescription(this.newTypeOfAccidentCode, this.newTypeOfAccidentDescription)
     };
     try {
       await this.typeOfAccidentService.createTypeOfAccident(newTypeOfAccident);
       this.alertifyService.message('Kaza türü başarıyla oluşturuldu.', {
         dismissOthers: true, messageType: MessageType.Success, position: Position.TopRight
       });
+      this.newTypeOfAccidentCode = '';
       this.newTypeOfAccident = '';
       this.newTypeOfAccidentDescription = '';
       await this.showTypeOfAccidents();
@@ -109,5 +132,54 @@ export class ShowTypeOfAccidentDialogComponent extends BaseDialog<ShowTypeOfAcci
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
     if (this.dataSource.paginator) this.dataSource.paginator.firstPage();
+  }
+
+  private toVm(item: List_Type_Of_Accident): TypeOfAccidentVm {
+    const decoded = this.decodeDescription(item.description);
+    return {
+      ...item,
+      code: decoded.code,
+      plainDescription: decoded.description,
+      description: item.description
+    };
+  }
+
+  private encodeDescription(code: string | undefined, description: string | undefined): string {
+    const cleanCode = (code ?? '').trim();
+    const cleanDescription = description ?? '';
+    if (!cleanCode) {
+      return cleanDescription;
+    }
+    return `${this.codePrefix}${cleanCode}\n${cleanDescription}`;
+  }
+
+  private decodeDescription(raw: string | undefined): { code?: string; description: string } {
+    const value = raw ?? '';
+    if (!value.startsWith(this.codePrefix)) {
+      return { description: value };
+    }
+
+    const body = value.substring(this.codePrefix.length);
+    const lineBreakIndex = body.indexOf('\n');
+    if (lineBreakIndex === -1) {
+      return { code: body.trim(), description: '' };
+    }
+
+    return {
+      code: body.substring(0, lineBreakIndex).trim(),
+      description: body.substring(lineBreakIndex + 1)
+    };
+  }
+
+  private hasCodeConflict(code: string | undefined, currentId?: string): boolean {
+    const cleanCode = (code ?? '').trim().toLowerCase();
+    if (!cleanCode) {
+      return false;
+    }
+
+    return this.dataSource.data.some(item =>
+      item.id !== currentId &&
+      (item.code ?? '').trim().toLowerCase() === cleanCode
+    );
   }
 }

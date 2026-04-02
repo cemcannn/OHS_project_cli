@@ -38,22 +38,48 @@
   <div class="dlg-table-wrap">
     <table mat-table [dataSource]="dataSource" matSort class="dlg-table">
 
-      <ng-container matColumnDef="profession">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Meslek / Açıklama</th>
+      <ng-container matColumnDef="code">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Kod</th>
         <td mat-cell *matCellDef="let element; let i = index">
           <ng-container *ngIf="editIndex === i; else readMode">
+            <mat-form-field appearance="outline" class="inline-field">
+              <mat-label>Kod</mat-label>
+              <input matInput [(ngModel)]="element.code" placeholder="Kod girin">
+            </mat-form-field>
+          </ng-container>
+          <ng-template #readMode>
+            {{ element.code || '-' }}
+          </ng-template>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Ad</th>
+        <td mat-cell *matCellDef="let element; let i = index">
+          <ng-container *ngIf="editIndex === i; else nameReadMode">
             <mat-form-field appearance="outline" class="inline-field">
               <mat-label>Ad</mat-label>
               <input matInput [(ngModel)]="element.name">
             </mat-form-field>
+          </ng-container>
+          <ng-template #nameReadMode>
+            <div class="cell-name">{{ element.name }}</div>
+          </ng-template>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="description">
+        <th mat-header-cell *matHeaderCellDef>Açıklama</th>
+        <td mat-cell *matCellDef="let element; let i = index">
+          <ng-container *ngIf="editIndex === i; else descReadMode">
             <mat-form-field appearance="outline" class="inline-field">
               <mat-label>Açıklama</mat-label>
-              <input matInput [(ngModel)]="element.description">
+              <input matInput [(ngModel)]="element.plainDescription">
             </mat-form-field>
           </ng-container>
-          <ng-template #readMode>
-            <div class="cell-name">{{ element.name }}</div>
-            <div class="cell-desc" *ngIf="element.description">{{ element.description }}</div>
+          <ng-template #descReadMode>
+            <div class="cell-desc" *ngIf="element.plainDescription">{{ element.plainDescription }}</div>
+            <div class="cell-desc" *ngIf="!element.plainDescription">-</div>
           </ng-template>
         </td>
       </ng-container>
@@ -117,6 +143,10 @@
       <i class="mdi mdi-plus-circle"></i> Yeni Meslek Ekle
     </div>
     <div class="dlg-add-fields">
+      <mat-form-field appearance="outline" class="add-field">
+        <mat-label>Kod</mat-label>
+        <input matInput [(ngModel)]="newProfessionCode" placeholder="Kod girin">
+      </mat-form-field>
       <mat-form-field appearance="outline" class="add-field">
         <mat-label>Meslek Adı</mat-label>
         <input matInput [(ngModel)]="newProfession" placeholder="Ad girin">

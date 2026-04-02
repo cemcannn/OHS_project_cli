@@ -10,25 +10,33 @@ import { Update_Profession } from 'src/app/contracts/definitions/profession/upda
 import { Create_Profession } from 'src/app/contracts/definitions/profession/create_profession';
 import { ProfessionService } from 'src/app/services/common/models/profession.service';
 
+interface ProfessionVm extends List_Profession {
+  code?: string;
+  plainDescription: string;
+}
+
 @Component({
   selector: 'app-show-profession-dialog',
   templateUrl: './show-profession-dialog.component.html',
   styleUrls: ['./show-profession-dialog.component.scss']
 })
 export class ShowProfessionDialogComponent extends BaseDialog<ShowProfessionDialogComponent> implements OnInit {
-  displayedColumns: string[] = ['profession', 'workType', 'actions'];
-  dataSource: MatTableDataSource<List_Profession> = new MatTableDataSource<List_Profession>();
+  private readonly codePrefix = '__code__:';
+
+  displayedColumns: string[] = ['code', 'name', 'description', 'workType', 'actions'];
+  dataSource: MatTableDataSource<ProfessionVm> = new MatTableDataSource<ProfessionVm>();
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
   editIndex: number | null = null;
+  newProfessionCode: string = '';
   newProfession: string = '';
   newProfessionDescription: string = '';
   newProfessionWorkType: string = 'Yeraltı';
 
   activeTab: 'all' | 'Yeraltı' | 'Yerüstü' = 'all';
-  allProfessions: List_Profession[] = [];
+  allProfessions: ProfessionVm[] = [];
 
   constructor(
     dialogRef: MatDialogRef<ShowProfessionDialogComponent>,
@@ -49,7 +57,7 @@ export class ShowProfessionDialogComponent extends BaseDialog<ShowProfessionDial
   async showProfessions(): Promise<void> {
     try {
       const result = await this.professionService.getProfessions();
-      this.allProfessions = result.datas;
+      this.allProfessions = result.datas.map(item => this.toVm(item));
       this.applyTab(this.activeTab);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
@@ -72,17 +80,24 @@ export class ShowProfessionDialogComponent extends BaseDialog<ShowProfessionDial
       : this.allProfessions.filter(p => p.workType === tab);
   }
 
-  selectProfession(profession: List_Profession): void {
+  selectProfession(profession: ProfessionVm): void {
     if (this.data.isPicker) this.dialogRef.close(profession);
   }
 
   startEdit(index: number): void { this.editIndex = index; }
 
-  async saveEdit(element: List_Profession): Promise<void> {
+  async saveEdit(element: ProfessionVm): Promise<void> {
+    if (this.hasCodeConflict(element.code, element.id)) {
+      this.alertifyService.message('Bu kod başka bir kayıt ile eşleşiyor. Lütfen farklı bir kod girin.', {
+        dismissOthers: true, messageType: MessageType.Warning, position: Position.TopRight
+      });
+      return;
+    }
+
     const updatedProfession: Update_Profession = {
       id: element.id,
       name: element.name,
-      description: element.description,
+      description: this.encodeDescription(element.code, element.plainDescription),
       workType: element.workType
     };
     try {
@@ -102,9 +117,16 @@ export class ShowProfessionDialogComponent extends BaseDialog<ShowProfessionDial
   cancelEdit(): void { this.editIndex = null; }
 
   async createProfession(): Promise<void> {
+    if (this.hasCodeConflict(this.newProfessionCode)) {
+      this.alertifyService.message('Bu kod başka bir kayıt ile eşleşiyor. Lütfen farklı bir kod girin.', {
+        dismissOthers: true, messageType: MessageType.Warning, position: Position.TopRight
+      });
+      return;
+    }
+
     const newProfession: Create_Profession = {
       name: this.newProfession,
-      description: this.newProfessionDescription,
+      description: this.encodeDescription(this.newProfessionCode, this.newProfessionDescription),
       workType: this.newProfessionWorkType
     };
     try {
@@ -112,6 +134,7 @@ export class ShowProfessionDialogComponent extends BaseDialog<ShowProfessionDial
       this.alertifyService.message('Meslek başarıyla oluşturuldu.', {
         dismissOthers: true, messageType: MessageType.Success, position: Position.TopRight
       });
+      this.newProfessionCode = '';
       this.newProfession = '';
       this.newProfessionDescription = '';
       await this.showProfessions();
@@ -130,4 +153,53 @@ export class ShowProfessionDialogComponent extends BaseDialog<ShowProfessionDial
 
   get undergroundCount() { return this.allProfessions.filter(p => p.workType === 'Yeraltı').length; }
   get surfaceCount() { return this.allProfessions.filter(p => p.workType === 'Yerüstü').length; }
+
+  private toVm(item: List_Profession): ProfessionVm {
+    const decoded = this.decodeDescription(item.description);
+    return {
+      ...item,
+      code: decoded.code,
+      plainDescription: decoded.description,
+      description: item.description
+    };
+  }
+
+  private encodeDescription(code: string | undefined, description: string | undefined): string {
+    const cleanCode = (code ?? '').trim();
+    const cleanDescription = description ?? '';
+    if (!cleanCode) {
+      return cleanDescription;
+    }
+    return `${this.codePrefix}${cleanCode}\n${cleanDescription}`;
+  }
+
+  private decodeDescription(raw: string | undefined): { code?: string; description: string } {
+    const value = raw ?? '';
+    if (!value.startsWith(this.codePrefix)) {
+      return { description: value };
+    }
+
+    const body = value.substring(this.codePrefix.length);
+    const lineBreakIndex = body.indexOf('\n');
+    if (lineBreakIndex === -1) {
+      return { code: body.trim(), description: '' };
+    }
+
+    return {
+      code: body.substring(0, lineBreakIndex).trim(),
+      description: body.substring(lineBreakIndex + 1)
+    };
+  }
+
+  private hasCodeConflict(code: string | undefined, currentId?: string): boolean {
+    const cleanCode = (code ?? '').trim().toLowerCase();
+    if (!cleanCode) {
+      return false;
+    }
+
+    return this.allProfessions.some(item =>
+      item.id !== currentId &&
+      (item.code ?? '').trim().toLowerCase() === cleanCode
+    );
+  }
 }

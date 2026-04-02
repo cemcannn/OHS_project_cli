@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { MatDialog } from '@angular/material/dialog';
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +10,7 @@ export class AuthService {
   private checkTokenInterval: any;
   private _roles: string[] = [];
 
-  constructor(private jwtHelper: JwtHelperService, private router: Router) {
+  constructor(private jwtHelper: JwtHelperService, private router: Router, private dialog: MatDialog) {
     this.startTokenExpirationCheck();
   }
 
@@ -53,7 +54,9 @@ export class AuthService {
   }
 
   signOut() {
+    this.dialog.closeAll();
     localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
     _isAuthenticated = false;
     this._roles = [];
     this.router.navigate(['/login']);

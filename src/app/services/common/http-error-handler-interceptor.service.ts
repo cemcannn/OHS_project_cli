@@ -6,13 +6,20 @@ import { catchError, Observable, of, throwError } from 'rxjs';
 import { CustomToastrService, ToastrMessageType, ToastrPosition } from '../ui/custom-toastr.service';
 import { UserAuthService } from './models/user-auth.service';
 import { SpinnerType } from 'src/app/base/base.component';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class HttpErrorHandlerInterceptorService implements HttpInterceptor {
 
-  constructor(private toastrService: CustomToastrService, private userAuthService: UserAuthService, private router: Router, private spinner: NgxSpinnerService) { }
+  constructor(
+    private toastrService: CustomToastrService,
+    private userAuthService: UserAuthService,
+    private authService: AuthService,
+    private router: Router,
+    private spinner: NgxSpinnerService
+  ) { }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     this.spinner.show(); // Spinner'ı her istek öncesi gösteriyoruz
@@ -38,6 +45,7 @@ export class HttpErrorHandlerInterceptorService implements HttpInterceptor {
 
           this.userAuthService.refreshTokenLogin(localStorage.getItem("refreshToken"), (state) => {
             if (!state) {
+              this.authService.signOut();
               const url = this.router.url;
               if (url == "/products")
                 this.toastrService.message("Sepete ürün eklemek için oturum açmanız gerekiyor.", "Oturum açınız!", {
