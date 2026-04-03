@@ -1,1 +1,89 @@
 @import '../dialog-def.scss';
+
+.hierarchy-name {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	width: 100%;
+	cursor: default;
+	user-select: none;
+
+	&.toggleable {
+		cursor: pointer;
+	}
+
+	&.toggleable:hover {
+		color: #a93226;
+	}
+}
+
+.hierarchy-icon {
+	font-size: 14px;
+	color: #7f8c8d;
+}
+
+.hierarchy-toggle {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 26px;
+	height: 26px;
+	margin-right: 4px;
+	color: #7f8c8d;
+
+	i { font-size: 15px; }
+}
+
+.hierarchy-spacer {
+	display: inline-block;
+	width: 26px;
+	height: 26px;
+	margin-right: 4px;
+}
+
+.group-level-switch {
+	display: flex;
+	flex-direction: column;
+	gap: 5px;
+	min-width: 170px;
+}
+
+.toggle-label {
+	font-size: 11.5px;
+	font-weight: 600;
+	color: #7f8c8d;
+	text-transform: uppercase;
+	letter-spacing: 0.4px;
+}
+
+.toggle-buttons {
+	display: flex;
+	gap: 6px;
+}
+
+.toggle-btn {
+	flex: 1;
+	padding: 7px 10px;
+	border: 2px solid #ddd;
+	border-radius: 7px;
+	background: #fff;
+	cursor: pointer;
+	font-size: 12.5px;
+	font-weight: 600;
+	color: #7f8c8d;
+	transition: all 0.2s;
+
+	&:hover { border-color: #bbb; color: #2c3e50; }
+
+	&.top-btn.selected {
+		background: rgba(46, 204, 113, 0.1);
+		border-color: #27ae60;
+		color: #1e8449;
+	}
+
+	&.sub-btn.selected {
+		background: rgba(52, 152, 219, 0.1);
+		border-color: #2980b9;
+		color: #1f618d;
+	}
+}

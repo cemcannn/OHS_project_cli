@@ -1,4 +1,4 @@
-<div class="dlg-wrapper">
+<div class="dlg-wrapper" style="--c1:#16a085; --c2:#117a65; --top-row-tint:10%; --top-row-tint-hover:15%">
 
   <div class="dlg-header" style="--c1:#16a085; --c2:#117a65">
     <div class="dlg-header-left">
@@ -10,6 +10,18 @@
     </div>
     <button mat-icon-button class="dlg-close" mat-dialog-close>
       <i class="mdi mdi-close"></i>
+    </button>
+  </div>
+
+  <div class="group-tabs">
+    <button class="group-tab" [class.active]="activeTab === 'all'" (click)="setTab('all')">
+      Tümü <span class="tab-count">{{ allAccidentAreas.length }}</span>
+    </button>
+    <button class="group-tab underground" [class.active]="activeTab === 'Yeraltı'" (click)="setTab('Yeraltı')">
+      <i class="mdi mdi-shovel"></i> Yeraltı <span class="tab-count">{{ undergroundCount }}</span>
+    </button>
+    <button class="group-tab surface" [class.active]="activeTab === 'Yerüstü'" (click)="setTab('Yerüstü')">
+      <i class="mdi mdi-weather-sunny"></i> Yerüstü <span class="tab-count">{{ surfaceCount }}</span>
     </button>
   </div>
 
@@ -50,7 +62,35 @@
             </mat-form-field>
           </ng-container>
           <ng-template #nameReadMode>
-            <div class="cell-name">{{ element.name }}</div>
+            <div class="cell-name hierarchy-name" [class.toggleable]="hasChildren(element)"
+                 [style.paddingLeft.px]="8 + (element.hierarchyLevel * 18)"
+                 (click)="hasChildren(element) && toggleHierarchyRow(element); $event.stopPropagation()">
+              <span class="hierarchy-toggle" *ngIf="hasChildren(element)">
+                <i class="mdi" [class.mdi-chevron-down]="isExpanded(element)" [class.mdi-chevron-right]="!isExpanded(element)"></i>
+              </span>
+              <span class="hierarchy-spacer" *ngIf="!hasChildren(element)"></span>
+              {{ element.name }}
+            </div>
+          </ng-template>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="parentGroup">
+        <th mat-header-cell *matHeaderCellDef>Üst Grup</th>
+        <td mat-cell *matCellDef="let element; let i = index">
+          <ng-container *ngIf="editIndex === i; else parentReadMode">
+            <mat-form-field appearance="outline" class="inline-field" style="min-width:220px">
+              <mat-label>Üst Grup</mat-label>
+              <mat-select [(ngModel)]="element.parentCode">
+                <mat-option value="">Yok (Ana Grup)</mat-option>
+                <mat-option *ngFor="let parent of getParentOptions(element.workType, element.id)" [value]="parent.code">
+                  {{ parent.code }} - {{ parent.name }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </ng-container>
+          <ng-template #parentReadMode>
+            <div class="cell-desc">{{ getParentLabel(element.parentCode) }}</div>
           </ng-template>
         </td>
       </ng-container>
@@ -67,6 +107,28 @@
           <ng-template #descReadMode>
             <div class="cell-desc" *ngIf="element.plainDescription">{{ element.plainDescription }}</div>
             <div class="cell-desc" *ngIf="!element.plainDescription">-</div>
+          </ng-template>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="workType">
+        <th mat-header-cell *matHeaderCellDef>Çalışma Alanı</th>
+        <td mat-cell *matCellDef="let element; let i = index">
+          <ng-container *ngIf="editIndex === i; else workTypeRead">
+            <mat-form-field appearance="outline" class="inline-field" style="max-width:130px">
+              <mat-label>Grup</mat-label>
+              <mat-select [(ngModel)]="element.workType">
+                <mat-option value="Yeraltı">Yeraltı</mat-option>
+                <mat-option value="Yerüstü">Yerüstü</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </ng-container>
+          <ng-template #workTypeRead>
+            <span class="work-type-badge" [class.underground]="element.workType === 'Yeraltı'" [class.surface]="element.workType === 'Yerüstü'" *ngIf="element.workType">
+              <i class="mdi" [class.mdi-shovel]="element.workType === 'Yeraltı'" [class.mdi-weather-sunny]="element.workType === 'Yerüstü'"></i>
+              {{ element.workType }}
+            </span>
+            <span *ngIf="!element.workType">-</span>
           </ng-template>
         </td>
       </ng-container>
@@ -96,7 +158,9 @@
       </ng-container>
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+          [class.row-top-group]="row.hierarchyLevel === 0"
+          [class.row-sub-group]="row.hierarchyLevel > 0"
           [class.row-picker]="data.isPicker"
           (click)="data.isPicker && selectAccidentArea(row)"></tr>
     </table>
@@ -121,6 +185,45 @@
         <mat-label>Açıklama</mat-label>
         <input matInput [(ngModel)]="newAccidentAreaDescription" placeholder="Kısa açıklama">
       </mat-form-field>
+      <div class="group-level-switch">
+        <label class="toggle-label">Üst Grup mu?</label>
+        <div class="toggle-buttons">
+          <button type="button" class="toggle-btn top-btn"
+                  [class.selected]="newAccidentAreaIsTopGroup"
+                  (click)="newAccidentAreaIsTopGroup = true; newAccidentAreaParentCode = ''">
+            Evet
+          </button>
+          <button type="button" class="toggle-btn sub-btn"
+                  [class.selected]="!newAccidentAreaIsTopGroup"
+                  (click)="newAccidentAreaIsTopGroup = false">
+            Alt Grup
+          </button>
+        </div>
+      </div>
+      <mat-form-field appearance="outline" class="add-field" *ngIf="!newAccidentAreaIsTopGroup">
+        <mat-label>Üst Grup</mat-label>
+        <mat-select [(ngModel)]="newAccidentAreaParentCode">
+          <mat-option value="">Yok (Ana Grup)</mat-option>
+          <mat-option *ngFor="let parent of getParentOptions(newAccidentAreaWorkType)" [value]="parent.code">
+            {{ parent.code }} - {{ parent.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <div class="work-type-toggle">
+        <label class="toggle-label">Çalışma Alanı</label>
+        <div class="toggle-buttons">
+          <button type="button" class="toggle-btn underground-btn"
+                  [class.selected]="newAccidentAreaWorkType === 'Yeraltı'"
+                  (click)="newAccidentAreaWorkType = 'Yeraltı'">
+            <i class="mdi mdi-shovel"></i> Yeraltı
+          </button>
+          <button type="button" class="toggle-btn surface-btn"
+                  [class.selected]="newAccidentAreaWorkType === 'Yerüstü'"
+                  (click)="newAccidentAreaWorkType = 'Yerüstü'">
+            <i class="mdi mdi-weather-sunny"></i> Yerüstü
+          </button>
+        </div>
+      </div>
     </div>
     <button mat-raised-button class="dlg-add-btn" (click)="createAccidentArea()">
       <i class="mdi mdi-plus"></i> Ekle

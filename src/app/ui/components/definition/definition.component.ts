@@ -18,6 +18,12 @@ import { CustomToastrService, ToastrMessageType, ToastrPosition } from 'src/app/
   styleUrls: ['./definition.component.scss']
 })
 export class DefinitionComponent implements OnInit {
+  private readonly definitionDialogConfig = {
+    width: '94vw',
+    maxWidth: '1320px',
+    maxHeight: '92vh'
+  };
+
   constructor(
     private alertify: AlertifyService,
     private dialog: MatDialog,
@@ -46,7 +52,7 @@ export class DefinitionComponent implements OnInit {
       return;
 
     const dialogRef = await this.dialog.open(ShowTypeOfAccidentDialogComponent, {
-      width: '860px',
+      ...this.definitionDialogConfig,
       data: typeOfAccidentData
     });
 
@@ -62,7 +68,7 @@ export class DefinitionComponent implements OnInit {
       return;
 
     const dialogRef = await this.dialog.open(ShowLimbDialogComponent, {
-      width: '860px',
+      ...this.definitionDialogConfig,
       data: limbData
     });
 
@@ -78,7 +84,7 @@ export class DefinitionComponent implements OnInit {
       return;
 
     const dialogRef = await this.dialog.open(ShowProfessionDialogComponent, {
-      width: '860px',
+      ...this.definitionDialogConfig,
       data: professionData
     });
 
@@ -94,7 +100,7 @@ export class DefinitionComponent implements OnInit {
       return;
 
     const dialogRef = await this.dialog.open(ShowAccidentAreaDialogComponent, {
-      width: '860px',
+      ...this.definitionDialogConfig,
       data: accidentAreaData
     });
 
@@ -110,7 +116,7 @@ export class DefinitionComponent implements OnInit {
       return;
 
     const dialogRef = await this.dialog.open(ShowDirectorateDialogComponent, {
-      width: '860px',
+      ...this.definitionDialogConfig,
       data: directorateData
     });
 

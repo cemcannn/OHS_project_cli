@@ -12,6 +12,8 @@ import { ProfessionService } from 'src/app/services/common/models/profession.ser
 
 interface ProfessionVm extends List_Profession {
   code?: string;
+  parentCode?: string;
+  hierarchyLevel: number;
   plainDescription: string;
 }
 
@@ -22,8 +24,9 @@ interface ProfessionVm extends List_Profession {
 })
 export class ShowProfessionDialogComponent extends BaseDialog<ShowProfessionDialogComponent> implements OnInit {
   private readonly codePrefix = '__code__:';
+  private readonly parentCodePrefix = '__parent_code__:';
 
-  displayedColumns: string[] = ['code', 'name', 'description', 'workType', 'actions'];
+  displayedColumns: string[] = ['code', 'name', 'parentGroup', 'description', 'workType', 'actions'];
   dataSource: MatTableDataSource<ProfessionVm> = new MatTableDataSource<ProfessionVm>();
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -34,6 +37,9 @@ export class ShowProfessionDialogComponent extends BaseDialog<ShowProfessionDial
   newProfession: string = '';
   newProfessionDescription: string = '';
   newProfessionWorkType: string = 'Yeraltı';
+  newProfessionParentCode: string = '';
+  newProfessionIsTopGroup: boolean = true;
+  private expandedGroupIds = new Set<string>();
 
   activeTab: 'all' | 'Yeraltı' | 'Yerüstü' = 'all';
   allProfessions: ProfessionVm[] = [];
@@ -75,9 +81,42 @@ export class ShowProfessionDialogComponent extends BaseDialog<ShowProfessionDial
   }
 
   private applyTab(tab: 'all' | 'Yeraltı' | 'Yerüstü') {
-    this.dataSource.data = tab === 'all'
+    const filtered = tab === 'all'
       ? this.allProfessions
       : this.allProfessions.filter(p => p.workType === tab);
+
+    this.dataSource.data = this.buildHierarchyList(filtered);
+  }
+
+  toggleHierarchyRow(element: ProfessionVm): void {
+    if (!this.hasChildren(element)) {
+      return;
+    }
+
+    if (this.expandedGroupIds.has(element.id)) {
+      this.expandedGroupIds.delete(element.id);
+      this.collapseDescendants(element);
+    } else {
+      this.expandedGroupIds.add(element.id);
+    }
+
+    this.applyTab(this.activeTab);
+  }
+
+  isExpanded(element: ProfessionVm): boolean {
+    return this.expandedGroupIds.has(element.id);
+  }
+
+  hasChildren(element: ProfessionVm): boolean {
+    const cleanCode = (element.code ?? '').trim().toLowerCase();
+    if (!cleanCode) {
+      return false;
+    }
+
+    return this.allProfessions.some(item =>
+      item.id !== element.id &&
+      (item.parentCode ?? '').trim().toLowerCase() === cleanCode
+    );
   }
 
   selectProfession(profession: ProfessionVm): void {
@@ -94,10 +133,24 @@ export class ShowProfessionDialogComponent extends BaseDialog<ShowProfessionDial
       return;
     }
 
+    if (!this.isParentSelectionValid(element.parentCode, element.workType, element.id)) {
+      this.alertifyService.message('Seçilen üst grup geçersiz. Aynı çalışma alanında ve farklı bir kayıt seçin.', {
+        dismissOthers: true, messageType: MessageType.Warning, position: Position.TopRight
+      });
+      return;
+    }
+
+    if (this.hasParentCycle(element.id, element.parentCode)) {
+      this.alertifyService.message('Hiyerarşi döngüsü oluşuyor. Üst grup seçimini kontrol edin.', {
+        dismissOthers: true, messageType: MessageType.Warning, position: Position.TopRight
+      });
+      return;
+    }
+
     const updatedProfession: Update_Profession = {
       id: element.id,
       name: element.name,
-      description: this.encodeDescription(element.code, element.plainDescription),
+      description: this.encodeDescription(element.code, element.parentCode, element.plainDescription),
       workType: element.workType
     };
     try {
@@ -124,9 +177,25 @@ export class ShowProfessionDialogComponent extends BaseDialog<ShowProfessionDial
       return;
     }
 
+    const selectedParentCode = this.newProfessionIsTopGroup ? '' : this.newProfessionParentCode;
+
+    if (!this.newProfessionIsTopGroup && !selectedParentCode) {
+      this.alertifyService.message('Alt grup seçtiğiniz için bağlı olduğu üst grubu seçmelisiniz.', {
+        dismissOthers: true, messageType: MessageType.Warning, position: Position.TopRight
+      });
+      return;
+    }
+
+    if (!this.isParentSelectionValid(selectedParentCode, this.newProfessionWorkType as 'Yeraltı' | 'Yerüstü')) {
+      this.alertifyService.message('Seçilen üst grup geçersiz. Aynı çalışma alanında bir üst grup seçin.', {
+        dismissOthers: true, messageType: MessageType.Warning, position: Position.TopRight
+      });
+      return;
+    }
+
     const newProfession: Create_Profession = {
       name: this.newProfession,
-      description: this.encodeDescription(this.newProfessionCode, this.newProfessionDescription),
+      description: this.encodeDescription(this.newProfessionCode, selectedParentCode, this.newProfessionDescription),
       workType: this.newProfessionWorkType
     };
     try {
@@ -137,6 +206,8 @@ export class ShowProfessionDialogComponent extends BaseDialog<ShowProfessionDial
       this.newProfessionCode = '';
       this.newProfession = '';
       this.newProfessionDescription = '';
+      this.newProfessionParentCode = '';
+      this.newProfessionIsTopGroup = true;
       await this.showProfessions();
     } catch (error) {
       this.alertifyService.message('Meslek oluşturulurken bir hata oluştu.', {
@@ -159,36 +230,82 @@ export class ShowProfessionDialogComponent extends BaseDialog<ShowProfessionDial
     return {
       ...item,
       code: decoded.code,
+      parentCode: decoded.parentCode,
+      hierarchyLevel: 0,
       plainDescription: decoded.description,
       description: item.description
     };
   }
 
-  private encodeDescription(code: string | undefined, description: string | undefined): string {
-    const cleanCode = (code ?? '').trim();
-    const cleanDescription = description ?? '';
-    if (!cleanCode) {
-      return cleanDescription;
-    }
-    return `${this.codePrefix}${cleanCode}\n${cleanDescription}`;
+  getParentOptions(workType: string | undefined, currentId?: string): ProfessionVm[] {
+    return this.allProfessions
+      .filter(item => !!item.code)
+      .filter(item => !workType || item.workType === workType)
+      .filter(item => !currentId || item.id !== currentId)
+      .filter(item => !currentId || !this.isDescendantOf(item, currentId))
+      .sort((a, b) => (a.code ?? '').localeCompare(b.code ?? '', 'tr', { numeric: true }));
   }
 
-  private decodeDescription(raw: string | undefined): { code?: string; description: string } {
+  getParentLabel(parentCode: string | undefined): string {
+    const cleanParentCode = (parentCode ?? '').trim().toLowerCase();
+    if (!cleanParentCode) {
+      return '-';
+    }
+
+    const parent = this.allProfessions.find(item => (item.code ?? '').trim().toLowerCase() === cleanParentCode);
+    return parent ? `${parent.code} - ${parent.name}` : parentCode ?? '-';
+  }
+
+  private encodeDescription(code: string | undefined, parentCode: string | undefined, description: string | undefined): string {
+    const cleanCode = (code ?? '').trim();
+    const cleanParentCode = (parentCode ?? '').trim();
+    const cleanDescription = description ?? '';
+    const metadataLines: string[] = [];
+
+    if (cleanCode) {
+      metadataLines.push(`${this.codePrefix}${cleanCode}`);
+    }
+
+    if (cleanParentCode) {
+      metadataLines.push(`${this.parentCodePrefix}${cleanParentCode}`);
+    }
+
+    if (metadataLines.length === 0) {
+      return cleanDescription;
+    }
+
+    if (!cleanDescription) {
+      return metadataLines.join('\n');
+    }
+
+    return `${metadataLines.join('\n')}\n${cleanDescription}`;
+  }
+
+  private decodeDescription(raw: string | undefined): { code?: string; parentCode?: string; description: string } {
     const value = raw ?? '';
-    if (!value.startsWith(this.codePrefix)) {
-      return { description: value };
+    const lines = value.split('\n');
+    let lineIndex = 0;
+    let code: string | undefined;
+    let parentCode: string | undefined;
+
+    while (lineIndex < lines.length) {
+      const currentLine = lines[lineIndex];
+      if (currentLine.startsWith(this.codePrefix)) {
+        code = currentLine.substring(this.codePrefix.length).trim();
+        lineIndex++;
+        continue;
+      }
+      if (currentLine.startsWith(this.parentCodePrefix)) {
+        const decodedParent = currentLine.substring(this.parentCodePrefix.length).trim();
+        parentCode = decodedParent || undefined;
+        lineIndex++;
+        continue;
+      }
+      break;
     }
 
-    const body = value.substring(this.codePrefix.length);
-    const lineBreakIndex = body.indexOf('\n');
-    if (lineBreakIndex === -1) {
-      return { code: body.trim(), description: '' };
-    }
-
-    return {
-      code: body.substring(0, lineBreakIndex).trim(),
-      description: body.substring(lineBreakIndex + 1)
-    };
+    const description = lines.slice(lineIndex).join('\n');
+    return { code, parentCode, description };
   }
 
   private hasCodeConflict(code: string | undefined, currentId?: string): boolean {
@@ -201,5 +318,183 @@ export class ShowProfessionDialogComponent extends BaseDialog<ShowProfessionDial
       item.id !== currentId &&
       (item.code ?? '').trim().toLowerCase() === cleanCode
     );
+  }
+
+  private isParentSelectionValid(parentCode: string | undefined, workType: string | undefined, currentId?: string): boolean {
+    const cleanParentCode = (parentCode ?? '').trim().toLowerCase();
+    if (!cleanParentCode) {
+      return true;
+    }
+
+    const parent = this.allProfessions.find(item => (item.code ?? '').trim().toLowerCase() === cleanParentCode);
+    if (!parent) {
+      return false;
+    }
+
+    if (currentId && parent.id === currentId) {
+      return false;
+    }
+
+    if (workType && parent.workType && parent.workType !== workType) {
+      return false;
+    }
+
+    return true;
+  }
+
+  private hasParentCycle(currentId: string, parentCode: string | undefined): boolean {
+    const cleanParentCode = (parentCode ?? '').trim().toLowerCase();
+    if (!cleanParentCode) {
+      return false;
+    }
+
+    const codeToItem = new Map<string, ProfessionVm>(
+      this.allProfessions
+        .filter(item => !!item.code)
+        .map(item => [(item.code ?? '').trim().toLowerCase(), item])
+    );
+
+    let cursor = codeToItem.get(cleanParentCode);
+    const visited = new Set<string>();
+
+    while (cursor) {
+      if (cursor.id === currentId) {
+        return true;
+      }
+
+      if (visited.has(cursor.id)) {
+        return true;
+      }
+      visited.add(cursor.id);
+
+      const nextParentCode = (cursor.parentCode ?? '').trim().toLowerCase();
+      if (!nextParentCode) {
+        break;
+      }
+
+      cursor = codeToItem.get(nextParentCode);
+    }
+
+    return false;
+  }
+
+  private isDescendantOf(candidate: ProfessionVm, ancestorId: string): boolean {
+    const codeToItem = new Map<string, ProfessionVm>(
+      this.allProfessions
+        .filter(item => !!item.code)
+        .map(item => [(item.code ?? '').trim().toLowerCase(), item])
+    );
+
+    let parentCode = (candidate.parentCode ?? '').trim().toLowerCase();
+    const visited = new Set<string>();
+
+    while (parentCode) {
+      const parent = codeToItem.get(parentCode);
+      if (!parent) {
+        return false;
+      }
+
+      if (parent.id === ancestorId) {
+        return true;
+      }
+
+      if (visited.has(parent.id)) {
+        return false;
+      }
+      visited.add(parent.id);
+      parentCode = (parent.parentCode ?? '').trim().toLowerCase();
+    }
+
+    return false;
+  }
+
+  private buildHierarchyList(items: ProfessionVm[]): ProfessionVm[] {
+    const codeToItem = new Map<string, ProfessionVm>();
+    for (const item of items) {
+      const cleanCode = (item.code ?? '').trim().toLowerCase();
+      if (cleanCode) {
+        codeToItem.set(cleanCode, item);
+      }
+    }
+
+    const childrenMap = new Map<string, ProfessionVm[]>();
+    const roots: ProfessionVm[] = [];
+
+    for (const item of items) {
+      const parentCode = (item.parentCode ?? '').trim().toLowerCase();
+      const parent = parentCode ? codeToItem.get(parentCode) : undefined;
+
+      if (!parent || parent.id === item.id) {
+        roots.push(item);
+        continue;
+      }
+
+      const key = parent.id;
+      if (!childrenMap.has(key)) {
+        childrenMap.set(key, []);
+      }
+      childrenMap.get(key)?.push(item);
+    }
+
+    const sortByCodeThenName = (a: ProfessionVm, b: ProfessionVm) => {
+      const codeCompare = (a.code ?? '').localeCompare(b.code ?? '', 'tr', { numeric: true });
+      if (codeCompare !== 0) {
+        return codeCompare;
+      }
+      return (a.name ?? '').localeCompare(b.name ?? '', 'tr');
+    };
+
+    roots.sort(sortByCodeThenName);
+    for (const list of childrenMap.values()) {
+      list.sort(sortByCodeThenName);
+    }
+
+    const ordered: ProfessionVm[] = [];
+    const visited = new Set<string>();
+
+    const walk = (item: ProfessionVm, level: number) => {
+      if (visited.has(item.id)) {
+        return;
+      }
+      visited.add(item.id);
+      item.hierarchyLevel = level;
+      ordered.push(item);
+
+      if (this.expandedGroupIds.has(item.id)) {
+        const children = childrenMap.get(item.id) ?? [];
+        for (const child of children) {
+          walk(child, level + 1);
+        }
+      }
+    };
+
+    for (const root of roots) {
+      walk(root, 0);
+    }
+
+    return ordered;
+  }
+
+  private collapseDescendants(root: ProfessionVm): void {
+    const cleanRootCode = (root.code ?? '').trim().toLowerCase();
+    if (!cleanRootCode) {
+      return;
+    }
+
+    const childCodes = new Set<string>();
+    const collect = (parentCode: string): void => {
+      for (const item of this.allProfessions) {
+        if ((item.parentCode ?? '').trim().toLowerCase() === parentCode) {
+          const childCode = (item.code ?? '').trim().toLowerCase();
+          if (childCode && !childCodes.has(childCode)) {
+            childCodes.add(childCode);
+            this.expandedGroupIds.delete(item.id);
+            collect(childCode);
+          }
+        }
+      }
+    };
+
+    collect(cleanRootCode);
   }
 }

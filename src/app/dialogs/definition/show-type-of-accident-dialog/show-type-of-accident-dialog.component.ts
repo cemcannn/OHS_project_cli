@@ -12,6 +12,8 @@ import { Update_Type_Of_Accident } from 'src/app/contracts/definitions/type_of_a
 
 interface TypeOfAccidentVm extends List_Type_Of_Accident {
   code?: string;
+  parentCode?: string;
+  hierarchyLevel: number;
   plainDescription: string;
 }
 
@@ -22,8 +24,9 @@ interface TypeOfAccidentVm extends List_Type_Of_Accident {
 })
 export class ShowTypeOfAccidentDialogComponent extends BaseDialog<ShowTypeOfAccidentDialogComponent> implements OnInit {
   private readonly codePrefix = '__code__:';
+  private readonly parentCodePrefix = '__parent_code__:';
 
-  displayedColumns: string[] = ['code', 'name', 'description', 'actions'];
+  displayedColumns: string[] = ['code', 'name', 'parentGroup', 'description', 'actions'];
   dataSource: MatTableDataSource<TypeOfAccidentVm> = new MatTableDataSource<TypeOfAccidentVm>();
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -33,6 +36,10 @@ export class ShowTypeOfAccidentDialogComponent extends BaseDialog<ShowTypeOfAcci
   newTypeOfAccidentCode: string = '';
   newTypeOfAccident: string = '';
   newTypeOfAccidentDescription: string = '';
+  newTypeOfAccidentParentCode: string = '';
+  newTypeOfAccidentIsTopGroup: boolean = true;
+  allTypeOfAccidents: TypeOfAccidentVm[] = [];
+  private expandedGroupIds = new Set<string>();
 
   constructor(
     dialogRef: MatDialogRef<ShowTypeOfAccidentDialogComponent>,
@@ -55,7 +62,8 @@ export class ShowTypeOfAccidentDialogComponent extends BaseDialog<ShowTypeOfAcci
   async showTypeOfAccidents(): Promise<void> {
     try {
       const allTypeOfAccidents = await this.typeOfAccidentService.getTypeOfAccidents();
-      this.dataSource.data = allTypeOfAccidents.datas.map(item => this.toVm(item));
+      this.allTypeOfAccidents = allTypeOfAccidents.datas.map(item => this.toVm(item));
+      this.refreshHierarchyView();
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
     } catch (error) {
@@ -79,10 +87,24 @@ export class ShowTypeOfAccidentDialogComponent extends BaseDialog<ShowTypeOfAcci
       return;
     }
 
+    if (!this.isParentSelectionValid(element.parentCode, element.id)) {
+      this.alertifyService.message('Seçilen üst grup geçersiz. Farklı bir kayıt seçin.', {
+        dismissOthers: true, messageType: MessageType.Warning, position: Position.TopRight
+      });
+      return;
+    }
+
+    if (this.hasParentCycle(element.id, element.parentCode)) {
+      this.alertifyService.message('Hiyerarşi döngüsü oluşuyor. Üst grup seçimini kontrol edin.', {
+        dismissOthers: true, messageType: MessageType.Warning, position: Position.TopRight
+      });
+      return;
+    }
+
     const updatedTypeOfAccident: Update_Type_Of_Accident = {
       id: element.id,
       name: element.name,
-      description: this.encodeDescription(element.code, element.plainDescription)
+      description: this.encodeDescription(element.code, element.parentCode, element.plainDescription)
     };
     try {
       await this.typeOfAccidentService.updateTypeOfAccident(updatedTypeOfAccident);
@@ -108,9 +130,29 @@ export class ShowTypeOfAccidentDialogComponent extends BaseDialog<ShowTypeOfAcci
       return;
     }
 
+    const selectedParentCode = this.newTypeOfAccidentIsTopGroup ? '' : this.newTypeOfAccidentParentCode;
+
+    if (!this.newTypeOfAccidentIsTopGroup && !selectedParentCode) {
+      this.alertifyService.message('Alt grup seçtiğiniz için bağlı olduğu üst grubu seçmelisiniz.', {
+        dismissOthers: true, messageType: MessageType.Warning, position: Position.TopRight
+      });
+      return;
+    }
+
+    if (!this.isParentSelectionValid(selectedParentCode)) {
+      this.alertifyService.message('Seçilen üst grup geçersiz. Lütfen listeden bir üst grup seçin.', {
+        dismissOthers: true, messageType: MessageType.Warning, position: Position.TopRight
+      });
+      return;
+    }
+
     const newTypeOfAccident: Create_Type_Of_Accident = {
       name: this.newTypeOfAccident,
-      description: this.encodeDescription(this.newTypeOfAccidentCode, this.newTypeOfAccidentDescription)
+      description: this.encodeDescription(
+        this.newTypeOfAccidentCode,
+        selectedParentCode,
+        this.newTypeOfAccidentDescription
+      )
     };
     try {
       await this.typeOfAccidentService.createTypeOfAccident(newTypeOfAccident);
@@ -120,6 +162,8 @@ export class ShowTypeOfAccidentDialogComponent extends BaseDialog<ShowTypeOfAcci
       this.newTypeOfAccidentCode = '';
       this.newTypeOfAccident = '';
       this.newTypeOfAccidentDescription = '';
+      this.newTypeOfAccidentParentCode = '';
+      this.newTypeOfAccidentIsTopGroup = true;
       await this.showTypeOfAccidents();
     } catch (error) {
       this.alertifyService.message('Kaza türü oluşturulurken bir hata oluştu.', {
@@ -134,41 +178,117 @@ export class ShowTypeOfAccidentDialogComponent extends BaseDialog<ShowTypeOfAcci
     if (this.dataSource.paginator) this.dataSource.paginator.firstPage();
   }
 
+  toggleHierarchyRow(element: TypeOfAccidentVm): void {
+    if (!this.hasChildren(element)) {
+      return;
+    }
+
+    if (this.expandedGroupIds.has(element.id)) {
+      this.expandedGroupIds.delete(element.id);
+      this.collapseDescendants(element);
+    } else {
+      this.expandedGroupIds.add(element.id);
+    }
+
+    this.refreshHierarchyView();
+  }
+
+  isExpanded(element: TypeOfAccidentVm): boolean {
+    return this.expandedGroupIds.has(element.id);
+  }
+
+  hasChildren(element: TypeOfAccidentVm): boolean {
+    const cleanCode = (element.code ?? '').trim().toLowerCase();
+    if (!cleanCode) {
+      return false;
+    }
+
+    return this.allTypeOfAccidents.some(item =>
+      item.id !== element.id &&
+      (item.parentCode ?? '').trim().toLowerCase() === cleanCode
+    );
+  }
+
   private toVm(item: List_Type_Of_Accident): TypeOfAccidentVm {
     const decoded = this.decodeDescription(item.description);
     return {
       ...item,
       code: decoded.code,
+      parentCode: decoded.parentCode,
+      hierarchyLevel: 0,
       plainDescription: decoded.description,
       description: item.description
     };
   }
 
-  private encodeDescription(code: string | undefined, description: string | undefined): string {
-    const cleanCode = (code ?? '').trim();
-    const cleanDescription = description ?? '';
-    if (!cleanCode) {
-      return cleanDescription;
-    }
-    return `${this.codePrefix}${cleanCode}\n${cleanDescription}`;
+  getParentOptions(currentId?: string): TypeOfAccidentVm[] {
+    return this.allTypeOfAccidents
+      .filter(item => !!item.code)
+      .filter(item => !currentId || item.id !== currentId)
+      .filter(item => !currentId || !this.isDescendantOf(item, currentId))
+      .sort((a, b) => (a.code ?? '').localeCompare(b.code ?? '', 'tr', { numeric: true }));
   }
 
-  private decodeDescription(raw: string | undefined): { code?: string; description: string } {
+  getParentLabel(parentCode: string | undefined): string {
+    const cleanParentCode = (parentCode ?? '').trim().toLowerCase();
+    if (!cleanParentCode) {
+      return '-';
+    }
+
+    const parent = this.allTypeOfAccidents.find(item => (item.code ?? '').trim().toLowerCase() === cleanParentCode);
+    return parent ? `${parent.code} - ${parent.name}` : parentCode ?? '-';
+  }
+
+  private encodeDescription(code: string | undefined, parentCode: string | undefined, description: string | undefined): string {
+    const cleanCode = (code ?? '').trim();
+    const cleanParentCode = (parentCode ?? '').trim();
+    const cleanDescription = description ?? '';
+    const metadataLines: string[] = [];
+
+    if (cleanCode) {
+      metadataLines.push(`${this.codePrefix}${cleanCode}`);
+    }
+
+    if (cleanParentCode) {
+      metadataLines.push(`${this.parentCodePrefix}${cleanParentCode}`);
+    }
+
+    if (metadataLines.length === 0) {
+      return cleanDescription;
+    }
+
+    if (!cleanDescription) {
+      return metadataLines.join('\n');
+    }
+
+    return `${metadataLines.join('\n')}\n${cleanDescription}`;
+  }
+
+  private decodeDescription(raw: string | undefined): { code?: string; parentCode?: string; description: string } {
     const value = raw ?? '';
-    if (!value.startsWith(this.codePrefix)) {
-      return { description: value };
+    const lines = value.split('\n');
+    let lineIndex = 0;
+    let code: string | undefined;
+    let parentCode: string | undefined;
+
+    while (lineIndex < lines.length) {
+      const currentLine = lines[lineIndex];
+      if (currentLine.startsWith(this.codePrefix)) {
+        code = currentLine.substring(this.codePrefix.length).trim();
+        lineIndex++;
+        continue;
+      }
+      if (currentLine.startsWith(this.parentCodePrefix)) {
+        const decodedParent = currentLine.substring(this.parentCodePrefix.length).trim();
+        parentCode = decodedParent || undefined;
+        lineIndex++;
+        continue;
+      }
+      break;
     }
 
-    const body = value.substring(this.codePrefix.length);
-    const lineBreakIndex = body.indexOf('\n');
-    if (lineBreakIndex === -1) {
-      return { code: body.trim(), description: '' };
-    }
-
-    return {
-      code: body.substring(0, lineBreakIndex).trim(),
-      description: body.substring(lineBreakIndex + 1)
-    };
+    const description = lines.slice(lineIndex).join('\n');
+    return { code, parentCode, description };
   }
 
   private hasCodeConflict(code: string | undefined, currentId?: string): boolean {
@@ -177,9 +297,187 @@ export class ShowTypeOfAccidentDialogComponent extends BaseDialog<ShowTypeOfAcci
       return false;
     }
 
-    return this.dataSource.data.some(item =>
+    return this.allTypeOfAccidents.some(item =>
       item.id !== currentId &&
       (item.code ?? '').trim().toLowerCase() === cleanCode
     );
+  }
+
+  private isParentSelectionValid(parentCode: string | undefined, currentId?: string): boolean {
+    const cleanParentCode = (parentCode ?? '').trim().toLowerCase();
+    if (!cleanParentCode) {
+      return true;
+    }
+
+    const parent = this.allTypeOfAccidents.find(item => (item.code ?? '').trim().toLowerCase() === cleanParentCode);
+    if (!parent) {
+      return false;
+    }
+
+    if (currentId && parent.id === currentId) {
+      return false;
+    }
+
+    return true;
+  }
+
+  private hasParentCycle(currentId: string, parentCode: string | undefined): boolean {
+    const cleanParentCode = (parentCode ?? '').trim().toLowerCase();
+    if (!cleanParentCode) {
+      return false;
+    }
+
+    const codeToItem = new Map<string, TypeOfAccidentVm>(
+      this.allTypeOfAccidents
+        .filter(item => !!item.code)
+        .map(item => [(item.code ?? '').trim().toLowerCase(), item])
+    );
+
+    let cursor = codeToItem.get(cleanParentCode);
+    const visited = new Set<string>();
+
+    while (cursor) {
+      if (cursor.id === currentId) {
+        return true;
+      }
+
+      if (visited.has(cursor.id)) {
+        return true;
+      }
+      visited.add(cursor.id);
+
+      const nextParentCode = (cursor.parentCode ?? '').trim().toLowerCase();
+      if (!nextParentCode) {
+        break;
+      }
+
+      cursor = codeToItem.get(nextParentCode);
+    }
+
+    return false;
+  }
+
+  private isDescendantOf(candidate: TypeOfAccidentVm, ancestorId: string): boolean {
+    const codeToItem = new Map<string, TypeOfAccidentVm>(
+      this.allTypeOfAccidents
+        .filter(item => !!item.code)
+        .map(item => [(item.code ?? '').trim().toLowerCase(), item])
+    );
+
+    let parentCode = (candidate.parentCode ?? '').trim().toLowerCase();
+    const visited = new Set<string>();
+
+    while (parentCode) {
+      const parent = codeToItem.get(parentCode);
+      if (!parent) {
+        return false;
+      }
+
+      if (parent.id === ancestorId) {
+        return true;
+      }
+
+      if (visited.has(parent.id)) {
+        return false;
+      }
+      visited.add(parent.id);
+      parentCode = (parent.parentCode ?? '').trim().toLowerCase();
+    }
+
+    return false;
+  }
+
+  private buildHierarchyList(items: TypeOfAccidentVm[]): TypeOfAccidentVm[] {
+    const codeToItem = new Map<string, TypeOfAccidentVm>();
+    for (const item of items) {
+      const cleanCode = (item.code ?? '').trim().toLowerCase();
+      if (cleanCode) {
+        codeToItem.set(cleanCode, item);
+      }
+    }
+
+    const childrenMap = new Map<string, TypeOfAccidentVm[]>();
+    const roots: TypeOfAccidentVm[] = [];
+
+    for (const item of items) {
+      const parentCode = (item.parentCode ?? '').trim().toLowerCase();
+      const parent = parentCode ? codeToItem.get(parentCode) : undefined;
+
+      if (!parent || parent.id === item.id) {
+        roots.push(item);
+        continue;
+      }
+
+      const key = parent.id;
+      if (!childrenMap.has(key)) {
+        childrenMap.set(key, []);
+      }
+      childrenMap.get(key)?.push(item);
+    }
+
+    const sortByCodeThenName = (a: TypeOfAccidentVm, b: TypeOfAccidentVm) => {
+      const codeCompare = (a.code ?? '').localeCompare(b.code ?? '', 'tr', { numeric: true });
+      if (codeCompare !== 0) {
+        return codeCompare;
+      }
+      return (a.name ?? '').localeCompare(b.name ?? '', 'tr');
+    };
+
+    roots.sort(sortByCodeThenName);
+    for (const list of childrenMap.values()) {
+      list.sort(sortByCodeThenName);
+    }
+
+    const ordered: TypeOfAccidentVm[] = [];
+    const visited = new Set<string>();
+
+    const walk = (item: TypeOfAccidentVm, level: number) => {
+      if (visited.has(item.id)) {
+        return;
+      }
+      visited.add(item.id);
+      item.hierarchyLevel = level;
+      ordered.push(item);
+
+      if (this.expandedGroupIds.has(item.id)) {
+        const children = childrenMap.get(item.id) ?? [];
+        for (const child of children) {
+          walk(child, level + 1);
+        }
+      }
+    };
+
+    for (const root of roots) {
+      walk(root, 0);
+    }
+
+    return ordered;
+  }
+
+  private refreshHierarchyView(): void {
+    this.dataSource.data = this.buildHierarchyList(this.allTypeOfAccidents);
+  }
+
+  private collapseDescendants(root: TypeOfAccidentVm): void {
+    const cleanRootCode = (root.code ?? '').trim().toLowerCase();
+    if (!cleanRootCode) {
+      return;
+    }
+
+    const childCodes = new Set<string>();
+    const collect = (parentCode: string): void => {
+      for (const item of this.allTypeOfAccidents) {
+        if ((item.parentCode ?? '').trim().toLowerCase() === parentCode) {
+          const childCode = (item.code ?? '').trim().toLowerCase();
+          if (childCode && !childCodes.has(childCode)) {
+            childCodes.add(childCode);
+            this.expandedGroupIds.delete(item.id);
+            collect(childCode);
+          }
+        }
+      }
+    };
+
+    collect(cleanRootCode);
   }
 }

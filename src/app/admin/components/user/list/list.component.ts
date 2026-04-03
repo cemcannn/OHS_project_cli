@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -16,7 +16,7 @@ import { UserPasswordUpdateComponent } from 'src/app/dialogs/user/user-password-
   templateUrl: './list.component.html',
   styleUrls: ['./list.component.scss']
 })
-export class ListComponent extends BaseComponent implements OnInit {
+export class ListComponent extends BaseComponent implements OnInit, AfterViewInit {
 
 
   constructor(spinner: NgxSpinnerService,
@@ -31,6 +31,10 @@ export class ListComponent extends BaseComponent implements OnInit {
   dataSource: MatTableDataSource<List_User> = null;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
+  get totalUsersCount(): number {
+    return this.dataSource?.data?.length ?? 0;
+  }
+
   async getUsers() {
     this.showSpinner(SpinnerType.Cog);
 
@@ -40,11 +44,22 @@ export class ListComponent extends BaseComponent implements OnInit {
       position: Position.TopRight
     }))
     this.dataSource = new MatTableDataSource<List_User>(allUsers.users);
-    this.paginator.length = allUsers.totalUsersCount;
+    if (this.paginator) {
+      this.dataSource.paginator = this.paginator;
+    }
+    if (this.paginator) {
+      this.paginator.length = allUsers.totalUsersCount;
+    }
   }
 
   async pageChanged() {
     await this.getUsers();
+  }
+
+  ngAfterViewInit(): void {
+    if (this.dataSource && this.paginator) {
+      this.dataSource.paginator = this.paginator;
+    }
   }
 
   async ngOnInit() {

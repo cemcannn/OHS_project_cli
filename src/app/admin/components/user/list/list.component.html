@@ -13,6 +13,11 @@
 
   <!-- Table Card -->
   <div class="user-table-card">
+    <div class="user-table-meta">
+      <span class="meta-label">Görüntülenen</span>
+      <span class="record-badge">{{ totalUsersCount }} kullanıcı</span>
+    </div>
+
     <table mat-table [dataSource]="dataSource">
 
       <ng-container matColumnDef="userName">
@@ -69,6 +74,11 @@
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      <tr class="mat-row empty-row" *matNoDataRow>
+        <td class="mat-cell" [attr.colspan]="displayedColumns.length">
+          Gösterilecek kullanıcı bulunamadı.
+        </td>
+      </tr>
     </table>
 
     <mat-paginator (page)="pageChanged()"

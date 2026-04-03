@@ -1,25 +1,22 @@
 <div class="modern-page">
-
-  <!-- ── Filter Bar ── -->
   <div class="filter-bar">
     <div class="filter-left">
       <i class="mdi mdi-medical-bag filter-icon"></i>
       <span class="filter-title">Kaza Geçiren Çalışan</span>
-      <span class="record-badge">{{ dataSource?.filteredData?.length ?? 0 }} kayıt</span>
+      <span class="record-badge">{{ dataSource?.data?.length ?? 0 }} kayıt</span>
     </div>
 
     <div class="filter-controls">
-
       <mat-form-field appearance="outline" class="filter-field" subscriptSizing="dynamic">
         <mat-label>Yıl</mat-label>
-        <mat-select [(value)]="selectedYear" (selectionChange)="applyFilters()">
+        <mat-select [(ngModel)]="selectedYear" (ngModelChange)="applyFilters()">
           <mat-option *ngFor="let year of years" [value]="year">{{ year }}</mat-option>
         </mat-select>
       </mat-form-field>
 
       <mat-form-field appearance="outline" class="filter-field" subscriptSizing="dynamic">
         <mat-label>İşletme</mat-label>
-        <mat-select [(value)]="selectedDirectorate" (selectionChange)="applyFilters()">
+        <mat-select [(ngModel)]="selectedDirectorate" (ngModelChange)="applyFilters()">
           <mat-option *ngFor="let directorate of directorates" [value]="directorate">
             {{ directorate }}
           </mat-option>
@@ -30,67 +27,43 @@
         <i class="mdi mdi-file-excel"></i>
         <span>Excel'e Aktar</span>
       </button>
-
     </div>
   </div>
 
-  <!-- ── Table ── -->
   <div class="table-container">
-    <div class="modern-table-card">
-      <div class="modern-table-wrapper">
-
-        <table mat-table [dataSource]="dataSource" matSort>
-
-          <ng-container matColumnDef="month">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>Ay</th>
-            <td mat-cell *matCellDef="let element">{{ element.month }}</td>
-          </ng-container>
-
-          <ng-container matColumnDef="zeroDay">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>
-              Kaza Sonrası Çalışır Durumdaki Çalışan Sayısı
-            </th>
-            <td mat-cell *matCellDef="let element">{{ element.zeroDay }}</td>
-          </ng-container>
-
-          <ng-container matColumnDef="oneToFourDay">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>
-              İş Göremez Raporlu Çalışan (1–4 Gün)
-            </th>
-            <td mat-cell *matCellDef="let element">{{ element.oneToFourDay }}</td>
-          </ng-container>
-
-          <ng-container matColumnDef="fiveAboveDay">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>
-              İş Göremez Çalışan (5 Gün ve Üzeri)
-            </th>
-            <td mat-cell *matCellDef="let element">{{ element.fiveAboveDay }}</td>
-          </ng-container>
-
-          <ng-container matColumnDef="totalAccidentNumber">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>Toplam Kaza Sayısı</th>
-            <td mat-cell *matCellDef="let element">{{ element.totalAccidentNumber }}</td>
-          </ng-container>
-
-          <ng-container matColumnDef="totalLostDayOfWork">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>Toplam İş Günü Kaybı</th>
-            <td mat-cell *matCellDef="let element">{{ element.totalLostDayOfWork }}</td>
-          </ng-container>
-
-          <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
-          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-
-          <tr class="mat-row" *matNoDataRow>
-            <td class="mat-cell empty-cell" [attr.colspan]="displayedColumns.length">
-              <i class="mdi mdi-information-outline"></i>
-              <span>Seçilen kriterlere uygun veri bulunamadı</span>
-            </td>
-          </tr>
-
+    <div class="stat-table-card">
+      <div class="stat-table-wrapper">
+        <table class="stat-table">
+          <thead>
+            <tr>
+              <th class="col-month">Ay</th>
+              <th>Kaza Sonrası Çalışır Durumdaki Çalışan Sayısı</th>
+              <th>İş Göremez Raporlu Çalışan (1-4 Gün)</th>
+              <th>İş Göremez Çalışan (5 Gün ve Üzeri)</th>
+              <th>Toplam Kaza Sayısı</th>
+              <th>Toplam İş Günü Kaybı</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of dataSource?.data; let i = index"
+                [class.row-odd]="i % 2 === 0"
+                [class.row-even]="i % 2 === 1">
+              <td class="col-month">{{ item.month }}</td>
+              <td class="num-cell">{{ item.zeroDay | number }}</td>
+              <td class="num-cell">{{ item.oneToFourDay | number }}</td>
+              <td class="num-cell">{{ item.fiveAboveDay | number }}</td>
+              <td class="num-cell bold-cell">{{ item.totalAccidentNumber | number }}</td>
+              <td class="num-cell highlight-cell">{{ item.totalLostDayOfWork | number }}</td>
+            </tr>
+            <tr *ngIf="!dataSource?.data || dataSource.data.length === 0">
+              <td colspan="6" class="empty-cell">
+                <i class="mdi mdi-information-outline"></i>
+                <span>Seçilen kriterlere uygun veri bulunamadı</span>
+              </td>
+            </tr>
+          </tbody>
         </table>
-
       </div>
     </div>
   </div>
-
 </div>

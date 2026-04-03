@@ -1,4 +1,4 @@
-<div class="dlg-wrapper">
+<div class="dlg-wrapper" style="--c1:#2980b9; --c2:#1f6fa0">
 
   <div class="dlg-header" style="--c1:#2980b9; --c2:#1f6fa0">
     <div class="dlg-header-left">
@@ -50,7 +50,35 @@
             </mat-form-field>
           </ng-container>
           <ng-template #nameReadMode>
-            <div class="cell-name">{{ element.name }}</div>
+            <div class="cell-name hierarchy-name" [class.toggleable]="hasChildren(element)"
+                 [style.paddingLeft.px]="8 + (element.hierarchyLevel * 18)"
+                 (click)="hasChildren(element) && toggleHierarchyRow(element); $event.stopPropagation()">
+              <span class="hierarchy-toggle" *ngIf="hasChildren(element)">
+                <i class="mdi" [class.mdi-chevron-down]="isExpanded(element)" [class.mdi-chevron-right]="!isExpanded(element)"></i>
+              </span>
+              <span class="hierarchy-spacer" *ngIf="!hasChildren(element)"></span>
+              {{ element.name }}
+            </div>
+          </ng-template>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="parentGroup">
+        <th mat-header-cell *matHeaderCellDef>Üst Grup</th>
+        <td mat-cell *matCellDef="let element; let i = index">
+          <ng-container *ngIf="editIndex === i; else parentReadMode">
+            <mat-form-field appearance="outline" class="inline-field" style="min-width:220px">
+              <mat-label>Üst Grup</mat-label>
+              <mat-select [(ngModel)]="element.parentCode">
+                <mat-option value="">Yok (Ana Grup)</mat-option>
+                <mat-option *ngFor="let parent of getParentOptions(element.id)" [value]="parent.code">
+                  {{ parent.code }} - {{ parent.name }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </ng-container>
+          <ng-template #parentReadMode>
+            <div class="cell-desc">{{ getParentLabel(element.parentCode) }}</div>
           </ng-template>
         </td>
       </ng-container>
@@ -96,7 +124,9 @@
       </ng-container>
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+          [class.row-top-group]="row.hierarchyLevel === 0"
+          [class.row-sub-group]="row.hierarchyLevel > 0"
           [class.row-picker]="data.isPicker"
           (click)="data.isPicker && selectLimb(row)"></tr>
     </table>
@@ -120,6 +150,30 @@
       <mat-form-field appearance="outline" class="add-field desc-field">
         <mat-label>Açıklama</mat-label>
         <input matInput [(ngModel)]="newLimbDescription" placeholder="Kısa açıklama">
+      </mat-form-field>
+      <div class="group-level-switch">
+        <label class="toggle-label">Üst Grup mu?</label>
+        <div class="toggle-buttons">
+          <button type="button" class="toggle-btn top-btn"
+                  [class.selected]="newLimbIsTopGroup"
+                  (click)="newLimbIsTopGroup = true; newLimbParentCode = ''">
+            Evet
+          </button>
+          <button type="button" class="toggle-btn sub-btn"
+                  [class.selected]="!newLimbIsTopGroup"
+                  (click)="newLimbIsTopGroup = false">
+            Alt Grup
+          </button>
+        </div>
+      </div>
+      <mat-form-field appearance="outline" class="add-field" *ngIf="!newLimbIsTopGroup">
+        <mat-label>Üst Grup</mat-label>
+        <mat-select [(ngModel)]="newLimbParentCode">
+          <mat-option value="">Yok (Ana Grup)</mat-option>
+          <mat-option *ngFor="let parent of getParentOptions()" [value]="parent.code">
+            {{ parent.code }} - {{ parent.name }}
+          </mat-option>
+        </mat-select>
       </mat-form-field>
     </div>
     <button mat-raised-button class="dlg-add-btn" (click)="createLimb()">
