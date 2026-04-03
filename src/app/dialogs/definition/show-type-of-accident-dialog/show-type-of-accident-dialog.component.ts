@@ -26,7 +26,7 @@ export class ShowTypeOfAccidentDialogComponent extends BaseDialog<ShowTypeOfAcci
   private readonly codePrefix = '__code__:';
   private readonly parentCodePrefix = '__parent_code__:';
 
-  displayedColumns: string[] = ['code', 'name', 'parentGroup', 'description', 'actions'];
+  displayedColumns: string[] = ['code', 'name', 'description', 'actions'];
   dataSource: MatTableDataSource<TypeOfAccidentVm> = new MatTableDataSource<TypeOfAccidentVm>();
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -51,6 +51,11 @@ export class ShowTypeOfAccidentDialogComponent extends BaseDialog<ShowTypeOfAcci
   }
 
   async ngOnInit(): Promise<void> {
+    if (this.data?.isPicker) {
+      // Keep picker mode compact so critical columns stay visible on narrow screens.
+      this.displayedColumns = ['code', 'name', 'actions'];
+    }
+
     await this.showTypeOfAccidents();
   }
 
@@ -80,8 +85,25 @@ export class ShowTypeOfAccidentDialogComponent extends BaseDialog<ShowTypeOfAcci
   startEdit(index: number): void { this.editIndex = index; }
 
   async saveEdit(element: TypeOfAccidentVm): Promise<void> {
+    const cleanCode = (element.code ?? '').trim();
+    const cleanName = (element.name ?? '').trim();
+
+    if (!cleanCode || !cleanName) {
+      this.alertifyService.message('Kaza türü kodu ve adı zorunludur.', {
+        dismissOthers: true, messageType: MessageType.Warning, position: Position.TopRight
+      });
+      return;
+    }
+
     if (this.hasCodeConflict(element.code, element.id)) {
       this.alertifyService.message('Bu kod başka bir kayıt ile eşleşiyor. Lütfen farklı bir kod girin.', {
+        dismissOthers: true, messageType: MessageType.Warning, position: Position.TopRight
+      });
+      return;
+    }
+
+    if (this.hasNameConflict(element.name, element.id)) {
+      this.alertifyService.message('Bu isim başka bir kayıt ile eşleşiyor. Lütfen farklı bir isim girin.', {
         dismissOthers: true, messageType: MessageType.Warning, position: Position.TopRight
       });
       return;
@@ -123,8 +145,25 @@ export class ShowTypeOfAccidentDialogComponent extends BaseDialog<ShowTypeOfAcci
   cancelEdit(): void { this.editIndex = null; }
 
   async createTypeOfAccident(): Promise<void> {
+    const cleanCode = this.newTypeOfAccidentCode.trim();
+    const cleanName = this.newTypeOfAccident.trim();
+
+    if (!cleanCode || !cleanName) {
+      this.alertifyService.message('Kaza türü kodu ve adı zorunludur.', {
+        dismissOthers: true, messageType: MessageType.Warning, position: Position.TopRight
+      });
+      return;
+    }
+
     if (this.hasCodeConflict(this.newTypeOfAccidentCode)) {
       this.alertifyService.message('Bu kod başka bir kayıt ile eşleşiyor. Lütfen farklı bir kod girin.', {
+        dismissOthers: true, messageType: MessageType.Warning, position: Position.TopRight
+      });
+      return;
+    }
+
+    if (this.hasNameConflict(this.newTypeOfAccident)) {
+      this.alertifyService.message('Bu isim başka bir kayıt ile eşleşiyor. Lütfen farklı bir isim girin.', {
         dismissOthers: true, messageType: MessageType.Warning, position: Position.TopRight
       });
       return;
@@ -300,6 +339,18 @@ export class ShowTypeOfAccidentDialogComponent extends BaseDialog<ShowTypeOfAcci
     return this.allTypeOfAccidents.some(item =>
       item.id !== currentId &&
       (item.code ?? '').trim().toLowerCase() === cleanCode
+    );
+  }
+
+  private hasNameConflict(name: string | undefined, currentId?: string): boolean {
+    const cleanName = (name ?? '').trim().toLowerCase();
+    if (!cleanName) {
+      return false;
+    }
+
+    return this.allTypeOfAccidents.some(item =>
+      item.id !== currentId &&
+      (item.name ?? '').trim().toLowerCase() === cleanName
     );
   }
 

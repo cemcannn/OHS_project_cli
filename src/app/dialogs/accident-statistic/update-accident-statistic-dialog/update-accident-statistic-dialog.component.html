@@ -40,16 +40,15 @@
           </mat-form-field>
         </div>
 
-        <div class="picker-box" [class.selected]="statisticForm.get('directorate')?.value" (click)="openDirectoratePicker()">
-          <div class="picker-info">
-            <span class="picker-label">İşletme <span class="req">*</span></span>
-            <span class="picker-value">
-              <i class="mdi mdi-office-building-outline"></i>
-              {{ statisticForm.get('directorate')?.value || 'Seçmek için tıklayın...' }}
-            </span>
-          </div>
-          <i class="mdi mdi-chevron-right picker-arrow"></i>
-        </div>
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>İşletme</mat-label>
+          <mat-select formControlName="directorate">
+            <mat-option [value]="''">Boş bırak</mat-option>
+            <mat-option *ngFor="let directorate of directorates" [value]="directorate.code || directorate.name">
+              {{ directorate.code ? directorate.code + ' - ' + directorate.name : directorate.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
       </div>
 
       <!-- Çalışan & Yevmiye Bilgileri -->

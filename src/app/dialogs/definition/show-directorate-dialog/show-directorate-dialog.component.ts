@@ -16,13 +16,14 @@ import { Create_Directorate } from 'src/app/contracts/definitions/directorate/cr
   styleUrls: ['./show-directorate-dialog.component.scss']
 })
 export class ShowDirectorateDialogComponent extends BaseDialog<ShowDirectorateDialogComponent> implements OnInit {
-  displayedColumns: string[] = ['directorate', 'actions'];
+  displayedColumns: string[] = ['code', 'directorate', 'actions'];
   dataSource: MatTableDataSource<List_Directorate> = new MatTableDataSource<List_Directorate>();
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
   editIndex: number | null = null; // Düzenleme modunda olan satırın indeksi
+  newDirectorateCode: string = '';
   newDirectorate: string = ''; // Yeni kaza türü eklemek için
 
   constructor(
@@ -69,8 +70,39 @@ export class ShowDirectorateDialogComponent extends BaseDialog<ShowDirectorateDi
   }
 
   async saveEdit(element: List_Directorate): Promise<void> {
+    const cleanCode = (element.code ?? '').trim();
+    const cleanName = (element.name ?? '').trim();
+
+    if (!cleanCode || !cleanName) {
+      this.alertifyService.message('İşletme kodu ve adı zorunludur.', {
+        dismissOthers: true,
+        messageType: MessageType.Warning,
+        position: Position.TopRight
+      });
+      return;
+    }
+
+    if (this.hasCodeConflict(element.code, element.id)) {
+      this.alertifyService.message('Bu kod başka bir kayıt ile eşleşiyor. Lütfen farklı bir kod girin.', {
+        dismissOthers: true,
+        messageType: MessageType.Warning,
+        position: Position.TopRight
+      });
+      return;
+    }
+
+    if (this.hasNameConflict(element.name, element.id)) {
+      this.alertifyService.message('Bu isim başka bir kayıt ile eşleşiyor. Lütfen farklı bir isim girin.', {
+        dismissOthers: true,
+        messageType: MessageType.Warning,
+        position: Position.TopRight
+      });
+      return;
+    }
+
     const updatedDirectorate: Update_Directorate = {
       id: element.id,
+      code: element.code,
       name: element.name // Güncellenen kaza türü adı
     };
 
@@ -97,7 +129,38 @@ export class ShowDirectorateDialogComponent extends BaseDialog<ShowDirectorateDi
   }
 
   async createDirectorate(): Promise<void> {
+    const cleanCode = this.newDirectorateCode.trim();
+    const cleanName = this.newDirectorate.trim();
+
+    if (!cleanCode || !cleanName) {
+      this.alertifyService.message('İşletme kodu ve adı zorunludur.', {
+        dismissOthers: true,
+        messageType: MessageType.Warning,
+        position: Position.TopRight
+      });
+      return;
+    }
+
+    if (this.hasCodeConflict(this.newDirectorateCode)) {
+      this.alertifyService.message('Bu kod başka bir kayıt ile eşleşiyor. Lütfen farklı bir kod girin.', {
+        dismissOthers: true,
+        messageType: MessageType.Warning,
+        position: Position.TopRight
+      });
+      return;
+    }
+
+    if (this.hasNameConflict(this.newDirectorate)) {
+      this.alertifyService.message('Bu isim başka bir kayıt ile eşleşiyor. Lütfen farklı bir isim girin.', {
+        dismissOthers: true,
+        messageType: MessageType.Warning,
+        position: Position.TopRight
+      });
+      return;
+    }
+
     const newDirectorate: Create_Directorate = {
+      code: this.newDirectorateCode,
       name: this.newDirectorate // Yeni kaza türü adı
     };
 
@@ -108,6 +171,7 @@ export class ShowDirectorateDialogComponent extends BaseDialog<ShowDirectorateDi
         messageType: MessageType.Success,
         position: Position.TopRight
       });
+      this.newDirectorateCode = '';
       this.newDirectorate = ''; // Giriş alanını temizleme
       await this.showDirectorates(); // Yeni kaza türünü yükleme
     } catch (error) {
@@ -126,5 +190,29 @@ export class ShowDirectorateDialogComponent extends BaseDialog<ShowDirectorateDi
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
+  }
+
+  private hasCodeConflict(code: string | undefined, currentId?: string): boolean {
+    const cleanCode = (code ?? '').trim().toLowerCase();
+    if (!cleanCode) {
+      return false;
+    }
+
+    return this.dataSource.data.some(item =>
+      item.id !== currentId &&
+      (item.code ?? '').trim().toLowerCase() === cleanCode
+    );
+  }
+
+  private hasNameConflict(name: string | undefined, currentId?: string): boolean {
+    const cleanName = (name ?? '').trim().toLowerCase();
+    if (!cleanName) {
+      return false;
+    }
+
+    return this.dataSource.data.some(item =>
+      item.id !== currentId &&
+      (item.name ?? '').trim().toLowerCase() === cleanName
+    );
   }
 }

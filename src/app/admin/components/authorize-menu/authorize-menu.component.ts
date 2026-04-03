@@ -8,11 +8,6 @@ import { AuthorizeMenuDialogComponent } from '../../../dialogs/authorize/authori
 import { DialogService } from '../../../services/common/dialog.service';
 import { ApplicationService } from '../../../services/common/models/application.service';
 
-interface FoodNode {
-  name: string;
-  children?: FoodNode[];
-}
-
 interface ITreeMenu {
   name?: string,
   actions?: ITreeMenu[],

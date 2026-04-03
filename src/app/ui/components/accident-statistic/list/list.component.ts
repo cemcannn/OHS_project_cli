@@ -8,6 +8,7 @@ import { BaseComponent, SpinnerType } from 'src/app/base/base.component';
 import { AlertifyService, MessageType, Position } from 'src/app/services/admin/alertify.service';
 import { AccidentStatisticService } from 'src/app/services/common/models/accident-statistic.service';
 import { AccidentStatisticFilterService } from 'src/app/services/common/accident-statistic-filter.service';
+import { DirectorateCodeService } from 'src/app/services/common/directorate-code.service';
 
 @Component({
   selector: 'app-list',
@@ -32,6 +33,7 @@ export class ListComponent extends BaseComponent implements OnInit {
     spinner: NgxSpinnerService,
     private accidentStatisticService: AccidentStatisticService,
     private accidentStatisticFilterService: AccidentStatisticFilterService,
+    private directorateCodeService: DirectorateCodeService,
     private alertifyService: AlertifyService,
   ) {super(spinner);}
 
@@ -49,7 +51,13 @@ export class ListComponent extends BaseComponent implements OnInit {
         position: Position.TopRight
       }))
 
-      this.accidentStatistics = result.datas;
+      await this.directorateCodeService.ensureLoaded();
+
+      this.accidentStatistics = result.datas.map(stat => ({
+        ...stat,
+        directorateCode: stat.directorate,
+        directorate: this.directorateCodeService.toDisplay(stat.directorate)
+      }));
 
       // Yılları ve işletmeleri filtreleme için hazırlıyoruz
       this.years = ['Tüm Yıllar', ...new Set(this.accidentStatistics.map(stat => stat.year))];

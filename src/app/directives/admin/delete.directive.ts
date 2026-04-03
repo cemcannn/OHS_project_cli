@@ -43,6 +43,7 @@ export class DeleteDirective {
     private toastrService: CustomToastrService
   ) {
     const img = _renderer.createElement('img');
+    img.classList.add('delete-action-icon');
     img.setAttribute('src', '../../../../../assets/icons/delete.png');
     img.setAttribute('style', 'cursor: pointer;');
     img.width = 25;
@@ -68,7 +69,9 @@ export class DeleteDirective {
     this.dialogService.openDialog({
       componentType: DeleteDialogComponent,
       data: DeleteState.Yes,
-      afterClosed: async () => {
+      afterClosed: async (result: DeleteState | undefined) => {
+        if (result !== DeleteState.Yes) return;
+
         this.spinner.show(SpinnerType.BallAtom);
         const td: HTMLTableCellElement = this.element.nativeElement;
         this.httpClientService

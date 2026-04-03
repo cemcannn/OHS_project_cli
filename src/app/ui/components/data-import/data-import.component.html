@@ -9,19 +9,19 @@
 
   <div class="cards-row">
 
-    <!-- ══════════ KAZA VERİSİ ══════════ -->
+    <!-- ══════════ VERİ PAKETİ ══════════ -->
     <div class="import-card">
       <div class="card-head">
         <i class="mdi mdi-alert-circle-outline"></i>
         <div>
-          <div class="card-title">Kaza Verisi</div>
-          <div class="card-sub">Personel ve kaza kayıtlarını günceller</div>
+          <div class="card-title">Veri Paketi</div>
+          <div class="card-sub">Aynı dosyadan kaza ve yevmiye kayıtlarını günceller</div>
         </div>
       </div>
 
       <div class="file-zone" [class.has-file]="veri.fileName">
         <i class="mdi mdi-microsoft-excel file-icon"></i>
-        <span class="file-name">{{ veri.fileName || 'Veri.xlsx' }}</span>
+        <span class="file-name">{{ veri.fileName || 'Excel dosyası seçin' }}</span>
         <span class="file-hint">{{ veri.fileName ? 'Dosya seçildi' : 'Dosya seçin veya sürükleyin' }}</span>
         <input #veriInput type="file" accept=".xlsx" class="file-input"
                (change)="onVeriFile($event)">
@@ -30,8 +30,30 @@
         </button>
       </div>
 
+      <mat-form-field appearance="outline" class="directorate-field">
+        <mat-label>İşletme</mat-label>
+        <mat-select [(ngModel)]="selectedDirectorate" name="selectedDirectorate">
+          <mat-option value="" disabled>İşletme seçin</mat-option>
+          <mat-option *ngFor="let directorate of directorates" [value]="directorate.code || directorate.name">
+            {{ directorate.code ? directorate.code + ' - ' + directorate.name : directorate.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="directorate-field">
+        <mat-label>Yıl</mat-label>
+        <mat-select [(ngModel)]="selectedYear" name="selectedYear">
+          <mat-option *ngFor="let year of years" [value]="year">{{ year }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <div class="field-note">
+        Dosyanın A-L sütunları kaza kayıtlarını, M-S sütunları ise aylık yevmiye verilerini taşır.
+        İkisi de tek yüklemede aktarılır.
+      </div>
+
       <button mat-raised-button color="primary" class="upload-btn"
-              [disabled]="!veri.fileName || veri.loading"
+              [disabled]="!veri.fileName || !selectedDirectorate || !selectedYear || veri.loading"
               (click)="uploadVeri(veriInput)">
         <ng-container *ngIf="!veri.loading">
           <i class="mdi mdi-upload"></i> Yükle ve İçe Aktar
@@ -45,54 +67,10 @@
       <div class="result-box" *ngIf="veri.done">
         <div class="result-banner" [class.banner-ok]="veri.success" [class.banner-err]="!veri.success">
           <i class="mdi" [class.mdi-check-circle]="veri.success" [class.mdi-alert-circle]="!veri.success"></i>
-          {{ veri.success ? 'İçe aktarma başarıyla tamamlandı' : 'İçe aktarma sırasında hata oluştu' }}
+          {{ veri.success ? 'Kaza ve yevmiye verileri başarıyla tamamlandı' : 'İçe aktarma sırasında hata oluştu' }}
         </div>
         <div class="log-area">
           <div *ngFor="let line of veri.lines" class="log-line" [ngClass]="lineClass(line)">{{ line }}</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ══════════ YEVMİYE VERİSİ ══════════ -->
-    <div class="import-card">
-      <div class="card-head">
-        <i class="mdi mdi-library-plus"></i>
-        <div>
-          <div class="card-title">Yevmiye Verisi</div>
-          <div class="card-sub">Aylık işletme istatistiklerini günceller</div>
-        </div>
-      </div>
-
-      <div class="file-zone" [class.has-file]="yevmiye.fileName">
-        <i class="mdi mdi-microsoft-excel file-icon"></i>
-        <span class="file-name">{{ yevmiye.fileName || 'Veri Yevmiye.xlsx' }}</span>
-        <span class="file-hint">{{ yevmiye.fileName ? 'Dosya seçildi' : 'Dosya seçin veya sürükleyin' }}</span>
-        <input #yevmiyeInput type="file" accept=".xlsx" class="file-input"
-               (change)="onYevmiyeFile($event)">
-        <button mat-stroked-button class="choose-btn" (click)="yevmiyeInput.click()" type="button">
-          <i class="mdi mdi-folder-open-outline"></i> Dosya Seç
-        </button>
-      </div>
-
-      <button mat-raised-button color="primary" class="upload-btn"
-              [disabled]="!yevmiye.fileName || yevmiye.loading"
-              (click)="uploadYevmiye(yevmiyeInput)">
-        <ng-container *ngIf="!yevmiye.loading">
-          <i class="mdi mdi-upload"></i> Yükle ve İçe Aktar
-        </ng-container>
-        <ng-container *ngIf="yevmiye.loading">
-          <i class="mdi mdi-loading mdi-spin"></i> İçe Aktarılıyor...
-        </ng-container>
-      </button>
-
-      <!-- Sonuç -->
-      <div class="result-box" *ngIf="yevmiye.done">
-        <div class="result-banner" [class.banner-ok]="yevmiye.success" [class.banner-err]="!yevmiye.success">
-          <i class="mdi" [class.mdi-check-circle]="yevmiye.success" [class.mdi-alert-circle]="!yevmiye.success"></i>
-          {{ yevmiye.success ? 'İçe aktarma başarıyla tamamlandı' : 'İçe aktarma sırasında hata oluştu' }}
-        </div>
-        <div class="log-area">
-          <div *ngFor="let line of yevmiye.lines" class="log-line" [ngClass]="lineClass(line)">{{ line }}</div>
         </div>
       </div>
     </div>

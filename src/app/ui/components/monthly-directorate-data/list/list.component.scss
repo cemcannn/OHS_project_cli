@@ -96,7 +96,29 @@
 
 .edit-btn {
   color: $blue !important;
-  &:hover { background: rgba(41, 128, 185, 0.1) !important; }
+  &:hover {
+    background: rgba(41, 128, 185, 0.12) !important;
+    transform: translateY(-1px);
+    box-shadow: 0 3px 10px rgba(41, 128, 185, 0.2);
+  }
+}
+
+::ng-deep .action-cell[appDelete] {
+  cursor: pointer;
+
+  img {
+    width: 25px;
+    height: 25px;
+    border-radius: 6px;
+    padding: 3px;
+    transition: all 0.2s ease;
+  }
+
+  &:hover img {
+    background: rgba(192, 57, 43, 0.12);
+    transform: translateY(-1px);
+    box-shadow: 0 3px 10px rgba(192, 57, 43, 0.2);
+  }
 }
 
 // ─── Empty Row ───

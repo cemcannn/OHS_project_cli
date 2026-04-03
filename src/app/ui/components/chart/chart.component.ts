@@ -12,6 +12,7 @@ import {
 } from 'src/app/services/admin/alertify.service';
 import { AccidentStatisticFilterService } from 'src/app/services/common/accident-statistic-filter.service';
 import { AccidentStatisticService } from 'src/app/services/common/models/accident-statistic.service';
+import { DirectorateCodeService } from 'src/app/services/common/directorate-code.service';
 
 @Component({
   selector: 'app-chart',
@@ -63,7 +64,8 @@ export class ChartComponent extends BaseComponent implements OnInit {
     spinner: NgxSpinnerService,
     private accidentStatisticService: AccidentStatisticService,
     private alertifyService: AlertifyService,
-    private accidentStatisticFilterService: AccidentStatisticFilterService
+    private accidentStatisticFilterService: AccidentStatisticFilterService,
+    private directorateCodeService: DirectorateCodeService
   ) {
     super(spinner);
     Chart.register(...registerables);
@@ -105,7 +107,12 @@ export class ChartComponent extends BaseComponent implements OnInit {
         })
     );
 
-    this.accidentStatistics = result.datas;
+    await this.directorateCodeService.ensureLoaded();
+
+    this.accidentStatistics = result.datas.map(stat => ({
+      ...stat,
+      directorate: this.directorateCodeService.toDisplay(stat.directorate)
+    }));
 
     // Yılları ve işletmeleri filtreleme için hazırlıyoruz
     this.years = [

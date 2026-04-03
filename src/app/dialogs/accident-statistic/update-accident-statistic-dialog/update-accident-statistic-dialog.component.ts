@@ -2,12 +2,12 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { List_Directorate } from 'src/app/contracts/definitions/directorate/list_directorate';
 import { BaseDialog } from '../../base/base-dialog';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { AccidentStatisticService } from 'src/app/services/common/models/accident-statistic.service';
-import { ShowDirectorateDialogComponent } from '../../definition/show-directorate-dialog/show-directorate-dialog.component';
 import { AlertifyService, MessageType, Position } from 'src/app/services/admin/alertify.service';
 import { Update_Accident_Statistic } from 'src/app/contracts/accident_statistic/update-accident-statistic';
 import { monthValidator, yearFormatValidator, positiveNumberValidator } from 'src/app/validators/custom-validators';
+import { DirectorateService } from 'src/app/services/common/models/directorate.service';
 
 @Component({
   selector: 'app-update-accident-statistic-dialog',
@@ -15,8 +15,8 @@ import { monthValidator, yearFormatValidator, positiveNumberValidator } from 'sr
   styleUrls: ['./update-accident-statistic-dialog.component.scss']
 })
 export class UpdateAccidentStatisticDialogComponent extends BaseDialog<UpdateAccidentStatisticDialogComponent> {
-  directorate: List_Directorate;
   statisticForm: FormGroup;
+  directorates: List_Directorate[] = [];
   
   months = [
     { value: '01', viewValue: 'Ocak' },
@@ -40,7 +40,7 @@ export class UpdateAccidentStatisticDialogComponent extends BaseDialog<UpdateAcc
     @Inject(MAT_DIALOG_DATA) public data: Update_Accident_Statistic,
     private accidentStatisticService: AccidentStatisticService,
     private alertifyService: AlertifyService,
-    private dialog: MatDialog,
+    private directorateService: DirectorateService,
     private fb: FormBuilder
   ) { 
     super(dialogRef);
@@ -51,15 +51,21 @@ export class UpdateAccidentStatisticDialogComponent extends BaseDialog<UpdateAcc
       actualDailyWageUnderground: [data.actualDailyWageUnderground, [Validators.required, positiveNumberValidator()]],
       employeesNumberSurface: [data.employeesNumberSurface, [Validators.required, positiveNumberValidator()]],
       employeesNumberUnderground: [data.employeesNumberUnderground, [Validators.required, positiveNumberValidator()]],
-      directorate: [data.directorate, [Validators.required]]
+      directorate: [data.directorate ?? '']
     });
   }
 
   ngOnInit(): void {
+    this.loadDirectorates();
     const currentYear = new Date().getFullYear();
     for (let i = currentYear; i >= 2000; i--) {
       this.years.push(i.toString());
     }
+  }
+
+  private async loadDirectorates(): Promise<void> {
+    const result = await this.directorateService.getDirectorates();
+    this.directorates = result.datas ?? [];
   }
 
   updateAccidentStatistic(): void {
@@ -79,7 +85,7 @@ export class UpdateAccidentStatisticDialogComponent extends BaseDialog<UpdateAcc
       actualDailyWageUnderground: formValue.actualDailyWageUnderground,
       employeesNumberSurface: formValue.employeesNumberSurface,
       employeesNumberUnderground: formValue.employeesNumberUnderground,
-      directorate: this.directorate?.name || formValue.directorate
+      directorate: formValue.directorate || ''
     };
 
     this.accidentStatisticService.updateAccidentStatistic(updateMonthlyDirectorateData).then(
@@ -102,17 +108,4 @@ export class UpdateAccidentStatisticDialogComponent extends BaseDialog<UpdateAcc
     );
   }
 
-  openDirectoratePicker(): void {
-    const dialogRef = this.dialog.open(ShowDirectorateDialogComponent, {
-      width: '600px',
-      data: { isPicker: true } // Picker modunda açmak için
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.directorate = result; // Seçilen kaza türünü al
-        this.statisticForm.patchValue({ directorate: result.name });
-      }
-    });
-  }
 }

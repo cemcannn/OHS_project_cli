@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpClientService } from '../http-client.service';
 import { firstValueFrom, Observable } from 'rxjs';
 import { Create_Accident_Area } from 'src/app/contracts/definitions/accident_area/create_accident_area';
-import { HttpErrorResponse } from '@angular/common/http';
 import { List_Accident_Area } from 'src/app/contracts/definitions/accident_area/list_accident_area';
 import { Update_Accident_Area } from 'src/app/contracts/definitions/accident_area/update_accident_area';
 
@@ -24,21 +23,11 @@ export class AccidentAreaService {
   }
 
   async createAccidentArea(accidentArea: Create_Accident_Area, successCallBack?: () => void, errorCallBack?: (errorMessage: string) => void) {
-    this.httpClientService.post({
+    const observable = this.httpClientService.post({
       controller: "accidentAreas"
-    }, accidentArea)
-      .subscribe(result => {
-        if (successCallBack) successCallBack();
-      }, (errorResponse: HttpErrorResponse) => {
-        const _error: Array<{ key: string, value: Array<string> }> = errorResponse.error;
-        let message = "";
-        _error.forEach((v, index) => {
-          v.value.forEach((_v, _index) => {
-            message += `${_v}<br>`;
-          });
-        });
-        if (errorCallBack) errorCallBack(message);
-      });
+    }, accidentArea);
+
+    return this.handleRequest(observable, successCallBack, errorCallBack);
   }
 
   async getAccidentAreaById(id: string, successCallBack?: () => void, errorCallBack?: (errorMessage: string) => void): Promise<List_Accident_Area> {

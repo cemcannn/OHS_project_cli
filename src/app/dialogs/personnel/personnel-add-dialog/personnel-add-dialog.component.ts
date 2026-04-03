@@ -61,7 +61,7 @@ export class PersonnelAddDialogComponent extends BaseDialog<PersonnelAddDialogCo
       name: formValue.name,
       surname: formValue.surname,
       profession: this.profession ? this.profession.name : formValue.profession,
-      directorate: this.directorate ? this.directorate.name : formValue.directorate,
+      directorate: this.directorate?.code || formValue.directorate,
       bornDate: bornDateValue
     };
 
@@ -99,7 +99,7 @@ export class PersonnelAddDialogComponent extends BaseDialog<PersonnelAddDialogCo
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.directorate = result;
-        this.personnelForm.patchValue({ directorate: result.name });
+        this.personnelForm.patchValue({ directorate: result.code || result.name });
       }
     });
   }

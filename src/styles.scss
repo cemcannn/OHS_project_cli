@@ -8,6 +8,74 @@
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
+// ─── Action icon alignment (global) ───
+button.action-btn.mat-mdc-icon-button {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  vertical-align: middle;
+  padding: 0 !important;
+  line-height: 1 !important;
+}
+
+button.action-btn.mat-mdc-icon-button i {
+  display: block;
+  line-height: 1 !important;
+  transform: translateY(-1px);
+}
+
+// ─── Delete icon hover hitbox (global) ───
+[appDelete] {
+  cursor: pointer;
+}
+
+[appDelete] .delete-action-icon {
+  display: block;
+  margin: 0 auto;
+  border-radius: 6px;
+  padding: 3px;
+  box-sizing: border-box;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+[appDelete]:hover .delete-action-icon {
+  background: rgba(192, 57, 43, 0.12);
+  box-shadow: 0 3px 10px rgba(192, 57, 43, 0.2);
+  transform: translateY(-1px);
+}
+
+// ─── Dialog close button: stable hover hit area ───
+button.dlg-close.mat-mdc-icon-button {
+  width: 36px !important;
+  height: 36px !important;
+  min-width: 36px !important;
+  padding: 0 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: 8px !important;
+}
+
+button.dlg-close.mat-mdc-icon-button .mat-mdc-button-touch-target,
+button.dlg-close.mat-mdc-icon-button .mat-mdc-focus-indicator,
+button.dlg-close.mat-mdc-icon-button .mat-mdc-button-persistent-ripple {
+  width: 36px !important;
+  height: 36px !important;
+  border-radius: 8px !important;
+}
+
+button.dlg-close.mat-mdc-icon-button:hover {
+  color: #fff !important;
+  background: rgba(255, 255, 255, 0.18) !important;
+}
+
+button.dlg-close.mat-mdc-icon-button i {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
 // ─── Dialog: padding sıfırla ───
 .no-padding-dialog .mat-mdc-dialog-surface {
   padding: 0 !important;

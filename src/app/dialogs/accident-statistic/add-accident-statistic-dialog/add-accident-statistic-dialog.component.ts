@@ -1,12 +1,12 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BaseDialog } from '../../base/base-dialog';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { ShowDirectorateDialogComponent } from '../../definition/show-directorate-dialog/show-directorate-dialog.component';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { List_Directorate } from 'src/app/contracts/definitions/directorate/list_directorate';
 import { AccidentStatisticService } from 'src/app/services/common/models/accident-statistic.service';
 import { Create_Accident_Statistic } from 'src/app/contracts/accident_statistic/create-accident-statistic';
 import { monthValidator, yearFormatValidator, positiveNumberValidator } from 'src/app/validators/custom-validators';
+import { DirectorateService } from 'src/app/services/common/models/directorate.service';
 
 
 @Component({
@@ -15,8 +15,8 @@ import { monthValidator, yearFormatValidator, positiveNumberValidator } from 'sr
   styleUrls: ['./add-accident-statistic-dialog.component.scss']
 })
 export class AddAccidentStatisticDialogComponent extends BaseDialog<AddAccidentStatisticDialogComponent> implements OnInit {
-  directorate: List_Directorate;
   statisticForm: FormGroup;
+  directorates: List_Directorate[] = [];
   
   // Template binding için getter'lar
   get month() { return this.statisticForm.get('month')?.value; }
@@ -58,7 +58,7 @@ export class AddAccidentStatisticDialogComponent extends BaseDialog<AddAccidentS
     dialogRef: MatDialogRef<AddAccidentStatisticDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private accidentStatisticService: AccidentStatisticService,
-    private dialog: MatDialog,
+    private directorateService: DirectorateService,
     private fb: FormBuilder
   ) { 
     super(dialogRef);
@@ -69,15 +69,21 @@ export class AddAccidentStatisticDialogComponent extends BaseDialog<AddAccidentS
       actualDailyWageUnderground: ['', [Validators.required, positiveNumberValidator()]],
       employeesNumberSurface: ['', [Validators.required, positiveNumberValidator()]],
       employeesNumberUnderground: ['', [Validators.required, positiveNumberValidator()]],
-      directorate: ['', [Validators.required]]
+      directorate: ['']
     });
   }
 
   ngOnInit(): void {
+    this.loadDirectorates();
     const currentYear = new Date().getFullYear();
     for (let i = currentYear; i >= 2000; i--) {
       this.years.push(i.toString());
     }
+  }
+
+  private async loadDirectorates(): Promise<void> {
+    const result = await this.directorateService.getDirectorates();
+    this.directorates = result.datas ?? [];
   }
 
   createAccidentStatistic(): void {
@@ -96,7 +102,7 @@ export class AddAccidentStatisticDialogComponent extends BaseDialog<AddAccidentS
       actualDailyWageUnderground: formValue.actualDailyWageUnderground,
       employeesNumberSurface: formValue.employeesNumberSurface,
       employeesNumberUnderground: formValue.employeesNumberUnderground,
-      directorate: this.directorate?.name || formValue.directorate
+      directorate: formValue.directorate || ''
     };
 
     this.accidentStatisticService.createAccidentStatistic(
@@ -110,17 +116,4 @@ export class AddAccidentStatisticDialogComponent extends BaseDialog<AddAccidentS
     );
   }
 
-  openDirectoratePicker(): void {
-    const dialogRef = this.dialog.open(ShowDirectorateDialogComponent, {
-      width: '600px',
-      data: { isPicker: true } // Picker modunda açmak için
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.directorate = result; // Seçilen kaza türünü al
-        this.statisticForm.patchValue({ directorate: result.name });
-      }
-    });
-  }
 }

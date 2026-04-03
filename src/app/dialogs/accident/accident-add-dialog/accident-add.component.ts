@@ -50,7 +50,9 @@ export class AccidentAddComponent extends BaseDialog<AccidentAddComponent> imple
 
   openTypeOfAccidentPicker(): void {
     const dialogRef = this.dialog.open(ShowTypeOfAccidentDialogComponent, {
-      width: '600px',
+      width: '760px',
+      maxWidth: '90vw',
+      panelClass: 'no-padding-dialog',
       data: { isPicker: true }
     });
 
@@ -64,7 +66,9 @@ export class AccidentAddComponent extends BaseDialog<AccidentAddComponent> imple
 
   openLimbPicker(): void {
     const dialogRef = this.dialog.open(ShowLimbDialogComponent, {
-      width: '600px',
+      width: '760px',
+      maxWidth: '90vw',
+      panelClass: 'no-padding-dialog',
       data: { isPicker: true }
     });
 
@@ -78,7 +82,9 @@ export class AccidentAddComponent extends BaseDialog<AccidentAddComponent> imple
 
   openAccidentAreaPicker(): void {
     const dialogRef = this.dialog.open(ShowAccidentAreaDialogComponent, {
-      width: '600px',
+      width: '760px',
+      maxWidth: '90vw',
+      panelClass: 'no-padding-dialog',
       data: { isPicker: true }
     });
 

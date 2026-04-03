@@ -11,6 +11,7 @@ import { AccidentUpdateDialogComponent } from 'src/app/dialogs/accident/accident
 import { AlertifyService, MessageType, Position } from 'src/app/services/admin/alertify.service';
 import { AccidentFilterService } from 'src/app/services/common/accident-filter.service';
 import { AccidentService } from 'src/app/services/common/models/accident.service';
+import { DirectorateCodeService } from 'src/app/services/common/directorate-code.service';
 import { AuthService } from 'src/app/services/common/auth.service';
 import { CustomToastrService, ToastrMessageType, ToastrPosition } from 'src/app/services/ui/custom-toastr.service';
 
@@ -39,6 +40,7 @@ export class ListComponent extends BaseComponent implements OnInit, AfterViewIni
     spinner: NgxSpinnerService,
     private accidentService: AccidentService,
     private accidentFilterService: AccidentFilterService,
+    private directorateCodeService: DirectorateCodeService,
     private alertifyService: AlertifyService,
     private dialog: MatDialog,
     private authService: AuthService,
@@ -81,7 +83,13 @@ export class ListComponent extends BaseComponent implements OnInit, AfterViewIni
       position: Position.TopRight
     }))
     
-    this.allAccidents = allAccidents.datas;
+    await this.directorateCodeService.ensureLoaded();
+
+    this.allAccidents = allAccidents.datas.map(accident => ({
+      ...accident,
+      directorateCode: accident.directorate,
+      directorate: this.directorateCodeService.toDisplay(accident.directorate)
+    }));
 
     // Dinamik verileri oluştur
     this.years = ['Tüm Yıllar', ...new Set(this.allAccidents.map(accident => new Date(accident.accidentDate).getFullYear().toString()))]; // "Tüm Yıllar" eklendi

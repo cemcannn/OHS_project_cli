@@ -9,6 +9,7 @@ import * as XLSX from 'xlsx'; // Import xlsx
 import { BaseComponent, SpinnerType } from 'src/app/base/base.component';
 import { AlertifyService, MessageType, Position } from 'src/app/services/admin/alertify.service';
 import { AccidentRateFilterService } from 'src/app/services/common/accident-rate-filter.service';
+import { DirectorateCodeService } from 'src/app/services/common/directorate-code.service';
 
 @Component({
   selector: 'app-list',
@@ -32,6 +33,7 @@ export class ListComponent extends BaseComponent implements OnInit {
     spinner: NgxSpinnerService,
     private accidentService: AccidentService,
     private accidentRateFilterService: AccidentRateFilterService,
+    private directorateCodeService: DirectorateCodeService,
     private alertifyService: AlertifyService,
   ) {super(spinner);}
 
@@ -48,7 +50,13 @@ export class ListComponent extends BaseComponent implements OnInit {
       position: Position.TopRight
     }))
     
-    this.allAccidents = result.datas;
+    await this.directorateCodeService.ensureLoaded();
+
+    this.allAccidents = result.datas.map(accident => ({
+      ...accident,
+      directorateCode: accident.directorate,
+      directorate: this.directorateCodeService.toDisplay(accident.directorate)
+    }));
 
     // Dinamik verileri oluştur
     this.years = ['Tüm Yıllar', ...new Set(this.allAccidents.map(accident => new Date(accident.accidentDate).getFullYear().toString()))]; // "Tüm Yıllar" eklendi

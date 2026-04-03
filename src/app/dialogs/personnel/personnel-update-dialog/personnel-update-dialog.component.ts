@@ -62,7 +62,7 @@ export class PersonnelUpdateDialogComponent extends BaseDialog<PersonnelUpdateDi
       name: formValue.name,
       surname: formValue.surname,
       profession: this.profession || formValue.profession,
-      directorate: this.directorate || formValue.directorate,
+      directorate: this.directorate || (this.data as any).directorateCode || formValue.directorate,
       bornDate: new Date(formValue.bornDate)
     };
 
@@ -108,8 +108,8 @@ export class PersonnelUpdateDialogComponent extends BaseDialog<PersonnelUpdateDi
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.directorate = result.name;
-        this.personnelForm.patchValue({ directorate: result.name });
+        this.directorate = result.code || result.name;
+        this.personnelForm.patchValue({ directorate: result.code || result.name });
       }
     });
   }

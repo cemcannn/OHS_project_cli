@@ -4,8 +4,8 @@
 
 :host ::ng-deep {
   .mat-mdc-dialog-container {
-    width: min(1320px, 94vw) !important;
-    max-width: 94vw !important;
+    width: min(820px, 90vw) !important;
+    max-width: 90vw !important;
   }
 
   .mat-mdc-dialog-surface {
@@ -17,7 +17,8 @@
 .dlg-wrapper {
   display: flex;
   flex-direction: column;
-  width: min(1320px, 94vw);
+  width: min(820px, 90vw);
+  max-width: 90vw;
   max-height: 92vh;
   overflow: hidden;
   border-radius: 12px;
@@ -26,6 +27,18 @@
   @media (max-width: 960px) {
     width: 95vw;
     max-height: 94vh;
+  }
+}
+
+@media (max-width: 920px) {
+  .dlg-search {
+    flex-wrap: wrap;
+    gap: 8px;
+
+    .search-field {
+      max-width: 100%;
+      width: 100%;
+    }
   }
 }
 
@@ -53,7 +66,7 @@
 
   h2 {
     margin: 0 0 2px;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 700;
     color: #fff;
     letter-spacing: 0.3px;
@@ -61,7 +74,7 @@
 
   p {
     margin: 0;
-    font-size: 11px;
+    font-size: 10px;
     color: rgba(255,255,255,0.72);
   }
 }
@@ -112,7 +125,7 @@
   }
 
   .record-badge {
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 600;
     color: $text-muted;
     background: #fff;
@@ -126,11 +139,11 @@
 // ─── Table Area ───
 .dlg-table-wrap {
   flex: 1;
-  overflow-y: auto;
+  overflow: auto;
   min-height: 180px;
   background: #fff;
 
-  &::-webkit-scrollbar { width: 6px; }
+  &::-webkit-scrollbar { width: 6px; height: 6px; }
   &::-webkit-scrollbar-thumb {
     background: rgba(0,0,0,0.15);
     border-radius: 3px;
@@ -146,12 +159,12 @@
     }
     .mat-mdc-header-cell {
       font-weight: 700;
-      font-size: 11px;
+      font-size: 10px;
       color: $text-main;
       letter-spacing: 0.5px;
       text-transform: uppercase;
       border-bottom: 2px solid $border;
-      padding: 10px 12px;
+      padding: 8px 10px;
     }
     .mat-mdc-row {
       cursor: default;
@@ -179,7 +192,8 @@
     }
     .mat-mdc-cell {
       border-bottom: 1px solid #f1f3f5;
-      padding: 8px 12px;
+      padding: 6px 10px;
+      font-size: 11px;
       vertical-align: middle;
     }
   }
@@ -188,7 +202,7 @@
 // ─── Cell content ───
 .cell-name {
   font-weight: 600;
-  font-size: 12.5px;
+  font-size: 11.5px;
   color: $text-main;
   line-height: 1.3;
 }
@@ -212,7 +226,7 @@
 }
 
 .cell-desc {
-  font-size: 11px;
+  font-size: 10px;
   color: $text-muted;
   margin-top: 2px;
   line-height: 1.4;
@@ -295,7 +309,7 @@
 }
 
 .dlg-add-title {
-  font-size: 12.5px;
+  font-size: 11.5px;
   font-weight: 700;
   color: $text-main;
   margin-bottom: 8px;

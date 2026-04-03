@@ -28,7 +28,7 @@ export class ShowAccidentAreaDialogComponent extends BaseDialog<ShowAccidentArea
   private readonly workTypePrefix = '__worktype__:';
   private readonly parentCodePrefix = '__parent_code__:';
 
-  displayedColumns: string[] = ['code', 'name', 'parentGroup', 'description', 'workType', 'actions'];
+  displayedColumns: string[] = ['code', 'name', 'description', 'workType', 'actions'];
   dataSource: MatTableDataSource<AccidentAreaVm> = new MatTableDataSource<AccidentAreaVm>();
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -128,8 +128,25 @@ export class ShowAccidentAreaDialogComponent extends BaseDialog<ShowAccidentArea
   startEdit(index: number): void { this.editIndex = index; }
 
   async saveEdit(element: AccidentAreaVm): Promise<void> {
+    const cleanCode = (element.code ?? '').trim();
+    const cleanName = (element.name ?? '').trim();
+
+    if (!cleanCode || !cleanName) {
+      this.alertifyService.message('Kaza yeri kodu ve adı zorunludur.', {
+        dismissOthers: true, messageType: MessageType.Warning, position: Position.TopRight
+      });
+      return;
+    }
+
     if (this.hasCodeConflict(element.code, element.id)) {
       this.alertifyService.message('Bu kod başka bir kayıt ile eşleşiyor. Lütfen farklı bir kod girin.', {
+        dismissOthers: true, messageType: MessageType.Warning, position: Position.TopRight
+      });
+      return;
+    }
+
+    if (this.hasNameConflict(element.name, element.id)) {
+      this.alertifyService.message('Bu isim başka bir kayıt ile eşleşiyor. Lütfen farklı bir isim girin.', {
         dismissOthers: true, messageType: MessageType.Warning, position: Position.TopRight
       });
       return;
@@ -171,8 +188,25 @@ export class ShowAccidentAreaDialogComponent extends BaseDialog<ShowAccidentArea
   cancelEdit(): void { this.editIndex = null; }
 
   async createAccidentArea(): Promise<void> {
+    const cleanCode = this.newAccidentAreaCode.trim();
+    const cleanName = this.newAccidentArea.trim();
+
+    if (!cleanCode || !cleanName) {
+      this.alertifyService.message('Kaza yeri kodu ve adı zorunludur.', {
+        dismissOthers: true, messageType: MessageType.Warning, position: Position.TopRight
+      });
+      return;
+    }
+
     if (this.hasCodeConflict(this.newAccidentAreaCode)) {
       this.alertifyService.message('Bu kod başka bir kayıt ile eşleşiyor. Lütfen farklı bir kod girin.', {
+        dismissOthers: true, messageType: MessageType.Warning, position: Position.TopRight
+      });
+      return;
+    }
+
+    if (this.hasNameConflict(this.newAccidentArea)) {
+      this.alertifyService.message('Bu isim başka bir kayıt ile eşleşiyor. Lütfen farklı bir isim girin.', {
         dismissOthers: true, messageType: MessageType.Warning, position: Position.TopRight
       });
       return;
@@ -344,6 +378,18 @@ export class ShowAccidentAreaDialogComponent extends BaseDialog<ShowAccidentArea
     return this.allAccidentAreas.some(item =>
       item.id !== currentId &&
       (item.code ?? '').trim().toLowerCase() === cleanCode
+    );
+  }
+
+  private hasNameConflict(name: string | undefined, currentId?: string): boolean {
+    const cleanName = (name ?? '').trim().toLowerCase();
+    if (!cleanName) {
+      return false;
+    }
+
+    return this.allAccidentAreas.some(item =>
+      item.id !== currentId &&
+      (item.name ?? '').trim().toLowerCase() === cleanName
     );
   }
 

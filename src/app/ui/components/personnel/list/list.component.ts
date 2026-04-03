@@ -9,6 +9,7 @@ import { List_Personnel } from 'src/app/contracts/personnels/list_personnel';
 import { PersonnelFilterService } from 'src/app/services/common/personnel-filter.service';
 import { PersonnelService } from 'src/app/services/common/models/personnel.service';
 import { AlertifyService, MessageType, Position } from 'src/app/services/admin/alertify.service';
+import { DirectorateCodeService } from 'src/app/services/common/directorate-code.service';
 import { AccidentListComponent } from 'src/app/dialogs/accident/accident-list/accident-list.component';
 import { PersonnelUpdateDialogComponent } from 'src/app/dialogs/personnel/personnel-update-dialog/personnel-update-dialog.component';
 import { AccidentAddComponent } from 'src/app/dialogs/accident/accident-add-dialog/accident-add.component';
@@ -36,6 +37,7 @@ export class ListComponent extends BaseComponent implements OnInit, AfterViewIni
     spinner: NgxSpinnerService,
     private personnelService: PersonnelService,
     private personnelFilterService: PersonnelFilterService,
+    private directorateCodeService: DirectorateCodeService,
     private alertifyService: AlertifyService,
     private dialog: MatDialog,
     private authService: AuthService,
@@ -83,7 +85,13 @@ export class ListComponent extends BaseComponent implements OnInit, AfterViewIni
           })
       );
 
-    this.allPersonnels = allPersonnels.datas;
+    await this.directorateCodeService.ensureLoaded();
+
+    this.allPersonnels = allPersonnels.datas.map(personnel => ({
+      ...personnel,
+      directorateCode: personnel.directorate,
+      directorate: this.directorateCodeService.toDisplay(personnel.directorate)
+    }));
 
     // İşletmeleri (directorates) listeye ekle
     this.directorates = [
@@ -144,7 +152,9 @@ export class ListComponent extends BaseComponent implements OnInit, AfterViewIni
       return;
 
     const dialogRef = this.dialog.open(AccidentAddComponent, {
-      width: '520px',
+      width: '640px',
+      maxWidth: '90vw',
+      panelClass: 'no-padding-dialog',
       data: { personnelId: id }
     });
 

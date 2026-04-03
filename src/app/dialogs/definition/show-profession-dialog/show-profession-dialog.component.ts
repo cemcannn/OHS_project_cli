@@ -26,7 +26,7 @@ export class ShowProfessionDialogComponent extends BaseDialog<ShowProfessionDial
   private readonly codePrefix = '__code__:';
   private readonly parentCodePrefix = '__parent_code__:';
 
-  displayedColumns: string[] = ['code', 'name', 'parentGroup', 'description', 'workType', 'actions'];
+  displayedColumns: string[] = ['code', 'name', 'description', 'workType', 'actions'];
   dataSource: MatTableDataSource<ProfessionVm> = new MatTableDataSource<ProfessionVm>();
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -126,8 +126,25 @@ export class ShowProfessionDialogComponent extends BaseDialog<ShowProfessionDial
   startEdit(index: number): void { this.editIndex = index; }
 
   async saveEdit(element: ProfessionVm): Promise<void> {
+    const cleanCode = (element.code ?? '').trim();
+    const cleanName = (element.name ?? '').trim();
+
+    if (!cleanCode || !cleanName) {
+      this.alertifyService.message('Meslek kodu ve adı zorunludur.', {
+        dismissOthers: true, messageType: MessageType.Warning, position: Position.TopRight
+      });
+      return;
+    }
+
     if (this.hasCodeConflict(element.code, element.id)) {
       this.alertifyService.message('Bu kod başka bir kayıt ile eşleşiyor. Lütfen farklı bir kod girin.', {
+        dismissOthers: true, messageType: MessageType.Warning, position: Position.TopRight
+      });
+      return;
+    }
+
+    if (this.hasNameConflict(element.name, element.id)) {
+      this.alertifyService.message('Bu isim başka bir kayıt ile eşleşiyor. Lütfen farklı bir isim girin.', {
         dismissOthers: true, messageType: MessageType.Warning, position: Position.TopRight
       });
       return;
@@ -170,8 +187,25 @@ export class ShowProfessionDialogComponent extends BaseDialog<ShowProfessionDial
   cancelEdit(): void { this.editIndex = null; }
 
   async createProfession(): Promise<void> {
+    const cleanCode = this.newProfessionCode.trim();
+    const cleanName = this.newProfession.trim();
+
+    if (!cleanCode || !cleanName) {
+      this.alertifyService.message('Meslek kodu ve adı zorunludur.', {
+        dismissOthers: true, messageType: MessageType.Warning, position: Position.TopRight
+      });
+      return;
+    }
+
     if (this.hasCodeConflict(this.newProfessionCode)) {
       this.alertifyService.message('Bu kod başka bir kayıt ile eşleşiyor. Lütfen farklı bir kod girin.', {
+        dismissOthers: true, messageType: MessageType.Warning, position: Position.TopRight
+      });
+      return;
+    }
+
+    if (this.hasNameConflict(this.newProfession)) {
+      this.alertifyService.message('Bu isim başka bir kayıt ile eşleşiyor. Lütfen farklı bir isim girin.', {
         dismissOthers: true, messageType: MessageType.Warning, position: Position.TopRight
       });
       return;
@@ -317,6 +351,18 @@ export class ShowProfessionDialogComponent extends BaseDialog<ShowProfessionDial
     return this.allProfessions.some(item =>
       item.id !== currentId &&
       (item.code ?? '').trim().toLowerCase() === cleanCode
+    );
+  }
+
+  private hasNameConflict(name: string | undefined, currentId?: string): boolean {
+    const cleanName = (name ?? '').trim().toLowerCase();
+    if (!cleanName) {
+      return false;
+    }
+
+    return this.allProfessions.some(item =>
+      item.id !== currentId &&
+      (item.name ?? '').trim().toLowerCase() === cleanName
     );
   }
 

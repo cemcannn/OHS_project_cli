@@ -26,7 +26,7 @@ export class ShowLimbDialogComponent extends BaseDialog<ShowLimbDialogComponent>
   private readonly codePrefix = '__code__:';
   private readonly parentCodePrefix = '__parent_code__:';
 
-  displayedColumns: string[] = ['code', 'name', 'parentGroup', 'description', 'actions'];
+  displayedColumns: string[] = ['code', 'name', 'description', 'actions'];
   dataSource: MatTableDataSource<LimbVm> = new MatTableDataSource<LimbVm>();
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -78,8 +78,25 @@ export class ShowLimbDialogComponent extends BaseDialog<ShowLimbDialogComponent>
   startEdit(index: number): void { this.editIndex = index; }
 
   async saveEdit(element: LimbVm): Promise<void> {
+    const cleanCode = (element.code ?? '').trim();
+    const cleanName = (element.name ?? '').trim();
+
+    if (!cleanCode || !cleanName) {
+      this.alertifyService.message('Uzuv kodu ve adı zorunludur.', {
+        dismissOthers: true, messageType: MessageType.Warning, position: Position.TopRight
+      });
+      return;
+    }
+
     if (this.hasCodeConflict(element.code, element.id)) {
       this.alertifyService.message('Bu kod başka bir kayıt ile eşleşiyor. Lütfen farklı bir kod girin.', {
+        dismissOthers: true, messageType: MessageType.Warning, position: Position.TopRight
+      });
+      return;
+    }
+
+    if (this.hasNameConflict(element.name, element.id)) {
+      this.alertifyService.message('Bu isim başka bir kayıt ile eşleşiyor. Lütfen farklı bir isim girin.', {
         dismissOthers: true, messageType: MessageType.Warning, position: Position.TopRight
       });
       return;
@@ -121,8 +138,25 @@ export class ShowLimbDialogComponent extends BaseDialog<ShowLimbDialogComponent>
   cancelEdit(): void { this.editIndex = null; }
 
   async createLimb(): Promise<void> {
+    const cleanCode = this.newLimbCode.trim();
+    const cleanName = this.newLimb.trim();
+
+    if (!cleanCode || !cleanName) {
+      this.alertifyService.message('Uzuv kodu ve adı zorunludur.', {
+        dismissOthers: true, messageType: MessageType.Warning, position: Position.TopRight
+      });
+      return;
+    }
+
     if (this.hasCodeConflict(this.newLimbCode)) {
       this.alertifyService.message('Bu kod başka bir kayıt ile eşleşiyor. Lütfen farklı bir kod girin.', {
+        dismissOthers: true, messageType: MessageType.Warning, position: Position.TopRight
+      });
+      return;
+    }
+
+    if (this.hasNameConflict(this.newLimb)) {
+      this.alertifyService.message('Bu isim başka bir kayıt ile eşleşiyor. Lütfen farklı bir isim girin.', {
         dismissOthers: true, messageType: MessageType.Warning, position: Position.TopRight
       });
       return;
@@ -294,6 +328,18 @@ export class ShowLimbDialogComponent extends BaseDialog<ShowLimbDialogComponent>
     return this.allLimbs.some(item =>
       item.id !== currentId &&
       (item.code ?? '').trim().toLowerCase() === cleanCode
+    );
+  }
+
+  private hasNameConflict(name: string | undefined, currentId?: string): boolean {
+    const cleanName = (name ?? '').trim().toLowerCase();
+    if (!cleanName) {
+      return false;
+    }
+
+    return this.allLimbs.some(item =>
+      item.id !== currentId &&
+      (item.name ?? '').trim().toLowerCase() === cleanName
     );
   }
 

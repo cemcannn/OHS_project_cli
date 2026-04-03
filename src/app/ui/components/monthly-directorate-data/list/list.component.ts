@@ -11,6 +11,7 @@ import { UpdateAccidentStatisticDialogComponent } from 'src/app/dialogs/accident
 import { AlertifyService, MessageType, Position } from 'src/app/services/admin/alertify.service';
 import { AccidentStatisticService } from 'src/app/services/common/models/accident-statistic.service';
 import { MonthlyDirectorateFilterService } from 'src/app/services/common/monthly-directorate-filter.service';
+import { DirectorateCodeService } from 'src/app/services/common/directorate-code.service';
 
 
 @Component({
@@ -52,6 +53,7 @@ export class ListComponent extends BaseComponent implements OnInit {
     spinner: NgxSpinnerService,
     private accidentStatisticService: AccidentStatisticService,
     private monthlyDirectorateFilterService: MonthlyDirectorateFilterService,
+    private directorateCodeService: DirectorateCodeService,
     private alertifyService: AlertifyService,
     private dialog: MatDialog,
   ) {
@@ -90,7 +92,13 @@ export class ListComponent extends BaseComponent implements OnInit {
       position: Position.TopRight
     }))
 
-    this.allAccidentStatistics = result.datas;
+    await this.directorateCodeService.ensureLoaded();
+
+    this.allAccidentStatistics = result.datas.map(stat => ({
+      ...stat,
+      directorateCode: stat.directorate,
+      directorate: this.directorateCodeService.toDisplay(stat.directorate)
+    }));
 
         // Dinamik verileri oluştur
         this.years = ['Tüm Yıllar', ...new Set(this.allAccidentStatistics.map(accidentStatistic => accidentStatistic.year.toString()))]; // "Tüm Yıllar" eklendi

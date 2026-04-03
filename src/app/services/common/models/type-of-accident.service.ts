@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { firstValueFrom, Observable } from 'rxjs';
 import { HttpClientService } from '../http-client.service';
-import { HttpErrorResponse } from '@angular/common/http';
 import { Create_Type_Of_Accident } from 'src/app/contracts/definitions/type_of_accident/create_type_of_accident';
 import { List_Type_Of_Accident } from 'src/app/contracts/definitions/type_of_accident/list_type_of_accident';
 import { Update_Type_Of_Accident } from 'src/app/contracts/definitions/type_of_accident/update_type_of_accident';
@@ -24,21 +23,11 @@ export class TypeOfAccidentService {
   }
 
   async createTypeOfAccident(typeOfAccident: Create_Type_Of_Accident, successCallBack?: () => void, errorCallBack?: (errorMessage: string) => void) {
-    this.httpClientService.post({
+    const observable = this.httpClientService.post({
       controller: "typeOfAccidents"
-    }, typeOfAccident)
-      .subscribe(result => {
-        if (successCallBack) successCallBack();
-      }, (errorResponse: HttpErrorResponse) => {
-        const _error: Array<{ key: string, value: Array<string> }> = errorResponse.error;
-        let message = "";
-        _error.forEach((v, index) => {
-          v.value.forEach((_v, _index) => {
-            message += `${_v}<br>`;
-          });
-        });
-        if (errorCallBack) errorCallBack(message);
-      });
+    }, typeOfAccident);
+
+    return this.handleRequest(observable, successCallBack, errorCallBack);
   }
 
   async getTypeOfAccidentById(id: string, successCallBack?: () => void, errorCallBack?: (errorMessage: string) => void): Promise<List_Type_Of_Accident> {

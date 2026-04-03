@@ -22,9 +22,11 @@ export class DataImportService {
     });
   }
 
-  importVeri(file: File): Observable<ImportResult> {
+  importVeri(file: File, directorate: string, year: string): Observable<ImportResult> {
     const form = new FormData();
     form.append('file', file, file.name);
+    form.append('directorate', directorate);
+    form.append('year', year);
     return this.http.post<ImportResult>(
       `${this.baseUrl}/v1/dataimport/veri`,
       form,

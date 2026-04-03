@@ -46,7 +46,8 @@ export class AccidentListComponent extends BaseDialog<AccidentListComponent> imp
 
   async openUpdateAccidentDialog(accidentData: any): Promise<void> {
     const dialogRef = await this.dialog.open(AccidentUpdateDialogComponent, {
-      width: '540px',
+      width: '860px',
+      maxWidth: '96vw',
       panelClass: 'no-padding-dialog',
       data: accidentData
     });
